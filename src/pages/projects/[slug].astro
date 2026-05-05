@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'projects'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<MainLayout title={`${entry.data.title} | Projects`} description={entry.data.description}>
+  <article class="prose-broadsheet mx-auto">
+    <div class="sans-meta mb-4">
+      <span class="tag">Project</span>
+    </div>
+    <h1 class="font-display">{entry.data.title}</h1>
+    <p class="text-ink-gray text-[1.15rem] mb-2">{entry.data.description}</p>
+    <div class="font-sans text-[0.85rem] text-ink-gray mb-8">
+      {entry.data.techStack.join(' • ')}
+    </div>
+
+    {(entry.data.githubLink || entry.data.liveLink) && (
+      <div class="flex gap-6 mb-8 sans-meta">
+        {entry.data.githubLink && (
+          <a href={entry.data.githubLink} class="article-link">GitHub &rarr;</a>
+        )}
+        {entry.data.liveLink && (
+          <a href={entry.data.liveLink} class="article-link">Live &rarr;</a>
+        )}
+      </div>
+    )}
+
+    <Content />
+
+    <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
+      <a href="/projects" class="article-link">&larr; All projects</a>
+    </div>
+  </article>
+</MainLayout>

@@ -1,0 +1,17 @@
+---
+title: "Project Chimera"
+description: "An AI-Native 4X strategy simulation engine fusing deterministic game systems with persistent agentic LLMs, state-aware image generation, and a recursive history-compression engine."
+techStack: ["Python", "Flask", "Gemini 2.5 Pro/Flash", "ComfyUI", "Async"]
+order: 2
+---
+
+## Architecture
+
+The largest, most complex project in the portfolio: an AI-Native "living" 4X strategy simulation engine that fuses deterministic game systems with probabilistic LLMs. The backend is a highly threaded Python/Flask service orchestrating game logic, agent reasoning, and asynchronous generative pipelines without blocking the main render loop.
+
+## Core Mechanics
+
+- **Agentic AI & Agency.** Leaders are not state machines; they are persistent AI agents with "Agency Engines" that form complex plans, hold grudges, and react to decisions dynamically based on individual goals and personality vectors.
+- **State-Aware Image Generation.** An asynchronous pipeline using Gemini 2.5 and ComfyUI maintains visual state — it can take a generated leader and "age" them ten years, or alter their clothing based on economic ruin or prosperity, without losing subject identity.
+- **History Compression Engine.** Solves the context window problem by recursively summarizing centuries of gameplay. Turn-level logs become Era-level *Chronicles*, which become Mythos-level *Cultural Traits*, allowing agents to recall and act upon events from 500 turns ago.
+- **Hybrid Orchestration.** Hard game logic (resources, buildings) and probabilistic LLM creative generation are coordinated via a threaded Python backend that keeps both deterministic and stochastic systems in lockstep.

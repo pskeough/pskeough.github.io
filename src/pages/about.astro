@@ -1,0 +1,14 @@
+---
+import { getEntry } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+
+const entry = await getEntry('about', 'index');
+const Content = entry ? (await entry.render()).Content : null;
+---
+
+<MainLayout title="About | Patrick Keough">
+  <article class="prose-broadsheet mx-auto">
+    <h1 class="font-display">{entry?.data.title ?? 'About'}</h1>
+    {Content && <Content />}
+  </article>
+</MainLayout>

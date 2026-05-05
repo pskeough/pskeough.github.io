@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-manila: #f4f1ea;
+    --ink-black: #111111;
+    --ink-gray: #444444;
+    --accent-red: #8b0000;
+  }
+
+  html {
+    background-color: var(--bg-manila);
+  }
+
+  body {
+    background-color: var(--bg-manila);
+    color: var(--ink-black);
+    font-family: 'Merriweather', Georgia, serif;
+    line-height: 1.7;
+    font-size: 1.125rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    line-height: 1.2;
+    color: var(--ink-black);
+  }
+
+  a {
+    color: var(--ink-black);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  a:hover {
+    border-color: var(--ink-black);
+  }
+}
+
+@layer components {
+  .container-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .sans-meta {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-gray);
+    font-weight: 600;
+  }
+
+  .tag {
+    border: 1px solid var(--ink-gray);
+    padding: 0.1rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .article-link:hover {
+    color: var(--accent-red);
+    border-color: var(--accent-red);
+  }
+
+  .project-card {
+    border: 1px solid var(--ink-gray);
+    padding: 2rem;
+    background: #fdfbf7;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: block;
+    height: 100%;
+  }
+
+  .project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px var(--ink-black);
+    border-color: var(--ink-black);
+  }
+
+  .section-header {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    border-bottom: 2px solid var(--ink-black);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+  }
+
+  .prose-broadsheet {
+    font-family: 'Merriweather', Georgia, serif;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    max-width: 70ch;
+  }
+
+  .prose-broadsheet h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .prose-broadsheet h2 {
+    font-size: 1.75rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--ink-gray);
+    padding-bottom: 0.25rem;
+  }
+
+  .prose-broadsheet h3 {
+    font-size: 1.35rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-broadsheet p {
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-broadsheet ul,
+  .prose-broadsheet ol {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose-broadsheet li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-broadsheet a {
+    border-bottom: 1px solid var(--ink-gray);
+  }
+
+  .prose-broadsheet a:hover {
+    color: var(--accent-red);
+    border-color: var(--accent-red);
+  }
+
+  .prose-broadsheet blockquote {
+    border-left: 3px solid var(--ink-black);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--ink-gray);
+  }
+
+  .prose-broadsheet code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.95em;
+    background: #ece8df;
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  .prose-broadsheet pre {
+    background: var(--ink-black);
+    color: #f4f1ea;
+    padding: 1.25rem;
+    overflow-x: auto;
+    border-radius: 2px;
+    margin: 1.5rem 0;
+  }
+
+  .prose-broadsheet pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+}

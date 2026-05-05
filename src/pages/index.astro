@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import ArticleItem from '../components/ArticleItem.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const research = await getCollection('research');
+const projects = await getCollection('projects');
+const writing = await getCollection('writing');
+
+const featuredResearch = research.find((r) => r.slug === 'granularity-gap') ?? research[0];
+const featuredProject = projects.find((p) => p.slug === 'ai-book-editor') ?? projects[0];
+const featuredWriting = writing.find((w) => w.slug === 'the-basilisk') ?? writing[0];
+---
+
+<MainLayout title="Patrick Keough | Portfolio">
+  <section class="grid md:grid-cols-[2fr_1fr] gap-16 mb-16 pb-16 border-b border-ink-gray">
+    <div class="text-[1.5rem] leading-[1.6]">
+      I am an independent AI safety and red-team researcher, software builder, and novelist
+      currently based in Sydney. My work investigates the socio-technical fault lines of
+      artificial intelligence, alongside producing unassisted, clinical literary fiction.
+    </div>
+    <aside class="font-sans text-[0.9rem] text-ink-gray border-l border-ink-gray pl-8 md:pl-8">
+      <p><strong>Focus Areas:</strong> LLM Alignment, Algorithmic Bias, AI-Assisted Tooling, Post-Apocalyptic Surrealism.</p>
+      <br />
+      <p><strong>Contact:</strong> <a href="mailto:pskeough@gmail.com" class="article-link">pskeough@gmail.com</a></p>
+      <p class="mt-2"><strong>Profiles:</strong> <a href="https://github.com/pskeough" class="article-link">GitHub</a> &mdash; <a href="/research" class="article-link">arXiv</a> &mdash; <a href="/about" class="article-link">About</a></p>
+    </aside>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-12 gap-8">
+    <div class="md:col-span-8">
+      <h2 class="section-header">Featured Research</h2>
+      {featuredResearch && (
+        <ArticleItem
+          href={`/research/${featuredResearch.slug}`}
+          title={featuredResearch.data.title}
+          description={featuredResearch.data.description}
+          meta={[String(featuredResearch.data.pubDate.getFullYear()), 'Preprint']}
+        />
+      )}
+      <div class="mt-2 sans-meta">
+        <a href="/research" class="article-link">All research &rarr;</a>
+      </div>
+    </div>
+
+    <div class="md:col-span-4">
+      <h2 class="section-header">Featured Writing</h2>
+      {featuredWriting && (
+        <ArticleItem
+          href={`/writing/${featuredWriting.slug}`}
+          title={featuredWriting.data.title}
+          description={featuredWriting.data.description}
+          meta={[featuredWriting.data.category]}
+          size="md"
+        />
+      )}
+      <div class="mt-2 sans-meta">
+        <a href="/writing" class="article-link">All writing &rarr;</a>
+      </div>
+    </div>
+
+    <div class="md:col-span-12 mt-8">
+      <h2 class="section-header">Featured Project</h2>
+      {featuredProject && (
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <ProjectCard
+            href={`/projects/${featuredProject.slug}`}
+            title={featuredProject.data.title}
+            description={featuredProject.data.description}
+            techStack={featuredProject.data.techStack}
+          />
+        </div>
+      )}
+      <div class="mt-6 sans-meta">
+        <a href="/projects" class="article-link">All projects &rarr;</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

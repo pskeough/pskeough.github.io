@@ -1,0 +1,27 @@
+---
+title: "BookEdit IDE"
+description: "A local-first creative writing IDE featuring a 3-pass parallel style analysis engine, RAG-driven contextual editing, and a unified workspace for drafting, structural analysis, and character development."
+techStack: ["Flask", "SQLite", "Vite", "Vanilla JS", "Gemini 3 Pro/Flash", "Imagen 3"]
+order: 1
+---
+
+## Architecture
+
+A comprehensive, full-stack, AI-powered creative writing and manuscript editing suite. BookEdit provides a unified workspace for drafting, structural analysis, character development, style emulation, and multimedia generation, built around a Flask + SQLite backend and a Vite-bundled vanilla-JS frontend.
+
+A companion local-IDE variant runs as a two-process web application: a resizable three-pane editor (file browser, editor/diff view, AI chat) backed by an Express server that handles file I/O and spawns headless instances of the `claude` CLI as a subprocess via Node's `child_process`. The system is file-system native — no database — operating directly on `.txt` manuscript files.
+
+## Core Features
+
+- **Style Analysis Engine.** A sophisticated 3-pass parallel pipeline that extracts lexical, structural, and tonal metrics from text to create a reusable "Author Style Profile" JSON object.
+- **Character Deep Dive.** A multi-threaded workshop that analyzes relationships and flaws, generates Imagen 3 portraits, and allows users to role-play chat with the character based on the psychological profile.
+- **RAG Chat & Contextual Editor.** Users can chat with their document and execute edits where the AI is informed by attached world-building snippets and the active style profile.
+- **Book Splitter & Flowcharts.** Automatically splits raw manuscripts into chapters via regex, and generates dynamic Mermaid.js flowcharts from text descriptions.
+
+## Editing Discipline
+
+Word-level diffing with three operating modes — **Analysis** (read-only), **Context** (creates reference docs), and **Edit** (proposes changes). Changes are strictly proposals: the AI edits the file on disk, but the system stores a snapshot of the original. The user reviews a line-by-line diff and must explicitly **Accept** or **Reject**.
+
+## Production Use
+
+This is the primary production environment for the *Rokos Basilisk* novel revision.

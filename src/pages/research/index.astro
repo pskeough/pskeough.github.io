@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import ArticleItem from '../../components/ArticleItem.astro';
+
+const entries = (await getCollection('research')).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) ||
+    b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+---
+
+<MainLayout title="Research & Audits | Patrick Keough">
+  <h2 class="section-header">Research &amp; Audits</h2>
+  <div class="max-w-4xl">
+    {
+      entries.map((entry) => (
+        <ArticleItem
+          href={`/research/${entry.slug}`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={[String(entry.data.pubDate.getFullYear()), entry.data.pdfLink ? 'Preprint' : 'Paper']}
+        />
+      ))
+    }
+  </div>
+</MainLayout>

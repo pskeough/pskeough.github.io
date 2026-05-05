@@ -1,0 +1,16 @@
+---
+title: "DealFinder"
+description: "A highly optimized scraper-and-ranker for Facebook Marketplace and eBay that uses parallel Selenium drivers and a Gemini-powered ranking engine to compute a verified Deal Score against recent market sold prices."
+techStack: ["Python", "Selenium", "SQLite", "concurrent.futures", "Gemini API"]
+order: 8
+---
+
+## Architecture
+
+A highly optimized web scraper targeting Facebook Marketplace and eBay, paired with an LLM-driven evaluator that benchmarks asking prices against verified recent sales.
+
+## Key Features
+
+- **Manual Login Handoff.** Bypasses bot detection by deferring authentication to the human, then minimizes the browser to run headless thereafter.
+- **Parallel Deep-Scrape.** Deploys multiple Chrome drivers concurrently to crawl individual listing pages at depth.
+- **The Ranking Engine.** Raw HTML text is passed to a `gemini_analyzer` that extracts pros, cons, and a verdict. Crucially, it fetches *recent market sold prices* from eBay and computes a strict **Deal Score (1–10)** by comparing the asking price to the verified market discount.

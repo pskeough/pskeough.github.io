@@ -1,0 +1,36 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description?: string;
+  meta?: string[];
+  size?: 'lg' | 'md';
+}
+
+const { href, title, description, meta = [], size = 'lg' } = Astro.props;
+const titleSize = size === 'lg' ? 'text-[1.75rem]' : 'text-[1.4rem]';
+const excerptSize = size === 'lg' ? 'text-[1.05rem]' : 'text-[0.95rem]';
+---
+
+<article class="mb-12">
+  {
+    meta.length > 0 && (
+      <div class="sans-meta flex gap-4 mb-2">
+        {meta.map((m, i) => (
+          <>
+            {i > 0 && <span>&bull;</span>}
+            {m.toLowerCase() === 'preprint' || m.toLowerCase() === 'paper' || m.toLowerCase() === 'novel' || m.toLowerCase() === 'short fiction' || m.toLowerCase() === 'essay' || m.toLowerCase() === 'poetry' || m.toLowerCase() === 'wip' ? (
+              <span class="tag">{m}</span>
+            ) : (
+              <span>{m}</span>
+            )}
+          </>
+        ))}
+      </div>
+    )
+  }
+  <h3 class={`font-display ${titleSize} my-2`}>
+    <a href={href} class="article-link">{title}</a>
+  </h3>
+  {description && <p class={`text-ink-gray ${excerptSize}`}>{description}</p>}
+</article>

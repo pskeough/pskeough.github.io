@@ -1,0 +1,17 @@
+---
+title: "Tarot Weaver"
+description: "A multi-stage pipeline that ingests a literary text, derives Tarot archetypes, extracts a rigid visual style guide from a reference image, and batch-generates a full custom 78-card deck."
+techStack: ["React 19", "TypeScript", "Gemini 2.5 Pro", "Gemini 2.5 Flash", "Imagen 4"]
+order: 5
+---
+
+## Architecture
+
+A complex AI pipeline for generating custom tarot decks based on literary text — combining textual archetype extraction, style-locked image generation, and multimodal editing.
+
+## Pipeline
+
+1. **Ideation (Gemini 2.5 Pro).** User inputs a massive text (e.g., a novel). Gemini 2.5 Pro analyzes the themes and maps them to traditional Tarot archetypes.
+2. **Styling (Gemini 2.5 Flash).** The model analyzes a user-provided reference image to extract a rigid style guide — linework, color palette, negative space, compositional rhythm.
+3. **Generation (Imagen 4).** Concurrent workers batch-generate the full deck (up to 78 cards) using combined archetype + style guide prompts.
+4. **Editing (Gemini Flash, multimodal).** Users issue natural-language commands to edit cards while the pipeline strictly enforces adherence to the original style guide.

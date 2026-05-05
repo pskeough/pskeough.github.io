@@ -1,0 +1,16 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  techStack: string[];
+}
+
+const { href, title, description, techStack } = Astro.props;
+---
+
+<a href={href} class="project-card hover:!border-ink">
+  <h3 class="font-display text-[1.5rem] mb-4">{title}</h3>
+  <p class="text-ink-gray text-[1.05rem]">{description}</p>
+  <div class="mt-6 font-sans text-[0.8rem] text-ink-gray">{techStack.join(' • ')}</div>
+</a>
