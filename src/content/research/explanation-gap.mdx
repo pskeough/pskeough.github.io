@@ -5,12 +5,33 @@ pubDate: 2025-11-01
 order: 3
 ---
 
+> [!WARNING]
+> **Pilot Study / In-Development**
+> The following research is currently in its pilot phase. The findings presented below are preliminary data from an ongoing four-phase audit. [Download the full Pilot Paper PDF](/research/explanation-gap/ExplanationGapPilot.pdf)
+
 ## Overview
 
 A pilot study analyzing the dissonance between LLM **mechanistic interpretability** and **user-facing rationale generation** in high-stakes deployment environments.
 
-{/* TODO: USER INSERT FULL ABSTRACT */}
+This research evaluates whether four production-grade language models (GPT-4o-mini, Gemini-3-Flash, DeepSeek-V3, GLM-4.7) reproduce demographic bias when scoring standardized psychological instruments (such as the PHQ-8), and critically, whether their post-hoc explanations accurately disclose the variables that actually drove those scores. 
 
-## Pilot Study
+## Pilot Study Findings
 
-{/* TODO: USER INSERT PILOT STUDY WRITE-UP */}
+Identical clinical vignettes were instantiated across 18 intersectional demographic cohorts (crossed by race, gender, and socioeconomic status). The results demonstrated massive demographic bias in scoring: PHQ-8 scores showed a Low-minus-High SES gap of 5.78 points (Cohen’s $d = 1.95$). 
+
+Variance decomposition confirmed that **Socioeconomic Status (SES) accounted for 48.75% of the total variance** in the generated scores, while the choice of the generator model itself accounted for only 2.22%. 
+
+![PHQ-8 Group Means](/research/explanation-gap/Fig1_phase1_phq8_bias.png)
+*Figure 1: PHQ-8 group means by SES, gender, and race. The SES gap is the dominant driver of scoring variance.*
+
+### The Failure of Post-Hoc Explanations
+
+Despite SES being the empirical driver of the scores, the models' explanations actively obfuscated this fact. When utilizing a Feature-Attribution explanation paradigm, the models claimed that "clinical presentation" accounted for 63.7% of their score, while assigning SES a mere 17.1% of the weight.
+
+![ANOVA Variance Partitioning](/research/explanation-gap/Fig2_variance_decomp.png)
+*Figure 2: ANOVA variance partitioning of PHQ-8 score variance, isolating the contribution of each prompt factor.*
+
+An LLM-as-judge protocol ($n=1,074$ evaluations) further revealed severe "fairwashing." In over 52% of the cases, explanations would explicitly name the demographic features involved, yet still successfully fairwash the output by rationalizing the biased score through clinical-sounding language. The pilot indicates that current post-hoc explanation paradigms fail to surface demographic bias, actively maintaining an "explanation gap" between the model's mechanical drivers and its user-facing rationale.
+
+---
+**[Read the Full Pilot PDF here.](/research/explanation-gap/ExplanationGapPilot.pdf)**

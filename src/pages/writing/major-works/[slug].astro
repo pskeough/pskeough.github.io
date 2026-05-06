@@ -21,6 +21,12 @@ const { Content } = await entry.render();
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
     {entry.data.description && <p class="text-ink-gray text-[1.15rem] mb-8 italic">{entry.data.description}</p>}
+
+    {entry.data.pdfLink && (
+      <div class="flex gap-6 mb-8 sans-meta">
+        <a href={entry.data.pdfLink} target="_blank" rel="noopener noreferrer" class="article-link">Download / Open Full Piece &rarr;</a>
+      </div>
+    )}
     <Content />
     <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
       <a href="/writing" class="article-link">&larr; All writing</a>

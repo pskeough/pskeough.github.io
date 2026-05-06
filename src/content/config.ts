@@ -35,6 +35,7 @@ const writingCollection = defineCollection({
     genre: z.string().optional(),
     isExcerpt: z.boolean().default(false),
     status: z.string().optional(),
+    pdfLink: z.string().optional(),
   }),
 });
 

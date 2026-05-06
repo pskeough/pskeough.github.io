@@ -173,4 +173,33 @@
     color: inherit;
     padding: 0;
   }
+
+  .prose-broadsheet img {
+    display: block;
+    margin: 2.5rem auto 0.5rem;
+    max-width: 100%;
+    height: auto;
+    background: #ffffff;
+    border: 1px solid var(--ink-gray);
+    padding: 0.5rem;
+  }
+
+  .prose-broadsheet img + em,
+  .prose-broadsheet p > em:only-child {
+    display: block;
+    text-align: center;
+    font-size: 0.92rem;
+    color: var(--ink-gray);
+    margin-top: 0.25rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .prose-broadsheet iframe {
+    display: block;
+    margin: 1.5rem auto;
+    max-width: 100%;
+    background: var(--ink-black);
+    border: 1px solid var(--ink-gray);
+  }
 }

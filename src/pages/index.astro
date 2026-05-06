@@ -8,9 +8,21 @@ const research = await getCollection('research');
 const projects = await getCollection('projects');
 const writing = await getCollection('writing');
 
-const featuredResearch = research.find((r) => r.slug === 'granularity-gap') ?? research[0];
-const featuredProject = projects.find((p) => p.slug === 'ai-book-editor') ?? projects[0];
-const featuredWriting = writing.find((w) => w.slug === 'the-basilisk') ?? writing[0];
+const featuredResearch = [
+  research.find((r) => r.slug === 'granularity-gap'),
+  research.find((r) => r.slug === 'psychbench')
+].filter((x): x is NonNullable<typeof x> => Boolean(x));
+
+const featuredWritings = [
+  writing.find((w) => w.slug === 'the-basilisk'),
+  writing.find((w) => w.slug === 'anderermensch')
+].filter((x): x is NonNullable<typeof x> => Boolean(x));
+
+const featuredProjects = [
+  projects.find((p) => p.slug === 'authors-workshop'),
+  projects.find((p) => p.slug === 'claude-cowrite'),
+  projects.find((p) => p.slug === 'civilization-simulation')
+].filter((x): x is NonNullable<typeof x> => Boolean(x));
 ---
 
 <MainLayout title="Patrick Keough | Portfolio">
@@ -28,53 +40,68 @@ const featuredWriting = writing.find((w) => w.slug === 'the-basilisk') ?? writin
     </aside>
   </section>
 
-  <section class="grid grid-cols-1 md:grid-cols-12 gap-8">
-    <div class="md:col-span-8">
-      <h2 class="section-header">Featured Research</h2>
-      {featuredResearch && (
-        <ArticleItem
-          href={`/research/${featuredResearch.slug}`}
-          title={featuredResearch.data.title}
-          description={featuredResearch.data.description}
-          meta={[String(featuredResearch.data.pubDate.getFullYear()), 'Preprint']}
-        />
-      )}
-      <div class="mt-2 sans-meta">
-        <a href="/research" class="article-link">All research &rarr;</a>
+  <section class="mb-16">
+    <!-- Headers -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-8">
+        <h2 class="section-header !mt-0 !mb-6">Featured Research</h2>
+      </div>
+      <div class="md:col-span-4">
+        <h2 class="section-header !mt-0 !mb-6">Featured Writing</h2>
       </div>
     </div>
 
-    <div class="md:col-span-4">
-      <h2 class="section-header">Featured Writing</h2>
-      {featuredWriting && (
-        <ArticleItem
-          href={`/writing/${featuredWriting.slug}`}
-          title={featuredWriting.data.title}
-          description={featuredWriting.data.description}
-          meta={[featuredWriting.data.category]}
-          size="md"
-        />
-      )}
-      <div class="mt-2 sans-meta">
+    <!-- Items aligned by row -->
+    {Array.from({ length: Math.max(featuredResearch.length, featuredWritings.length) }).map((_, i) => (
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-8">
+          {featuredResearch[i] ? (
+            <ArticleItem
+              href={`/research/${featuredResearch[i].slug}`}
+              title={featuredResearch[i].data.title}
+              description={featuredResearch[i].data.description}
+              meta={[String(featuredResearch[i].data.pubDate.getFullYear()), featuredResearch[i].data.pdfLink ? 'Preprint' : 'Paper']}
+            />
+          ) : <div />}
+        </div>
+        <div class="md:col-span-4">
+          {featuredWritings[i] ? (
+            <ArticleItem
+              href={`/writing/${featuredWritings[i].slug}`}
+              title={featuredWritings[i].data.title}
+              description={featuredWritings[i].data.description}
+              meta={[featuredWritings[i].data.category === 'Major Works' ? 'Novel' : featuredWritings[i].data.category]}
+            />
+          ) : <div />}
+        </div>
+      </div>
+    ))}
+
+    <!-- Footer Links -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-8 sans-meta">
+        <a href="/research" class="article-link">All research &rarr;</a>
+      </div>
+      <div class="md:col-span-4 sans-meta">
         <a href="/writing" class="article-link">All writing &rarr;</a>
       </div>
     </div>
+  </section>
 
-    <div class="md:col-span-12 mt-8">
-      <h2 class="section-header">Featured Project</h2>
-      {featuredProject && (
-        <div class="grid grid-cols-1 md:grid-cols-3">
-          <ProjectCard
-            href={`/projects/${featuredProject.slug}`}
-            title={featuredProject.data.title}
-            description={featuredProject.data.description}
-            techStack={featuredProject.data.techStack}
-          />
-        </div>
-      )}
-      <div class="mt-6 sans-meta">
-        <a href="/projects" class="article-link">All projects &rarr;</a>
-      </div>
+  <section class="mt-8">
+    <h2 class="section-header !mt-0 !mb-6">Featured Projects</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {featuredProjects.map((item) => (
+        <ProjectCard
+          href={`/projects/${item.slug}`}
+          title={item.data.title}
+          description={item.data.description}
+          techStack={item.data.techStack}
+        />
+      ))}
+    </div>
+    <div class="mt-6 sans-meta">
+      <a href="/projects" class="article-link">All projects &rarr;</a>
     </div>
   </section>
 </MainLayout>

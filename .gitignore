@@ -34,3 +34,12 @@ Thumbs.db
 /builder_context/
 /design_prototypes/
 /prototype.html
+
+# Claude Code worktree state and other local working files
+/.claude/
+/tempImagesforWebsite/
+/grangap_pdf.txt
+/psychbench_pdf.txt
+/pdf_content.txt
+/preview.bat
+/public/test.pdf

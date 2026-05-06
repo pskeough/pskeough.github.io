@@ -2,27 +2,55 @@
 title: "PsychBench"
 description: "A systematic epidemiological audit of LLM mental health simulations across 28,800 simulated patient profiles and 120 intersectional demographic cohorts."
 pubDate: 2026-02-10
-pdfLink: "/assets/Keough_PsychBench.pdf"
+pdfLink: "/research/psychbench/Keough_PsychBench.pdf"
 order: 2
 ---
+
+**[Read the Full Paper on ArXiv](https://arxiv.org/abs/2604.17359)** | **[Download PDF](/research/psychbench/Keough_PsychBench.pdf)**
 
 ## Overview
 
 A systematic epidemiological audit (2026) evaluating **28,800 simulated patient profiles** across four frontier models — GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, and GLM-4.7 — against real-world NHANES and NESARC-III baselines. Coverage spans **120 intersectional demographic cohorts**.
 
+The central question: Do LLMs faithfully reproduce the distributional properties of real populations, or do they encode stereotypes invisible at the individual case level?
+
 ## Coherence–Fidelity Dissociation
 
-The central finding: while frontier models produce clinically plausible *individuals*, they systematically misrepresent the *populations* those individuals are drawn from.
+The central finding of this research is a coherence-fidelity dissociation. While frontier models produce clinically plausible *individuals* (cases that a reviewer would find individually coherent), they systematically misrepresent the *populations* those individuals are drawn from.
+
+![Stereotype Rigidity Heatmap](/research/psychbench/stereotype_rigidity_heatmap_aggregate.png)
+*Figure 1: Stereotype Index heatmap demonstrating variance compression. The socioeconomic dimension shows uniformly severe compression across all intersections.*
 
 ## Key Findings
 
-- **Variance Collapse.** Models compress patient presentation variance by 14% to 62%, eliminating the distributional tails that define clinical reality and atypical presentations.
-- **Asymmetric Calibration Bias.** Models consistently *overestimate* depression severity for most groups (a consequence of training on elevated base-rate clinical corpora), yet paradoxically *underestimate* it for transgender women — capturing only 8% to 46% of documented minority stress elevation.
-- **Encoded Stereotypes.** Models attribute irritability to Black men and fatigue to women at rates exceeding matched controls, encoding racialized and gendered assumptions into generated symptom profiles.
-- **Cross-Architecture Replication.** Failures replicate across both US and Chinese model architectures.
+- **Variance Collapse.** Models compress patient presentation variance by 14% to 62%, establishing a "Stereotype Index" that eliminates the distributional tails that define clinical reality. For instance, models generate "textbook" presentations while missing both resilient low-income patients and severely depressed high-income patients.
+- **Asymmetric Calibration Bias.** Models consistently *overestimate* depression severity for most groups (+3.6 to +6.1 points), a consequence of training on elevated base-rate clinical corpora. Yet paradoxically, they *underestimate* it for transgender women (a -5.42 point residual), capturing only 8% to 46% of documented minority stress elevation.
+
+![Calibration Bias](/research/psychbench/significant_bias_residuals_aggregate.png)
+*Figure 2: Residual bias aggregates highlighting systematic overestimation of distress in most cohorts, inverted into severe underestimation for transgender populations.*
+
+- **Network Structural Divergence.** Symptom correlation matrices diverge across demographic groups beyond split-half noise. Transgender populations show a divergence three to five times larger than racial differences, indicating structurally distinct (and incorrect) representations of psychopathology.
+
+![Network Divergence Plot](/research/psychbench/network_divergence_plot_aggregate.png)
+*Figure 3: Network structural divergence across demographics, illustrating latent representational differences.*
+
+- **Encoded Stereotypes.** Models attribute irritability to Black men and fatigue to women at rates exceeding matched controls, encoding racialized and gendered assumptions directly into the generated symptom profiles.
+- **Cross-Architecture Replication.** These failures replicate across both US and Chinese model architectures (GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, GLM-4.7), indicating issues rooted in fundamental RLHF training paradigms rather than isolated implementations.
+
+## Supplementary Tables and Figures
+
+![Bias residuals by demographic group — positive residuals = overestimation; the −5.42 transgender-women residual stands inverted against systematic +3 to +6 overestimation everywhere else](/research/psychbench/T20_BiasResiduals.png)
+*Table 20: Bias Residuals (Model Mean – Ground Truth), aggregate pooled from Run 1 and Run 2. The asymmetry is structural, not an outlier — models overestimate distress for nearly every cohort while uniquely underestimating it for transgender women. All comparisons p&lt;0.001.*
+
+![Cross-model performance — bias residual, PHQ-8 five-category flip rate (stability), and temporal drift across the four frontier models](/research/psychbench/T17_ModelPerformance.png)
+*Table 17: Performance across accuracy, stability, and temporal drift. No model dominates across dimensions: GLM-4.7 achieves the lowest bias residual (+4.90) but high flip rate; DeepSeek-V3 achieves the lowest flip rate (27.7%) but high bias. The failure modes are distributed across the frontier.*
+
+![Diagnostic transition heatmap (Run 1 vs Run 2) — heavy off-diagonal mass on the Mild→Moderate cell exposes 36.66% of cases crossing diagnostic thresholds between identical runs](/research/psychbench/F2_DiagnosticStability.png)
+*Figure 4: Test-retest classification stability. Despite correlation coefficients above r=0.90, 36.66% of profiles cross a diagnostic threshold between Run 1 and Run 2. Surface-level reliability conceals classification-level instability.*
 
 ## Conclusion
 
-Current LLM-driven mental health tools risk **unnecessary pathologization of ordinary distress** for most users while simultaneously producing **algorithmic erasure of genuine need** in marginalized populations.
+Current LLM-driven mental health tools risk **unnecessary pathologization of ordinary distress** for most users while simultaneously producing **algorithmic erasure of genuine need** in marginalized populations. The patients look right, but they do not represent real populations.
 
-{/* TODO: USER INSERT FULL ABSTRACT AND METHODOLOGY DETAIL */}
+---
+**[Read the Full Paper on ArXiv](https://arxiv.org/abs/2604.17359)**

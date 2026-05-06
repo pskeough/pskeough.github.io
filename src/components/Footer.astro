@@ -2,6 +2,13 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-24 py-12 border-t-[3px] border-ink text-center font-sans text-[0.85rem]">
-  <p>&copy; {year} Patrick Keough. All writing is human-authored and unassisted.</p>
+<footer class="mt-24 py-12 border-t-[3px] border-ink font-sans text-[0.85rem] text-ink-gray">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+    <p>&copy; {year} Patrick Keough. All literary writing is human-authored and unassisted.</p>
+    <div class="flex gap-6">
+      <a href="mailto:pskeough@gmail.com" class="article-link">Email</a>
+      <a href="https://github.com/pskeough" class="article-link">GitHub</a>
+      <a href="https://linkedin.com/in/patrick-keough-b5b7a7261" class="article-link">LinkedIn</a>
+    </div>
+  </div>
 </footer>
