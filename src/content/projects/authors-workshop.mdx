@@ -1,31 +1,31 @@
 ---
 github: "https://github.com/pskeough/authors-workshop"
 title: "AuthorsWorkshop"
-description: "A full-stack, AI-powered creative writing and manuscript editing suite. It provides authors with a unified workspace for drafting, structural analysis, character development, and stylistic emulation via Gemini AI."
+description: "A local-first creative writing and manuscript editing application built around Gemini AI. Style analysis, character work, RAG editing, and multimedia generation from a single interface."
 techStack: ["Flask", "SQLite", "Vite", "Vanilla JS", "Gemini API", "Imagen3"]
 order: 1
 ---
 
 ## Architecture
 
-**AuthorsWorkshop** is a comprehensive, local-first web application designed as a universal editing environment. Built around a Flask + SQLite backend and a Vite-bundled vanilla JS frontend, the application exposes Google's Gemini AI models through a polished, stateless, book-themed UI.
+**AuthorsWorkshop** is a local-first web application for manuscript work. Flask + SQLite backend, Vite-bundled vanilla JS frontend. The interface is book-themed and deliberately minimal — six tools, each scoped to a distinct phase of the writing process.
 
 ![The Author's Study — main landing page showing the six primary workspace tools: Generate New Story, Analyze Manuscript, Contextual Editor, Chat with Document, Chapter Library, and Author's Toolkit](/projects/authors-workshop/AuthorsStudy_MainPage.png)
 *The Author's Study: main workspace hub. Six modular tools, each scoped to a distinct phase of the manuscript workflow, accessed from a single clean interface.*
 
 ## Core Mechanics
 
-- **Style Analysis Engine:** A highly sophisticated 3-pass parallel pipeline that extracts lexical, structural, and tonal metrics from text to reverse-engineer an author's prose style into a reusable JSON profile.
-- **Character Deep Dive Workshop:** A multi-threaded NLP suite that identifies characters and performs deep psychological, relationship, and flaw analyses, ultimately allowing the user to role-play chat with the character.
-- **RAG Chat & Contextual Editor:** Users can chat with their document and execute edits where the AI is intrinsically informed by attached world-building snippets and the active style profile.
-- **Book Splitter & Multimedia Generation:** Automatically splits raw manuscripts into chapters via regex, and features dynamic playlist generation, Mermaid.js flowcharts, and Imagen3 character portrait rendering.
+- **Style Analysis Engine:** A 3-pass parallel pipeline that extracts lexical, structural, and tonal metrics from text to reverse-engineer an author's prose style into a reusable JSON profile.
+- **Character Deep Dive Workshop:** A multi-threaded NLP suite that identifies characters and runs deep psychological, relationship, and flaw analysis, with a role-play chat mode at the end.
+- **RAG Chat & Contextual Editor:** Users can chat with their document and execute edits where the AI is informed by attached world-building snippets and the active style profile.
+- **Book Splitter & Multimedia Generation:** Splits raw manuscripts into chapters via regex, with dynamic playlist generation, Mermaid.js flowcharts, and Imagen3 character portrait rendering.
 
 ![Author's Toolkit panel — Plot & Pacing flowchart generator, Character Deep Dive analyzer, Generate Playlist with album art, and Mood Board tools](/projects/authors-workshop/AuthorsToolkit.png)
 *Author's Toolkit: specialized creative-analysis tools. Plot & Pacing renders interactive Mermaid.js flowcharts; Character Deep Dive runs multi-threaded psychological and relationship analysis; Generate Playlist produces scene-matched music selections with custom album art via Gemini.*
 
 ## Editing Discipline
 
-Every AI operation—generation, editing, chat, analysis—is deeply context-sensitive and isolated per user. The system ensures the author remains in complete control, leveraging AI not as a replacement for creativity, but as an analytical sounding board and structural editor.
+Every AI operation runs context-isolated per user. The author makes all final decisions. The AI proposes; it does not decide.
 
 
 [View on GitHub](https://github.com/pskeough/authors-workshop)

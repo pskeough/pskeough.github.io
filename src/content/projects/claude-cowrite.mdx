@@ -1,23 +1,23 @@
 ---
 github: "https://github.com/pskeough/claude-cowrite"
 title: "Claude CoWrite"
-description: "A local-first, privacy-focused creative writing IDE featuring line-by-line LLM-integrated editing, word-level diffing, and seamless headless Claude CLI integration."
+description: "A local-first creative writing IDE with line-by-line LLM editing, word-level diffing, and headless Claude CLI integration. No cloud upload, no API key UI."
 techStack: ["React 18", "Vite", "TypeScript", "Node.js", "Express", "Claude Code CLI"]
 order: 1
 ---
 
 ## Architecture
 
-The Basilisk Editor is a two-process, local-first web application designed as a universal editing environment. The frontend features a resizable three-pane editor (File Browser, Editor/Diff View, AI Chat). The backend is an Express server that handles file I/O and spawns headless instances of the `claude` CLI as a subprocess via Node's `child_process`.
+Claude CoWrite is a two-process, local-first web application. The frontend is a resizable three-pane editor (File Browser, Editor/Diff View, AI Chat). The backend is an Express server that handles file I/O and spawns headless instances of the `claude` CLI as a subprocess via Node's `child_process`.
 
 ![Claude CoWrite — three-pane layout with file browser (left), manuscript editor (center), and Claude chat panel (right)](/projects/claude-cowrite/CoWrite_FileView.png)
 *Three-pane filesystem-native editor. The browser operates directly on `.txt` manuscript files; the center pane handles the active document; the right panel connects to a headless Claude CLI subprocess via Express — no API key UI, no cloud upload.*
 
 ## Core Mechanics
 
-- **File-System Native:** Operates directly on `.txt` manuscript files. No complex database setup is required, ensuring maximum privacy and data control.
-- **Line-by-Line AI Editing:** Implements granular word-level diffing. The AI operates in three distinct modes: **Analysis** (read-only), **Context** (creates reference docs), and **Edit** (proposes changes).
-- **Strict User Control:** AI changes are strictly proposals. The AI edits the file on disk, but the system stores a snapshot of the original. The user reviews a line-by-line diff and must explicitly click "Accept" or "Reject" to finalize edits.
+- **File-System Native:** Operates directly on `.txt` manuscript files. No database setup required.
+- **Line-by-Line AI Editing:** Granular word-level diffing. The AI operates in three distinct modes: **Analysis** (read-only), **Context** (creates reference docs), and **Edit** (proposes changes).
+- **Strict User Control:** AI changes are proposals only. The system snapshots the original file before any AI write; the user reviews a line-by-line diff and must explicitly click "Accept" or "Reject" before changes persist.
 
 ![Claude CoWrite in Analysis mode — side-by-side view of the manuscript and AI-generated structural analysis with comparative notes between draft years](/projects/claude-cowrite/CoWrite_Analysis.png)
 *Analysis mode (read-only): Claude reads the active chapter and surfaces structural, tonal, and pacing observations in the right panel. Shown here running a comparative analysis between two draft years of the same chapter.*

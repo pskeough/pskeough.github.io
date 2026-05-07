@@ -1,22 +1,21 @@
 ---
 github: "https://github.com/pskeough/local-dungeon"
 title: "LocalDungeon: Generative Narrative Engine"
-description: "An advanced local AI roleplay system (akin to an AI Dungeon clone) that fuses local LLMs with Stable Diffusion to generate dynamic, persistent visual novel experiences."
+description: "A local AI roleplay engine that generates the world, characters, narrative, and imagery on the fly using local LLMs and Stable Diffusion."
 techStack: ["Python", "Flask", "Qwen 2.5 14B", "ComfyUI", "Stable Diffusion"]
 order: 3
 ---
-github: "https://github.com/pskeough/local-dungeon"
 
 ## Architecture
 
-This application is an immersive, local-first AI roleplay engine. Unlike traditional visual novels with hard-coded branching paths, this system generates the entire world, characters, narrative, and accompanying imagery on the fly, entirely locally.
+A local-first AI roleplay engine. The entire world, characters, narrative, and imagery generate on the fly from a local stack, with no branching paths or pre-written content.
 
 ## Core Mechanics
 
-- **Dynamic Visuals & State:** The backend utilizes Qwen 2.5 14B to drive the narrative and ComfyUI (Stable Diffusion) to visualize it. The scene updates visually every few turns.
-- **Visual Mode:** Users can pause the text-based roleplay and ask the AI to generate a specific image based on a description of the current scene.
-- **Smart Memory:** As the user interacts, the system automatically summarizes the interaction history into a smart memory buffer. This ensures the AI stays within the context window without losing track of past events or characters.
-- **Gallery & Persistence:** Maintains a gallery of all generated visuals and preserves the world state across sessions.
+- **Dynamic Visuals & State:** Qwen 2.5 14B drives the narrative; ComfyUI (Stable Diffusion) visualizes it. The scene updates every few turns.
+- **Visual Mode:** Users can pause the text-based roleplay and ask the AI to generate a specific image from a description of the current scene.
+- **Smart Memory:** The system automatically summarizes interaction history into a memory buffer as the session grows, keeping the AI within its context window without losing track of past events or characters.
+- **Gallery & Persistence:** Maintains a gallery of all generated visuals and preserves world state across sessions.
 
 
 [View on GitHub](https://github.com/pskeough/local-dungeon)
