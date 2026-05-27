@@ -1,0 +1,31 @@
+---
+github: "https://github.com/pskeough/Sonic-Vector"
+githubLink: "https://github.com/pskeough/Sonic-Vector"
+title: "Sonic Vector"
+description: "A system-wide audio-mastering dashboard that binds Windows Equalizer APO to real-time Spotify playback, interpolating parametric curves over semantic audio centroids."
+techStack: ["Python", "Flask", "SQLite", "Equalizer APO", "Scikit-Learn", "Spotify API"]
+order: 5
+---
+
+## Architecture
+
+**Sonic Vector** is a local-first audio mastering application. It bridges the gap between static equalization profiles and dynamic playback, using vector interpolation over preprocessed semantic audio centroids to generate optimal 5-band parametric filters in real time. 
+
+The system runs as a local Flask web dashboard and background service. It polls active Spotify playback to harvest metadata and writes synthesized parametric curves directly to the system-wide Equalizer APO configuration file, adjusting hardware output frequencies on song transitions.
+
+## Centroid Synthesis Engine
+
+The core technical contribution is the real-time interpolation of crowdsourced semantic audio data:
+
+1. **Semantic Centroids.** The system parses crowdsourced parametric curves from the SAFE Equaliser Database. It mathematically filters out outlier entries using standard deviation thresholds and calculates average 5-band parametric "sonic centroids" for descriptors such as *warm*, *bright*, *muddy*, *presence*, *airy*, and *punchy*.
+2. **Tag Matching.** On song changes, the background service collects Last.fm crowdsourced acoustic tags and Spotify genres. It computes overlap scores against the semantic vocabularies, generating normalized interpolation weights.
+3. **Curve Interpolation.** The engine executes a weighted average of active centroids, dynamically synthesizing a custom 5-band parametric curve tailored to the active song's acoustic profile.
+
+## Key Features
+
+- **Hardware Control.** Compiles and writes synthesized parametric curves straight to the Equalizer APO `config.txt` path, enabling system-wide audio modification.
+- **Mastering Overlays.** Provides advanced processing overlays (such as Preamp, intensity Strength, Bass Boost, Vocal Clarity, and Airiness) that adjust the output curve.
+- **State Caching.** Automatically saves manual user adjustments or AI-guided tuning to a local SQLite database, recalling the custom profile instantly whenever that track plays again.
+- **Fail-Safe Router.** Includes a dynamic context router that can query local or remote language models for expert EQ profiles, fallback-routing to vector similarity centroids if the AI is offline.
+
+[View on GitHub](https://github.com/pskeough/Sonic-Vector)
