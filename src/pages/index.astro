@@ -24,6 +24,12 @@ const featuredProjects = [
   projects.find((p) => p.slug === 'mimesis-mcp'),
   projects.find((p) => p.slug === 'sonic-vector')
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
+
+const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poetry', string> = {
+  'Major Works': 'major-works',
+  'Short Fiction': 'short-fiction',
+  'Essays & Poetry': 'essays-and-poetry',
+};
 ---
 
 <MainLayout title="Patrick Keough | Portfolio">
@@ -70,7 +76,7 @@ const featuredProjects = [
           <div class="flex flex-col gap-8">
             {featuredWritings.map((item) => (
               <ArticleItem
-                href={`/writing/${item.slug}`}
+                href={`/writing/${folderForCategory[item.data.category]}/${item.slug}`}
                 title={item.data.title}
                 description={item.data.description}
                 meta={[item.data.category === 'Major Works' ? 'Novel' : item.data.category]}
