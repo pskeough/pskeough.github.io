@@ -53,7 +53,7 @@ const featuredProjects = [
                 href={`/research/${item.slug}`}
                 title={item.data.title}
                 description={item.data.description}
-                meta={[String(item.data.pubDate.getFullYear()), item.data.pdfLink ? 'Preprint' : 'Paper']}
+                meta={[String(item.data.pubDate.getFullYear()), item.slug === 'thematic-consensus' ? 'Work in Progress' : (item.data.pdfLink ? 'Preprint' : 'Paper')]}
               />
             ))}
           </div>
