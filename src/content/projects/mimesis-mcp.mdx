@@ -1,7 +1,7 @@
 ---
-github: "https://github.com/pskeough/Claude-Style-Clone-MCP"
-githubLink: "https://github.com/pskeough/Claude-Style-Clone-MCP"
-title: "StyleClone MCP"
+github: "https://github.com/pskeough/Claude-RAG-Voice-MCP"
+githubLink: "https://github.com/pskeough/Claude-RAG-Voice-MCP"
+title: "Mimesis MCP"
 description: "An offline, local-first Model Context Protocol (MCP) server that equips Claude with tools to draft in a target author's voice, utilizing SQLite FTS5 hybrid search, stylometric profiling, and local ONNX embeddings."
 techStack: ["Python", "SQLite FTS5", "FastEmbed (ONNX)", "FastMCP", "PowerShell", "FastAPI"]
 order: 4
@@ -9,7 +9,7 @@ order: 4
 
 ## Architecture
 
-**StyleClone MCP** is a local-first Model Context Protocol (MCP) server that operates entirely offline. The system integrates directly with Claude Desktop and the Claude Code CLI, equipping language models with tools to access an author's stylistic corpus and pacing patterns.
+**Mimesis MCP** is a local-first Model Context Protocol (MCP) server that operates entirely offline. The system integrates directly with Claude Desktop and the Claude Code CLI, equipping language models with tools to access an author's stylistic corpus and pacing patterns.
 
 By utilizing lightweight local ONNX embeddings, SQLite FTS5 indices, and automated stylometric profiling, the server exposes contextual style examples and real-time stylistic vetting tools without transmitting private data to external servers.
 
@@ -30,4 +30,4 @@ To ensure the generated drafts match the target author's natural pacing, the ser
 - **Definiteness Enforcement.** Profiles the density of hedging phrases (such as *seems to*, *appears to*, or *in a sense*), directing the model to replace cautious statements with active, definite verbs.
 - **Pacing Metrics.** Measures median sentence lengths and strictly bans the use of em-dashes to eliminate common AI drafting Tells.
 
-[View on GitHub](https://github.com/pskeough/Claude-Style-Clone-MCP)
+[View on GitHub](https://github.com/pskeough/Claude-RAG-Voice-MCP)

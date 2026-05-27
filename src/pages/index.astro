@@ -9,8 +9,9 @@ const projects = await getCollection('projects');
 const writing = await getCollection('writing');
 
 const featuredResearch = [
-  research.find((r) => r.slug === 'granularity-gap'),
-  research.find((r) => r.slug === 'psychbench')
+  research.find((r) => r.slug === 'psychbench'),
+  research.find((r) => r.slug === 'thematic-consensus'),
+  research.find((r) => r.slug === 'granularity-gap')
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 
 const featuredWritings = [
@@ -19,8 +20,8 @@ const featuredWritings = [
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 
 const featuredProjects = [
-  projects.find((p) => p.slug === 'tai-rag'),
-  projects.find((p) => p.slug === 'styleclone-mcp'),
+  projects.find((p) => p.slug === 'claude-cowrite'),
+  projects.find((p) => p.slug === 'mimesis-mcp'),
   projects.find((p) => p.slug === 'sonic-vector')
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 ---

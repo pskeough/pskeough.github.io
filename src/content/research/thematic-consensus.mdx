@@ -1,0 +1,44 @@
+---
+title: "LLMQ Thematic Consensus Engine"
+description: "An iterative research pipeline extending the LLM-Quotient (LLMQ) reliability framework to open, inductive qualitative coding of multilingual interview corpora."
+pubDate: 2026-05-20
+order: 3
+---
+
+## Overview
+
+This research project introduces a highly rigorous, local-first computational pipeline designed to execute reproducible, LLM-assisted **inductive thematic analysis** of semi-structured qualitative interview transcripts. 
+
+Where traditional qualitative AI systems rely on deductive coding against pre-defined human schemas, this architecture extends the **LLM-Quotient (LLMQ)** iteration-based reliability framework (Tai et al., 2024) to open, cold-review inductive analysis. Rather than trusting a single generative pass, the pipeline runs massive independent inference sweeps to mathematically isolate substantive thematic consensus from stochastic noise.
+
+## Methodology & Inductive LLMQ
+
+To calibrate coding reliability at the inductive frontier, the engine models the thematic analysis process across four computational stages:
+
+1. **Greedy Structural Chunker.** Raw transcript data is parsed, cleaned of audio-dropout segments, and split on speaker turns into hierarchically structured Q–A chunks.
+2. **High-Iteration Coding.** The engine targets a locally served, GPU-offloaded open-weights model (**Llama-3.1-8B-Instruct**), running **N = 20** independent open-coding iterations per chunk. Constrained JSON schemas enforce strict format parity.
+3. **Within-Chunk Semantic Clustering.** The thousands of generated label strings are projected into a 768-dimensional embedding space using `nomic-embed-text-v1.5`. Inside each chunk, the engine performs average-linkage agglomerative clustering (cosine distance threshold 0.5) to group semantically equivalent codes.
+4. **Reliability Rollup.** Within-chunk theme recurrence is calculated as the ratio of independent iterations that surfaced the theme over total iterations:
+   `LLMQ = (Iterations Surfacing Theme) / N`
+   Empirical testing demonstrates that single-pass LLM open coding is largely stochastic (mean LLMQ ≈ 0.19), validating the necessity of an N = 20 consensus threshold to isolate stable themes.
+
+## Two-Axis Reliability & Span Stability
+
+To satisfy academic publication standards, the pipeline establishes a two-axis reliability metric that separates thematic categorization from verbatim evidence sourcing:
+
+- **Verdict Recurrence (LLMQ).** The level of cross-iteration agreement on the conceptual presence of a theme.
+- **Evidence Span Stability.** The percentage of iterations within a theme cluster that cite the exact same verbatim words from the transcript.
+
+To resolve minor editorial adjustments made by smaller local models (such as silent pronoun changes or whitespace discrepancies), a **six-stage verbatim recovery cascade** is implemented. Using normalized matching, fuzz-matching similarity ratios, and sub-chunk re-attribution, the post-processing routine re-anchors LLM-emitted quotes back to verifiable, verbatim transcript substrings with a $96\%+$ success rate.
+
+## Hierarchical Aggregation & Calibration
+
+To aggregate recurrent chunk-level themes into a publication-ready codebook, the pipeline employs a deterministic hierarchical clustering scheme:
+
+- **Sub-Themes.** Agglomerates corpus-wide codes using Ward-linkage clustering on unit-norm centroids into $K = 30$ sub-themes. The LLM is used strictly to name and define each cluster, preventing hallucinated themes.
+- **Top-Themes.** Centroids of the sub-themes are clustered in a second Ward-linkage pass into $K = 12$ top-themes. Ordering is determined by mean LLMQ, placing the most robust, convergent findings first.
+- **Cross-Pass Convergence.** Parallel runs of unprimed and minimally scaffolded prompt variants are compared via Jaccard overlap on covered chunks. Themes meeting a mutual-best Jaccard overlap of $\ge 0.50$ are reported as robustly convergent, while lower overlaps isolate pass-dependent prompt sensitivity.
+
+---
+
+*Note: The source repository and interview transcripts are private.*
