@@ -42,49 +42,45 @@ const featuredProjects = [
   </section>
 
   <section class="mb-16">
-    <!-- Headers -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-      <div class="md:col-span-8">
-        <h2 class="section-header !mt-0 !mb-6">Featured Research</h2>
-      </div>
-      <div class="md:col-span-4">
-        <h2 class="section-header !mt-0 !mb-6">Featured Writing</h2>
-      </div>
-    </div>
-
-    <!-- Items aligned by row -->
-    {Array.from({ length: Math.max(featuredResearch.length, featuredWritings.length) }).map((_, i) => (
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <div class="md:col-span-8">
-          {featuredResearch[i] ? (
-            <ArticleItem
-              href={`/research/${featuredResearch[i].slug}`}
-              title={featuredResearch[i].data.title}
-              description={featuredResearch[i].data.description}
-              meta={[String(featuredResearch[i].data.pubDate.getFullYear()), featuredResearch[i].data.pdfLink ? 'Preprint' : 'Paper']}
-            />
-          ) : <div />}
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-12">
+      <!-- Research Column -->
+      <div class="md:col-span-8 flex flex-col justify-between">
+        <div>
+          <h2 class="section-header !mt-0 !mb-6">Featured Research</h2>
+          <div class="flex flex-col gap-8">
+            {featuredResearch.map((item) => (
+              <ArticleItem
+                href={`/research/${item.slug}`}
+                title={item.data.title}
+                description={item.data.description}
+                meta={[String(item.data.pubDate.getFullYear()), item.data.pdfLink ? 'Preprint' : 'Paper']}
+              />
+            ))}
+          </div>
         </div>
-        <div class="md:col-span-4">
-          {featuredWritings[i] ? (
-            <ArticleItem
-              href={`/writing/${featuredWritings[i].slug}`}
-              title={featuredWritings[i].data.title}
-              description={featuredWritings[i].data.description}
-              meta={[featuredWritings[i].data.category === 'Major Works' ? 'Novel' : featuredWritings[i].data.category]}
-            />
-          ) : <div />}
+        <div class="mt-8 sans-meta">
+          <a href="/research" class="article-link">All research &rarr;</a>
         </div>
       </div>
-    ))}
 
-    <!-- Footer Links -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-      <div class="md:col-span-8 sans-meta">
-        <a href="/research" class="article-link">All research &rarr;</a>
-      </div>
-      <div class="md:col-span-4 sans-meta">
-        <a href="/writing" class="article-link">All writing &rarr;</a>
+      <!-- Writing Column -->
+      <div class="md:col-span-4 flex flex-col justify-between">
+        <div>
+          <h2 class="section-header !mt-0 !mb-6">Featured Writing</h2>
+          <div class="flex flex-col gap-8">
+            {featuredWritings.map((item) => (
+              <ArticleItem
+                href={`/writing/${item.slug}`}
+                title={item.data.title}
+                description={item.data.description}
+                meta={[item.data.category === 'Major Works' ? 'Novel' : item.data.category]}
+              />
+            ))}
+          </div>
+        </div>
+        <div class="mt-8 sans-meta">
+          <a href="/writing" class="article-link">All writing &rarr;</a>
+        </div>
       </div>
     </div>
   </section>
