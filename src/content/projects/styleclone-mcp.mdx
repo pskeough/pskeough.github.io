@@ -1,0 +1,33 @@
+---
+github: "https://github.com/pskeough/Claude-Style-Clone-MCP"
+githubLink: "https://github.com/pskeough/Claude-Style-Clone-MCP"
+title: "StyleClone MCP"
+description: "An offline, local-first Model Context Protocol (MCP) server that equips Claude with tools to draft in a target author's voice, utilizing SQLite FTS5 hybrid search, stylometric profiling, and local ONNX embeddings."
+techStack: ["Python", "SQLite FTS5", "FastEmbed (ONNX)", "FastMCP", "PowerShell", "FastAPI"]
+order: 4
+---
+
+## Architecture
+
+**StyleClone MCP** is a local-first Model Context Protocol (MCP) server that operates entirely offline. The system integrates directly with Claude Desktop and the Claude Code CLI, equipping language models with tools to access an author's stylistic corpus and pacing patterns.
+
+By utilizing lightweight local ONNX embeddings, SQLite FTS5 indices, and automated stylometric profiling, the server exposes contextual style examples and real-time stylistic vetting tools without transmitting private data to external servers.
+
+## Retrieval-Augmented Pacing
+
+The core implementation utilizes a multi-stage offline RAG pipeline to guide the drafting process:
+
+1. **Greedy Paragraph Chunking.** Raw manuscript files (PDF or DOCX) are ingested, cleaned of boilerplate headers, and packed into overlapping paragraphs of approximately 200 words to preserve the natural cadence of the text.
+2. **Hybrid Search Index.** Passages are embedded locally using a lightweight CPU-optimized BAAI/bge-small-en-v1.5 ONNX model. The vectors are stored in SQLite alongside an FTS5 virtual search table for high-performance keyword indexing.
+3. **Reciprocal Rank Fusion (RRF).** During a drafting query, the server executes both cosine similarity vector search and BM25 keyword search, combining the results using reciprocal rank fusion to retrieve highly relevant few-shot style exemplars.
+
+## Stylometric Auditing (AI Footprint Scrubber)
+
+To ensure the generated drafts match the target author's natural pacing, the server runs a real-time stylometric check:
+
+- **Sentence Burstiness.** Calculates the standard deviation of sentence lengths. The system flags flat, uniform sentence structures (a hallmark signature of standard AI output) and guides the model to insert highly varied sentence lengths.
+- **Diction Calibration.** Automatically filters an extensive list of overused AI buzzwords (such as *delve*, *tapestry*, *foster*, and *synergy*) against the target corpus, whitelisting only the words the author naturally uses and flagging other occurrences.
+- **Definiteness Enforcement.** Profiles the density of hedging phrases (such as *seems to*, *appears to*, or *in a sense*), directing the model to replace cautious statements with active, definite verbs.
+- **Pacing Metrics.** Measures median sentence lengths and strictly bans the use of em-dashes to eliminate common AI drafting Tells.
+
+[View on GitHub](https://github.com/pskeough/Claude-Style-Clone-MCP)
