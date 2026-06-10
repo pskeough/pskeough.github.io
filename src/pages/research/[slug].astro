@@ -42,7 +42,7 @@ const bibtex = arxivId
       <span class="tag">{entry.data.status ?? 'Research'}</span>
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
-    <p class="text-ink-gray text-[1.15rem] mb-8 italic">{entry.data.description}</p>
+    <p class="deck mb-8">{entry.data.description}</p>
 
     {(entry.data.pdfLink || entry.data.arxivLink || entry.data.repoLink) && (
       <div class="badge-row mb-10">

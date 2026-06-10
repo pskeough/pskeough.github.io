@@ -10,6 +10,8 @@ const researchCollection = defineCollection({
     pdfLink: z.string().optional(),
     repoLink: z.string().url().optional(),
     status: z.string().optional(),
+    plate: z.string().optional(),
+    plateCaption: z.string().optional(),
     order: z.number().optional(),
   }),
 });
@@ -37,6 +39,7 @@ const writingCollection = defineCollection({
     genre: z.string().optional(),
     isExcerpt: z.boolean().default(false),
     status: z.string().optional(),
+    wordCount: z.number().optional(),
     pdfLink: z.string().optional(),
   }),
 });

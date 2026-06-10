@@ -18,10 +18,11 @@ const { Content } = await entry.render();
       <span class="tag">{entry.data.category}</span>
       {entry.data.genre && <span>{entry.data.genre}</span>}
       {entry.data.status && (<><span>&bull;</span><span>{entry.data.status}</span></>)}
+      {entry.data.wordCount && (<><span>&bull;</span><span>{`~${entry.data.wordCount.toLocaleString()} words`}</span></>)}
       {entry.data.isExcerpt && (<><span>&bull;</span><span>Excerpt</span></>)}
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
-    {entry.data.description && <p class="text-ink-gray text-[1.15rem] mb-8 italic">{entry.data.description}</p>}
+    {entry.data.description && <p class="deck mb-8">{entry.data.description}</p>}
 
     {entry.data.pdfLink && (
       <div class="flex gap-6 mb-8 sans-meta">

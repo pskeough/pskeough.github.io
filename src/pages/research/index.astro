@@ -17,15 +17,25 @@ const entries = (await getCollection('research')).sort(
     post-hoc explanations faithfully report the variables that actually drove a model's output.
     Two are arXiv preprints. Code and full prompt sets are public where the work allows it.
   </p>
-  <div class="max-w-4xl">
+  <div class="max-w-5xl">
     {
       entries.map((entry) => (
-        <ArticleItem
-          href={`/research/${entry.slug}`}
-          title={entry.data.title}
-          description={entry.data.description}
-          meta={[String(entry.data.pubDate.getFullYear()), entry.data.status ?? 'Research']}
-        />
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-x-10 gap-y-4 items-start mb-4">
+          <ArticleItem
+            href={`/research/${entry.slug}`}
+            title={entry.data.title}
+            description={entry.data.description}
+            meta={[String(entry.data.pubDate.getFullYear()), entry.data.status ?? 'Research']}
+          />
+          {entry.data.plate && (
+            <a href={`/research/${entry.slug}`} class="plate mb-12 md:mb-0" tabindex="-1" aria-hidden="true">
+              <figure>
+                <img src={entry.data.plate} alt="" width="240" loading="lazy" />
+                {entry.data.plateCaption && <figcaption>{entry.data.plateCaption}</figcaption>}
+              </figure>
+            </a>
+          )}
+        </div>
       ))
     }
   </div>

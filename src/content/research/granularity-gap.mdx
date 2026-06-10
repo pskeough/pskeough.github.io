@@ -6,8 +6,12 @@ arxivLink: "https://arxiv.org/abs/2606.05183"
 pdfLink: "/research/granularity-gap/Keough_GranularityGap.pdf"
 repoLink: "https://github.com/pskeough/The-Granularity-Gap"
 status: "arXiv Preprint"
+plate: "/research/granularity-gap/Fig1_GranularityMatrix.png"
+plateCaption: "Fig. 1 · Variance captured: binary vs continuous measurement"
 order: 1
 ---
+
+import MarginNote from '../../components/MarginNote.astro';
 
 ## Overview
 
@@ -16,6 +20,8 @@ An empirical audit of **8,830 responses** across three Gemini generations (2.0, 
 ## The Granularity Gap
 
 Current LLM safety metrics rely heavily on binary pass/fail classification. This paradigm obscures a spectrum of "social compliance": hedging, flattery, and partial agreement where models prioritize user validation over epistemic accuracy. 
+
+<MarginNote>Binary filters behave as high-pass detectors: 95.9% detection for severe violations and 99.7% specificity on clean responses, but only 6.4% detection in the moderate band.</MarginNote>
 
 Our audit found that binary classification leaves **71% of behavioral variance unexplained** ($R^2=0.29$). Most critically, this gap concentrates in the moderate-severity band: approximately **94% of mild-to-moderate sycophantic responses perfectly bypass standard binary safety filters**, meaning the most common form of sycophancy goes entirely undetected.
 

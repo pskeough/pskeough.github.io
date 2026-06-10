@@ -32,10 +32,18 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
 };
 
 const arxivAuthorUrl = 'https://arxiv.org/search/?searchtype=author&query=Keough%2C+P+S';
+
+const stats = [
+  { value: '40,000+', label: 'LLM responses audited', href: '/research' },
+  { value: '71%', label: 'Variance missed by binary safety metrics', href: '/research/granularity-gap' },
+  { value: 'κ = 0.78', label: 'Agreement with human raters', href: '/research/granularity-gap' },
+  { value: '120', label: 'Demographic cohorts benchmarked', href: '/research/psychbench' },
+  { value: '300,000+', label: 'Words of prose, written without AI', href: '/writing' },
+];
 ---
 
 <MainLayout title="Patrick Keough | AI Evaluation Researcher & Writer">
-  <section class="grid md:grid-cols-[2fr_1fr] gap-16 mb-16 pb-16 border-b border-ink-gray">
+  <section class="grid md:grid-cols-[2fr_1fr] gap-16 mb-16">
     <div class="text-[1.25rem] md:text-[1.5rem] leading-[1.6]">
       I am an independent AI evaluation researcher in Sydney. The finding repeats across three
       solo-authored studies and roughly 40,000 model responses: large language models that pass
@@ -49,6 +57,15 @@ const arxivAuthorUrl = 'https://arxiv.org/search/?searchtype=author&query=Keough
       <p class="mt-6"><strong>Contact:</strong> <a href="mailto:pskeough@gmail.com" class="article-link">pskeough@gmail.com</a></p>
       <p class="mt-2"><strong>Profiles:</strong> <a href="https://github.com/pskeough" class="article-link">GitHub</a> &middot; <a href={arxivAuthorUrl} class="article-link">arXiv</a> &middot; <a href="https://linkedin.com/in/patrick-keough-b5b7a7261" class="article-link">LinkedIn</a> &middot; <a href="/about" class="article-link">About</a></p>
     </aside>
+  </section>
+
+  <section class="stat-strip mb-16" aria-label="Key figures">
+    {stats.map((s) => (
+      <a href={s.href} class="stat">
+        <span class="stat-number">{s.value}</span>
+        <span class="stat-label">{s.label}</span>
+      </a>
+    ))}
   </section>
 
   <section class="mb-16">
