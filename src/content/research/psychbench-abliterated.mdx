@@ -1,0 +1,26 @@
+---
+title: "PsychBench: Abliterated"
+description: "An extension of PsychBench testing whether the demographic suppression documented in aligned models survives abliteration, separating safety-trained suppression from absence in the underlying weights."
+pubDate: 2026-06-01
+status: "In Progress"
+order: 5
+---
+
+> [!NOTE]
+> **In Progress**
+> Generation runs are underway on local hardware. The paper is not yet written. This page documents the design and hypotheses.
+
+## Overview
+
+PsychBench documented a consistent failure: frontier models underestimate distress for transgender women while overestimating it nearly everywhere else. This extension asks where that failure lives. Abliteration removes a model's refusal direction by orthogonalizing the relevant weights, producing a model that answers what the aligned version would have declined, and that subtraction gives the audit a lever no amount of prompting can reach. The logic is simple. If the bias is enforced at the alignment layer, removing that layer should shift the output distribution; if the bias sits in the pretraining corpus itself, nothing should move.
+
+## Hypotheses
+
+Two hypotheses cover the outcomes.
+
+- **Active Suppression (H1).** Safety training is muting minority-stress signal the base model actually carries, so abliterated variants should recover part of the documented elevation that aligned checkpoints flatten away.
+- **Passive Erasure (H2).** The signal was never there. The corpus underrepresents the populations in question, and the abliterated variants reproduce the same flattened distributions as their aligned counterparts.
+
+## Design
+
+The design is matched-pairs. Base-instruct and abliterated variants of the same checkpoints run against identical PsychBench cohorts and the same NHANES and NESARC-III baselines, with all inference local on a single 16GB consumer GPU so the pairs differ in nothing except the abliteration itself. Scoring reuses the PsychBench pipeline unmodified. Any divergence between variants is attributable to the intervention rather than the harness.

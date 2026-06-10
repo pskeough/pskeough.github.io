@@ -10,20 +10,18 @@ interface Props {
 const { href, title, description, meta = [], size = 'lg' } = Astro.props;
 const titleSize = size === 'lg' ? 'text-[1.75rem]' : 'text-[1.4rem]';
 const excerptSize = size === 'lg' ? 'text-[1.05rem]' : 'text-[0.95rem]';
+
+const TAGGED = /^(arxiv preprint|preprint|paper|pilot study|work in progress|in progress|completed|novel|short fiction|essay|poetry|wip|client work)$/i;
 ---
 
 <article class="mb-12">
   {
     meta.length > 0 && (
-      <div class="sans-meta flex gap-4 mb-2">
+      <div class="sans-meta flex gap-4 mb-2 flex-wrap">
         {meta.map((m, i) => (
           <>
             {i > 0 && <span>&bull;</span>}
-            {m.toLowerCase() === 'preprint' || m.toLowerCase() === 'paper' || m.toLowerCase() === 'novel' || m.toLowerCase() === 'short fiction' || m.toLowerCase() === 'essay' || m.toLowerCase() === 'poetry' || m.toLowerCase() === 'wip' ? (
-              <span class="tag">{m}</span>
-            ) : (
-              <span>{m}</span>
-            )}
+            {TAGGED.test(m) ? <span class="tag">{m}</span> : <span>{m}</span>}
           </>
         ))}
       </div>
@@ -32,5 +30,5 @@ const excerptSize = size === 'lg' ? 'text-[1.05rem]' : 'text-[0.95rem]';
   <h3 class={`font-display ${titleSize} my-2`}>
     <a href={href} class="article-link">{title}</a>
   </h3>
-  {description && <p class={`text-ink-gray ${excerptSize}`}>{description}</p>}
+  {description && <p class={`text-ink-gray ${excerptSize} max-w-[68ch]`}>{description}</p>}
 </article>

@@ -9,7 +9,12 @@ const entries = (await getCollection('projects')).sort(
 ---
 
 <MainLayout title="Systems & Applications | Patrick Keough">
-  <h2 class="section-header">Systems &amp; Applications</h2>
+  <h1 class="section-header">Systems &amp; Applications</h1>
+  <p class="text-ink-gray text-[1.05rem] max-w-[68ch] mb-12">
+    Software built around the research and the writing: evaluation pipelines, local-first tools
+    for manuscript work, agentic simulation engines, and one paid client system. Most
+    repositories are public on GitHub.
+  </p>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     {
       entries.map((entry) => (

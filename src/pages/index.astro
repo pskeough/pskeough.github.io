@@ -10,8 +10,8 @@ const writing = await getCollection('writing');
 
 const featuredResearch = [
   research.find((r) => r.slug === 'psychbench'),
-  research.find((r) => r.slug === 'thematic-consensus'),
-  research.find((r) => r.slug === 'granularity-gap')
+  research.find((r) => r.slug === 'granularity-gap'),
+  research.find((r) => r.slug === 'explanation-gap')
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 
 const featuredWritings = [
@@ -20,9 +20,9 @@ const featuredWritings = [
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 
 const featuredProjects = [
-  projects.find((p) => p.slug === 'claude-cowrite'),
-  projects.find((p) => p.slug === 'mimesis-mcp'),
-  projects.find((p) => p.slug === 'sonic-vector')
+  projects.find((p) => p.slug === 'ingenuity-readiness-evaluator'),
+  projects.find((p) => p.slug === 'claudemind'),
+  projects.find((p) => p.slug === 'mimesis-mcp')
 ].filter((x): x is NonNullable<typeof x> => Boolean(x));
 
 const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poetry', string> = {
@@ -30,20 +30,24 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
   'Short Fiction': 'short-fiction',
   'Essays & Poetry': 'essays-and-poetry',
 };
+
+const arxivAuthorUrl = 'https://arxiv.org/search/?searchtype=author&query=Keough%2C+P+S';
 ---
 
-<MainLayout title="Patrick Keough | Portfolio">
+<MainLayout title="Patrick Keough | AI Evaluation Researcher & Writer">
   <section class="grid md:grid-cols-[2fr_1fr] gap-16 mb-16 pb-16 border-b border-ink-gray">
-    <div class="text-[1.5rem] leading-[1.6]">
-      I am an independent AI safety and red-team researcher, software builder, and novelist
-      currently based in Sydney. My work investigates the socio-technical fault lines of
-      artificial intelligence, alongside producing unassisted, clinical literary fiction.
+    <div class="text-[1.25rem] md:text-[1.5rem] leading-[1.6]">
+      I am an independent AI evaluation researcher in Sydney. The finding repeats across three
+      solo-authored studies and roughly 40,000 model responses: large language models that pass
+      binary safety checks still flatter users, flatten the populations they simulate, and
+      misreport the variables that drove their own outputs. Two of the three studies sit on
+      arXiv as preprints, with code and full prompt sets public. I also write fiction and
+      essays, none of it with AI.
     </div>
     <aside class="font-sans text-[0.9rem] text-ink-gray border-l border-ink-gray pl-8 md:pl-8">
-      <p><strong>Focus Areas:</strong> LLM Alignment, Algorithmic Bias, AI-Assisted Tooling, Post-Apocalyptic Surrealism.</p>
-      <br />
-      <p><strong>Contact:</strong> <a href="mailto:pskeough@gmail.com" class="article-link">pskeough@gmail.com</a></p>
-      <p class="mt-2"><strong>Profiles:</strong> <a href="https://github.com/pskeough" class="article-link">GitHub</a> &mdash; <a href="/research" class="article-link">arXiv</a> &mdash; <a href="/about" class="article-link">About</a></p>
+      <p><strong>Focus Areas:</strong> LLM Evaluation, Sycophancy &amp; Demographic Bias Auditing, Explanation Faithfulness, AI-Assisted Tooling, Literary Fiction.</p>
+      <p class="mt-6"><strong>Contact:</strong> <a href="mailto:pskeough@gmail.com" class="article-link">pskeough@gmail.com</a></p>
+      <p class="mt-2"><strong>Profiles:</strong> <a href="https://github.com/pskeough" class="article-link">GitHub</a> &middot; <a href={arxivAuthorUrl} class="article-link">arXiv</a> &middot; <a href="https://linkedin.com/in/patrick-keough-b5b7a7261" class="article-link">LinkedIn</a> &middot; <a href="/about" class="article-link">About</a></p>
     </aside>
   </section>
 
@@ -59,7 +63,7 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
                 href={`/research/${item.slug}`}
                 title={item.data.title}
                 description={item.data.description}
-                meta={[String(item.data.pubDate.getFullYear()), item.slug === 'thematic-consensus' ? 'Work in Progress' : (item.data.pdfLink ? 'Preprint' : 'Paper')]}
+                meta={[String(item.data.pubDate.getFullYear()), item.data.status ?? 'Research']}
               />
             ))}
           </div>
@@ -70,7 +74,7 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
       </div>
 
       <!-- Writing Column -->
-      <div class="md:col-span-4 flex flex-col justify-between">
+      <div class="md:col-span-4 flex flex-col justify-between md:border-l md:border-ink-gray/40 md:pl-12">
         <div>
           <h2 class="section-header !mt-0 !mb-6">Featured Writing</h2>
           <div class="flex flex-col gap-8">
@@ -79,7 +83,7 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
                 href={`/writing/${folderForCategory[item.data.category]}/${item.slug}`}
                 title={item.data.title}
                 description={item.data.description}
-                meta={[item.data.category === 'Major Works' ? 'Novel' : item.data.category]}
+                meta={[item.slug === 'the-basilisk' ? 'Novel' : 'Essay Collection']}
               />
             ))}
           </div>
@@ -93,7 +97,7 @@ const folderForCategory: Record<'Major Works' | 'Short Fiction' | 'Essays & Poet
 
   <section class="mt-8">
     <h2 class="section-header !mt-0 !mb-6">Featured Projects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {featuredProjects.map((item) => (
         <ProjectCard
           href={`/projects/${item.slug}`}

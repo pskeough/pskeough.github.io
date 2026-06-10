@@ -8,7 +8,7 @@ export default {
         'manila-card': '#fdfbf7',
         ink: '#111111',
         'ink-gray': '#444444',
-        accent: '#8b0000',
+        accent: '#700000',
       },
       fontFamily: {
         sans: ['Inter', '-apple-system', 'sans-serif'],

@@ -2,15 +2,16 @@
 title: "PsychBench"
 description: "A systematic epidemiological audit of LLM mental health simulations across 28,800 simulated patient profiles and 120 intersectional demographic cohorts."
 pubDate: 2026-02-10
+arxivLink: "https://arxiv.org/abs/2604.17359"
 pdfLink: "/research/psychbench/Keough_PsychBench.pdf"
+repoLink: "https://github.com/pskeough/PsychBench"
+status: "arXiv Preprint"
 order: 2
 ---
 
-**[Read the Full Paper on ArXiv](https://arxiv.org/abs/2604.17359)** | **[Download PDF](/research/psychbench/Keough_PsychBench.pdf)**
-
 ## Overview
 
-A systematic epidemiological audit (2026) evaluating **28,800 simulated patient profiles** across four frontier models — GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, and GLM-4.7 — against real-world NHANES and NESARC-III baselines. Coverage spans **120 intersectional demographic cohorts**.
+A systematic epidemiological audit (2026) evaluating **28,800 simulated patient profiles** across four frontier models (GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, and GLM-4.7) against real-world NHANES and NESARC-III baselines. Coverage spans **120 intersectional demographic cohorts**.
 
 The central question: Do LLMs faithfully reproduce the distributional properties of real populations, or do they encode stereotypes invisible at the individual case level?
 
@@ -39,13 +40,13 @@ The central finding of this research is a coherence-fidelity dissociation. While
 
 ## Supplementary Tables and Figures
 
-![Bias residuals by demographic group — positive residuals = overestimation; the −5.42 transgender-women residual stands inverted against systematic +3 to +6 overestimation everywhere else](/research/psychbench/T20_BiasResiduals.png)
-*Table 20: Bias Residuals (Model Mean – Ground Truth), aggregate pooled from Run 1 and Run 2. The asymmetry is structural, not an outlier — models overestimate distress for nearly every cohort while uniquely underestimating it for transgender women. All comparisons p&lt;0.001.*
+![Bias residuals by demographic group: positive residuals mean overestimation; the −5.42 transgender-women residual stands inverted against systematic +3 to +6 overestimation everywhere else](/research/psychbench/T20_BiasResiduals.png)
+*Table 20: Bias Residuals (Model Mean minus Ground Truth), aggregate pooled from Run 1 and Run 2. The asymmetry is structural, not an outlier: models overestimate distress for nearly every cohort while uniquely underestimating it for transgender women. All comparisons p&lt;0.001.*
 
-![Cross-model performance — bias residual, PHQ-8 five-category flip rate (stability), and temporal drift across the four frontier models](/research/psychbench/T17_ModelPerformance.png)
+![Cross-model performance: bias residual, PHQ-8 five-category flip rate (stability), and temporal drift across the four frontier models](/research/psychbench/T17_ModelPerformance.png)
 *Table 17: Performance across accuracy, stability, and temporal drift. No model dominates across dimensions: GLM-4.7 achieves the lowest bias residual (+4.90) but high flip rate; DeepSeek-V3 achieves the lowest flip rate (27.7%) but high bias. The failure modes are distributed across the frontier.*
 
-![Diagnostic transition heatmap (Run 1 vs Run 2) — heavy off-diagonal mass on the Mild→Moderate cell exposes 36.66% of cases crossing diagnostic thresholds between identical runs](/research/psychbench/F2_DiagnosticStability.png)
+![Diagnostic transition heatmap (Run 1 vs Run 2): heavy off-diagonal mass on the Mild to Moderate cell exposes 36.66% of cases crossing diagnostic thresholds between identical runs](/research/psychbench/F2_DiagnosticStability.png)
 *Figure 4: Test-retest classification stability. Despite correlation coefficients above r=0.90, 36.66% of profiles cross a diagnostic threshold between Run 1 and Run 2. Surface-level reliability conceals classification-level instability.*
 
 ## Conclusion

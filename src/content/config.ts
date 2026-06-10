@@ -8,6 +8,8 @@ const researchCollection = defineCollection({
     pubDate: z.date(),
     arxivLink: z.string().url().optional(),
     pdfLink: z.string().optional(),
+    repoLink: z.string().url().optional(),
+    status: z.string().optional(),
     order: z.number().optional(),
   }),
 });

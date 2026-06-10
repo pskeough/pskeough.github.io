@@ -12,12 +12,13 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MainLayout title={`${entry.data.title} | Writing`} description={entry.data.description}>
+<MainLayout title={`${entry.data.title} | Writing`} description={entry.data.description} ogType="article">
   <article class="prose-broadsheet mx-auto">
     <div class="sans-meta flex gap-4 mb-4 flex-wrap">
       <span class="tag">{entry.data.category}</span>
       {entry.data.genre && <span>{entry.data.genre}</span>}
       {entry.data.status && (<><span>&bull;</span><span>{entry.data.status}</span></>)}
+      {entry.data.isExcerpt && (<><span>&bull;</span><span>Excerpt</span></>)}
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
     {entry.data.description && <p class="text-ink-gray text-[1.15rem] mb-8 italic">{entry.data.description}</p>}
@@ -27,7 +28,9 @@ const { Content } = await entry.render();
         <a href={entry.data.pdfLink} target="_blank" rel="noopener noreferrer" class="article-link">Download / Open Full Piece &rarr;</a>
       </div>
     )}
-    <Content />
+    <div class="article-body">
+      <Content />
+    </div>
     <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
       <a href="/writing" class="article-link">&larr; All writing</a>
     </div>

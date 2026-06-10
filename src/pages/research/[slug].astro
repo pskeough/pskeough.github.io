@@ -11,33 +11,72 @@ interface Props { entry: CollectionEntry<'research'>; }
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const year = entry.data.pubDate.getFullYear();
+
+const arxivId = entry.data.arxivLink?.match(/abs\/([\d.]+)/)?.[1];
+const citeKey = `keough${year}${entry.slug.replace(/-/g, '')}`;
+const pageUrl = new URL(`/research/${entry.slug}/`, Astro.site).href;
+
+const bibtex = arxivId
+  ? `@misc{${citeKey},
+  title         = {${entry.data.title}},
+  author        = {Keough, Patrick S.},
+  year          = {${year}},
+  eprint        = {${arxivId}},
+  archivePrefix = {arXiv},
+  url           = {${entry.data.arxivLink}}
+}`
+  : `@misc{${citeKey},
+  title  = {${entry.data.title}},
+  author = {Keough, Patrick S.},
+  year   = {${year}},
+  note   = {${entry.data.status ?? 'Working paper'}},
+  url    = {${pageUrl}}
+}`;
 ---
 
-<MainLayout title={`${entry.data.title} | Research`} description={entry.data.description}>
+<MainLayout title={`${entry.data.title} | Research`} description={entry.data.description} ogType="article">
   <article class="prose-broadsheet mx-auto">
-    <div class="sans-meta flex gap-4 mb-4">
+    <div class="sans-meta flex gap-4 mb-4 flex-wrap">
       <span>{year}</span>
       <span>&bull;</span>
-      <span class="tag">Research</span>
+      <span class="tag">{entry.data.status ?? 'Research'}</span>
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
-    <p class="text-ink-gray text-[1.15rem] mb-8">{entry.data.description}</p>
+    <p class="text-ink-gray text-[1.15rem] mb-8 italic">{entry.data.description}</p>
 
-    {(entry.data.pdfLink || entry.data.arxivLink) && (
-      <div class="flex gap-6 mb-8 sans-meta">
-        {entry.data.pdfLink && (
-          <a href={entry.data.pdfLink} class="article-link">Download PDF &rarr;</a>
-        )}
-        {entry.data.arxivLink && (
-          <a href={entry.data.arxivLink} class="article-link">View on arXiv &rarr;</a>
-        )}
+    {(entry.data.pdfLink || entry.data.arxivLink || entry.data.repoLink) && (
+      <div class="badge-row mb-10">
+        {entry.data.arxivLink && <a href={entry.data.arxivLink}>arXiv</a>}
+        {entry.data.pdfLink && <a href={entry.data.pdfLink}>PDF</a>}
+        {entry.data.repoLink && <a href={entry.data.repoLink}>Code</a>}
       </div>
     )}
 
-    <Content />
+    <div class="article-body">
+      <Content />
+    </div>
+
+    <details class="cite-block">
+      <summary>Cite this work</summary>
+      <pre class="cite-bibtex"><code>{bibtex}</code></pre>
+      <button type="button" class="cite-copy-btn">Copy BibTeX</button>
+    </details>
 
     <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
       <a href="/research" class="article-link">&larr; All research</a>
     </div>
   </article>
 </MainLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.cite-copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const pre = btn.parentElement?.querySelector('.cite-bibtex');
+      if (!pre?.textContent) return;
+      await navigator.clipboard.writeText(pre.textContent);
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    });
+  });
+</script>

@@ -1,17 +1,17 @@
 ---
-github: "https://github.com/pskeough/claude-cowrite"
+githubLink: "https://github.com/pskeough/claude-cowrite"
 title: "Claude CoWrite"
 description: "A local-first creative writing IDE with line-by-line LLM editing, word-level diffing, and headless Claude CLI integration. No cloud upload, no API key UI."
 techStack: ["React 18", "Vite", "TypeScript", "Node.js", "Express", "Claude Code CLI"]
-order: 1
+order: 2
 ---
 
 ## Architecture
 
 Claude CoWrite is a two-process, local-first web application. The frontend is a resizable three-pane editor (File Browser, Editor/Diff View, AI Chat). The backend is an Express server that handles file I/O and spawns headless instances of the `claude` CLI as a subprocess via Node's `child_process`.
 
-![Claude CoWrite — three-pane layout with file browser (left), manuscript editor (center), and Claude chat panel (right)](/projects/claude-cowrite/CoWrite_FileView.png)
-*Three-pane filesystem-native editor. The browser operates directly on `.txt` manuscript files; the center pane handles the active document; the right panel connects to a headless Claude CLI subprocess via Express — no API key UI, no cloud upload.*
+![Claude CoWrite: three-pane layout with file browser (left), manuscript editor (center), and Claude chat panel (right)](/projects/claude-cowrite/CoWrite_FileView.png)
+*Three-pane filesystem-native editor. The browser operates directly on `.txt` manuscript files; the center pane handles the active document; the right panel connects to a headless Claude CLI subprocess via Express. No API key UI, no cloud upload.*
 
 ## Core Mechanics
 
@@ -19,13 +19,13 @@ Claude CoWrite is a two-process, local-first web application. The frontend is a 
 - **Line-by-Line AI Editing:** Granular word-level diffing. The AI operates in three distinct modes: **Analysis** (read-only), **Context** (creates reference docs), and **Edit** (proposes changes).
 - **Strict User Control:** AI changes are proposals only. The system snapshots the original file before any AI write; the user reviews a line-by-line diff and must explicitly click "Accept" or "Reject" before changes persist.
 
-![Claude CoWrite in Analysis mode — side-by-side view of the manuscript and AI-generated structural analysis with comparative notes between draft years](/projects/claude-cowrite/CoWrite_Analysis.png)
+![Claude CoWrite in Analysis mode: side-by-side view of the manuscript and AI-generated structural analysis with comparative notes between draft years](/projects/claude-cowrite/CoWrite_Analysis.png)
 *Analysis mode (read-only): Claude reads the active chapter and surfaces structural, tonal, and pacing observations in the right panel. Shown here running a comparative analysis between two draft years of the same chapter.*
 
-![Claude CoWrite in Edit/Diff mode — dual pane with original manuscript on the left and AI-proposed edits on the right, with word-level highlighting showing insertions and deletions](/projects/claude-cowrite/CoWrite_DiffView.png)
+![Claude CoWrite in Edit/Diff mode: dual pane with original manuscript on the left and AI-proposed edits on the right, with word-level highlighting showing insertions and deletions](/projects/claude-cowrite/CoWrite_DiffView.png)
 *Edit mode with word-level diff: proposed AI edits appear in the right pane with per-word insertion/deletion highlighting. The original file is snapshotted before any AI write; the user must explicitly Accept or Reject before changes persist.*
 
-![Claude CoWrite Context mode — file viewer showing a generated character voice and dialogue guide, used as retrieval context for subsequent AI editing passes](/projects/claude-cowrite/CoWrite_ContextDoc.png)
+![Claude CoWrite Context mode: file viewer showing a generated character voice and dialogue guide, used as retrieval context for subsequent AI editing passes](/projects/claude-cowrite/CoWrite_ContextDoc.png)
 *Context mode: Claude generates structured reference documents (character voice guides, plot outlines, style notes) saved as `.md` files in the project. These are loaded as RAG context for all subsequent Analysis and Edit operations.*
 
 

@@ -12,7 +12,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MainLayout title={`${entry.data.title} | Projects`} description={entry.data.description}>
+<MainLayout title={`${entry.data.title} | Projects`} description={entry.data.description} ogType="article">
   <article class="prose-broadsheet mx-auto">
     <div class="sans-meta mb-4">
       <span class="tag">Project</span>
@@ -24,17 +24,15 @@ const { Content } = await entry.render();
     </div>
 
     {(entry.data.githubLink || entry.data.liveLink) && (
-      <div class="flex gap-6 mb-8 sans-meta">
-        {entry.data.githubLink && (
-          <a href={entry.data.githubLink} class="article-link">GitHub &rarr;</a>
-        )}
-        {entry.data.liveLink && (
-          <a href={entry.data.liveLink} class="article-link">Live &rarr;</a>
-        )}
+      <div class="badge-row mb-10">
+        {entry.data.githubLink && <a href={entry.data.githubLink}>GitHub</a>}
+        {entry.data.liveLink && <a href={entry.data.liveLink}>Live</a>}
       </div>
     )}
 
-    <Content />
+    <div class="article-body">
+      <Content />
+    </div>
 
     <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
       <a href="/projects" class="article-link">&larr; All projects</a>

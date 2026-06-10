@@ -1,0 +1,19 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Page Not Found | Patrick Keough" description="The page you were looking for does not exist.">
+  <section class="py-16 max-w-[70ch]">
+    <p class="sans-meta mb-4">404</p>
+    <h1 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Page not found.</h1>
+    <p class="text-[1.15rem] leading-[1.7] mb-8">
+      Whatever was here has been retired, moved, or never existed. The archives below are current.
+    </p>
+    <nav class="flex flex-wrap gap-6 sans-meta">
+      <a href="/" class="article-link">Front page &rarr;</a>
+      <a href="/research" class="article-link">Research &rarr;</a>
+      <a href="/writing" class="article-link">Writing &rarr;</a>
+      <a href="/projects" class="article-link">Projects &rarr;</a>
+    </nav>
+  </section>
+</MainLayout>

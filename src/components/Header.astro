@@ -7,30 +7,47 @@ const navItems = [
 ];
 
 const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/';
 const isActive = (href: string) =>
   href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+
+const today = new Date().toLocaleDateString('en-AU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
 ---
 
-<header class="py-12 mb-16 border-b-[3px] border-ink flex flex-col md:flex-row md:justify-between md:items-end gap-6">
-  <div>
-    <a href="/" class="hover:!border-transparent">
-      <h1 class="font-display text-5xl font-extrabold tracking-tight">Patrick Keough</h1>
-    </a>
-    <div class="sans-meta mt-2">Independent AI Researcher &amp; Writer &mdash; Sydney</div>
+<header class="pt-12 pb-6 mb-12">
+  <div class="masthead-rule pb-6 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+    <div>
+      <a href="/" class="hover:!border-transparent">
+        {
+          isHome ? (
+            <h1 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight">Patrick Keough</h1>
+          ) : (
+            <p class="font-display text-4xl md:text-5xl font-extrabold tracking-tight">Patrick Keough</p>
+          )
+        }
+      </a>
+    </div>
+    <nav class="flex flex-wrap gap-x-8 gap-y-2 pb-1" aria-label="Primary">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'font-sans text-[0.85rem] font-semibold uppercase tracking-wider py-2',
+              { 'border-b-2 border-ink hover:!border-ink': isActive(item.href) },
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
   </div>
-  <nav class="flex gap-8 pb-2">
-    {
-      navItems.map((item) => (
-        <a
-          href={item.href}
-          class:list={[
-            'font-sans text-[0.85rem] font-semibold uppercase tracking-wider',
-            { 'border-b-2 border-ink hover:!border-ink': isActive(item.href) },
-          ]}
-        >
-          {item.label}
-        </a>
-      ))
-    }
-  </nav>
+  <div class="dateline-strip mt-3">
+    <span>AI Evaluation Researcher &amp; Writer &middot; Sydney &middot; {today}</span>
+  </div>
 </header>

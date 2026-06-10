@@ -1,0 +1,18 @@
+---
+title: "ClaudeMind"
+description: "A self-maintaining personal memory system: a FastEmbed vector index and a compiled graph index over an Obsidian vault, kept current by autonomous headless Claude Code loops and served to agents over MCP."
+techStack: ["Python", "FastEmbed (ONNX)", "SQLite", "MCP", "Claude Code", "Obsidian"]
+order: 3
+---
+
+## Overview
+
+ClaudeMind is the memory layer my agents run on. Two engines sit over one Obsidian vault, a FastEmbed vector index for semantic recall and a compiled flat-file graph for structural recall, and autonomous headless Claude Code loops sweep new sessions into the vault, write state cards per project, and rebuild both engines without manual upkeep. Nothing about it requires me.
+
+## Architecture
+
+Ingestion runs on a schedule, summarizing sessions, extracting decisions, and filing them against the right project. Vector search answers what is relevant. Graph traversal answers what is connected. Above both sits a persona layer, a longitudinal user model synthesized from three years of conversation history with a quarantined clinical tier that surfaces only on explicit query, and the whole system is exposed over MCP so that search, project state, timeline, and persona recall are tools any compatible client can call.
+
+## Why It Exists
+
+My memory is semantic rather than episodic, so I keep records the way other people keep recollections. ClaudeMind turns that necessity into infrastructure. Any agent I work with starts a session already knowing the state of every project I run, and the system maintains itself while I sleep. The repository is private while I make the system portable for public release.

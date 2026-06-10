@@ -1,0 +1,18 @@
+---
+title: "Ingenuity Readiness Evaluator"
+description: "A commissioned agentic RAG pipeline that scores major organizations against a leadership framework, producing reports of roughly 110 individually cited findings per company with verbatim-quote discipline at every score."
+techStack: ["Python", "Flask", "React", "Claude API", "Agentic RAG", "Headless Chrome PDF"]
+order: 1
+---
+
+## Overview
+
+A paid client system built for author Katharine McLennan's book on leadership in the AI era. It shipped. The pipeline evaluates major organizations, Accenture, Atlassian, BHP, Canva, CommBank, McKinsey, Telstra, Wesfarmers, and Woolworths among them, against her VISTA and ORG6 leadership frameworks, then assembles every finding into a print-ready report the client now uses in her consulting work.
+
+## Pipeline
+
+Five stages. Discovery sends web research agents out to assemble an evidence pool per company from filings, hiring pages, press coverage, and analyst commentary, with provenance recorded for every document retrieved along the way. Extraction catalogues verbatim quotes against each framework dimension. Scoring assigns every VISTA and ORG6 sub-question a 1 to 5 rating, no rating is accepted without a verbatim quote and a source id attached, and quadrant analysis then classifies each operational subcomponent within the framework taxonomy. Report generation renders the result in a Flask and React app, and a headless Chrome pipeline exports a print-quality PDF free of browser chrome and font artifacts.
+
+## Citation Discipline
+
+The constraint that mattered was citation discipline under automation. Roughly 110 individually cited findings per company. The evidence database audits itself, rejecting any claim that cannot point back to its source before that claim ever reaches the report.

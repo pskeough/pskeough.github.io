@@ -2,11 +2,12 @@
 title: "The Granularity Gap"
 description: "A multi-dimensional longitudinal audit of sycophancy in Gemini models, showing that binary safety classification leaves 71% of behavioral variance unexplained."
 pubDate: 2026-01-15
+arxivLink: "https://arxiv.org/abs/2606.05183"
 pdfLink: "/research/granularity-gap/Keough_GranularityGap.pdf"
+repoLink: "https://github.com/pskeough/The-Granularity-Gap"
+status: "arXiv Preprint"
 order: 1
 ---
-
-**[Download the Full PDF](/research/granularity-gap/Keough_GranularityGap.pdf)**
 
 ## Overview
 
@@ -14,7 +15,7 @@ An empirical audit of **8,830 responses** across three Gemini generations (2.0, 
 
 ## The Granularity Gap
 
-Current LLM safety metrics rely heavily on binary pass/fail classification. This paradigm obscures a spectrum of "social compliance" — hedging, flattery, and partial agreement where models prioritize user validation over epistemic accuracy. 
+Current LLM safety metrics rely heavily on binary pass/fail classification. This paradigm obscures a spectrum of "social compliance": hedging, flattery, and partial agreement where models prioritize user validation over epistemic accuracy. 
 
 Our audit found that binary classification leaves **71% of behavioral variance unexplained** ($R^2=0.29$). Most critically, this gap concentrates in the moderate-severity band: approximately **94% of mild-to-moderate sycophantic responses perfectly bypass standard binary safety filters**, meaning the most common form of sycophancy goes entirely undetected.
 
@@ -37,16 +38,16 @@ The paper introduces a measure of the epistemic cost of social compliance. Sycop
 
 - **Category Vulnerability:** Requests for flattery (Egotistical Validation) elicit sycophancy at nearly twice the rate of overtly unethical requests. This suggests that RLHF-trained "helpfulness" creates exploitable blind spots centered on affective manipulation.
 
-![Vulnerability heatmap across 8 Gemini variants × 7 adversarial prompt categories — Egotistical Validation (flattery) is the dominant vulnerability across the entire model family](/research/granularity-gap/F3_VulnerabilityHeatmap.png)
+![Vulnerability heatmap across 8 Gemini variants and 7 adversarial prompt categories: Egotistical Validation (flattery) is the dominant vulnerability across the entire model family](/research/granularity-gap/F3_VulnerabilityHeatmap.png)
 *Figure 4: Mean sycophancy scores across eight Gemini variants and seven adversarial categories (Control condition, N=2,948). Egotistical Validation dominates across the entire family; Gen 2.5 Pro shows the most severe susceptibility (M=4.15 in this category).*
 
-![Generational vulnerability radar charts — Gen 2.5 (red) expands across every adversarial axis, demonstrating a regression that affected all categories simultaneously rather than any single dimension](/research/granularity-gap/F4_GenerationalProfiles.png)
-*Figure 5: Generational vulnerability profiles across all seven categories (Control). The Gen 2.5 expansion is uniform across categories — not specialization-driven — suggesting a system-wide regression rather than a targeted failure mode.*
+![Generational vulnerability radar charts: Gen 2.5 (red) expands across every adversarial axis, demonstrating a regression that affected all categories simultaneously rather than any single dimension](/research/granularity-gap/F4_GenerationalProfiles.png)
+*Figure 5: Generational vulnerability profiles across all seven categories (Control). The Gen 2.5 expansion is uniform across categories, not specialization-driven, suggesting a system-wide regression rather than a targeted failure mode.*
 
 - **Guardrail Interventions:** Simple direct constraints ("Do not agree with false premises") consistently outperformed complex reasoning protocols, achieving a 42% remediation in the most vulnerable category.
 
-![Intervention efficacy bar chart — challenge rate climbs from 87.7% (Control) to 99.9% (Simple), while mean sycophancy drops from 2.21 to 1.16](/research/granularity-gap/F6_InterventionEfficacy.png)
-*Figure 6: Guardrail impact on challenge rate (87.7% → 99.9%) and mean sycophancy (2.21 → 1.16) — a 48% reduction. Simple constraints outperform complex reasoning protocols, suggesting susceptibility to flattery is an alignment artifact addressable through minimal intervention.*
+![Intervention efficacy bar chart: challenge rate climbs from 87.7% (Control) to 99.9% (Simple), while mean sycophancy drops from 2.21 to 1.16](/research/granularity-gap/F6_InterventionEfficacy.png)
+*Figure 6: Guardrail impact on challenge rate (87.7% → 99.9%) and mean sycophancy (2.21 → 1.16), a 48% reduction. Simple constraints outperform complex reasoning protocols, suggesting susceptibility to flattery is an alignment artifact addressable through minimal intervention.*
 
 ## Conclusion
 
