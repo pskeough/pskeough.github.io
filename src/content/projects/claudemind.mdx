@@ -1,7 +1,8 @@
 ---
 title: "ClaudeMind"
-description: "A self-maintaining personal memory system: a FastEmbed vector index and a compiled graph index over an Obsidian vault, kept current by autonomous headless Claude Code loops and served to agents over MCP."
-techStack: ["Python", "FastEmbed (ONNX)", "SQLite", "MCP", "Claude Code", "Obsidian"]
+description: "A self-maintaining personal memory system: vector and graph indexes over an Obsidian vault, kept current by autonomous Claude Code loops, gated by audience-scoped privacy profiles, and measured by its own evaluation harnesses. Portable release on GitHub."
+techStack: ["TypeScript", "FastEmbed (ONNX)", "SQLite + sqlite-vec", "MCP", "Claude Code", "Obsidian"]
+githubLink: "https://github.com/pskeough/claude_mind"
 order: 3
 ---
 
@@ -13,6 +14,10 @@ ClaudeMind is the memory layer my agents run on. Two engines sit over one Obsidi
 
 Ingestion runs on a schedule, summarizing sessions, extracting decisions, and filing them against the right project. Vector search answers what is relevant. Graph traversal answers what is connected. Above both sits a persona layer, a longitudinal user model synthesized from three years of conversation history with a quarantined clinical tier that surfaces only on explicit query, and the whole system is exposed over MCP so that search, project state, timeline, and persona recall are tools any compatible client can call.
 
+Every memory also carries an audience scope on a privacy ladder, and sessions can run under a work or public profile that structurally cannot retrieve more private material. An adversarial leak harness proves the boundary on my own data, with a content-audit mode that reads the retrieved text itself rather than trusting labels. The system also learns: a nightly miner turns in-chat feedback on drafts written in my voice into recalibration signal for the voice engine, keeping stylistic corrections and discarding factual ones, and a weekly hygiene pass tracks retrieval quality as a trend and raises an alarm in my daily digest when it drifts.
+
 ## Why It Exists
 
-My memory is semantic rather than episodic, so I keep records the way other people keep recollections. ClaudeMind turns that necessity into infrastructure. Any agent I work with starts a session already knowing the state of every project I run, and the system maintains itself while I sleep. The repository is private while I make the system portable for public release.
+My memory is semantic rather than episodic, so I keep records the way other people keep recollections. ClaudeMind turns that necessity into infrastructure. Any agent I work with starts a session already knowing the state of every project I run, and the system maintains itself while I sleep. The portable release is public: it installs through a Claude-driven runbook, verifies itself with a doctor script, and ships with the same evaluation harnesses the system was tuned against.
+
+[View on GitHub](https://github.com/pskeough/claude_mind)
