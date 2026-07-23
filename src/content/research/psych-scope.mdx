@@ -1,0 +1,45 @@
+---
+title: "Same Bias, Different Mechanisms"
+description: "A counterfactual audit of socioeconomic-cue bias in LLM mental-health assessment across three model families, showing an identical behavioral bias whose mechanism is model-idiosyncratic and mostly invisible to any single sparse dictionary."
+pubDate: 2026-07-23
+repoLink: "https://github.com/pskeough/psych_scope"
+pdfLink: "/research/psych-scope/Keough_PsychScope.pdf"
+status: "Preprint (draft)"
+plate: "/research/psych-scope/fig1_gradients.png"
+plateCaption: "Fig. 1 · Poverty-graded symptom scoring across three models and instruments"
+order: 9
+---
+
+import MarginNote from '../../components/MarginNote.astro';
+
+## Overview
+
+An audit of three open-weight model families for socioeconomic-cue bias in simulated mental-health self-report, paired with a mechanistic analysis that answers a harder question: whether interpretability could stand in for the audit. It cannot, and that is the point.
+
+## A counterfactual design
+
+We built clinical-style vignettes in which the symptom presentation is held fixed and only the income and insurance cue changes. Because the two patients are identical apart from the cue, any score difference is an individual-fairness violation, and it needs no ground-truth severity to interpret. All three models, Qwen3-8B, Gemma-3-12B-it, and Llama-3.1-8B-Instruct, raise assessed PHQ-8 and GAD-7 severity for the poorer patient, monotonically across three cue levels, with profile-clustered bootstrap intervals that clear zero by a wide margin. The gradient holds when the literal socioeconomic label is deleted, across framings, and under sampled decoding.
+
+<MarginNote>Powered tier: $n=320$ per level, temperature 1.0, 80 paired demographic profiles. Gap intervals: Qwen 7.77 [7.40, 8.14], Llama 7.09 [6.60, 7.58], Gemma 4.03 [3.69, 4.37].</MarginNote>
+
+![Poverty-graded symptom scoring across three models and three instruments](/research/psych-scope/fig1_gradients.png)
+*Figure 1: All three models raise assessed severity for the poorer patient, monotonically across cue levels, on both internalizing instruments.*
+
+## The mechanism is not shared
+
+The mechanistic half is where the story turns. Cue-derived dictionary features do shift scores when injected, but the mechanism behind the shared behavior is not shared. Qwen is injectable and resistant to ablation, Gemma is the reverse, the stereotype content contradicts across models, and operator-matched patching shows that any single sparse dictionary carries only about a third of the causal signal that the raw residual stream carries. A fairness auditor reading each model from the inside would have written three different explanations for one identical harm.
+
+![Causal intervention effects with bootstrap confidence intervals](/research/psych-scope/fig4_causal_ci.png)
+*Figure 2: Feature injection, ablation, and raw patching all move scores with intervals excluding zero, but the handles dissociate by model.*
+
+![SAE dictionary adequacy at layer 18](/research/psych-scope/fig5_sae_adequacy.png)
+*Figure 3: The reconstruction operator carries a non-cue valence contrast at 79 percent but the socioeconomic contrast at only 35 percent, which points to selective under-representation rather than a broken operator.*
+
+## Why interpretability cannot replace the audit
+
+That divergence is the argument. When the mechanism changes shape from model to model while the behavior stays fixed, the internal view cannot be the audit surface. Behavioral counterfactual auditing has to remain the load-bearing instrument, and we propose a socioeconomic cue-swap invariance test as a concrete, cheap pre-deployment gate. Every number was re-derived from the raw files by an independent check, and one artifact, a format-echo effect under feature injection, was caught and corrected in the open rather than buried.
+
+This is a working draft. The socioeconomic cue bundles income and insurance rather than a validated multidimensional construct, the mechanistic tier tests one checkpoint per family, and several identification controls are left for future work.
+
+---
+**[Download the Full PDF](/research/psych-scope/Keough_PsychScope.pdf)**
