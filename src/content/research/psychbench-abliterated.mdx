@@ -1,26 +1,32 @@
 ---
-title: "PsychBench: Abliterated"
-description: "An extension of PsychBench testing whether the demographic suppression documented in aligned models survives abliteration, separating safety-trained suppression from absence in the underlying weights."
-pubDate: 2026-06-01
-status: "In Progress"
+title: "Deeper Than the Guardrails"
+description: "A ten-pair audit of base and abliterated open-weight models across 95,920 clinical screening observations, showing that demographic over-pathologization survives removal of the refusal direction."
+pubDate: 2026-07-15
+repoLink: "https://github.com/pskeough/deeper-than-the-guardrails"
+status: "Preprint in Preparation"
 order: 5
 ---
 
 > [!NOTE]
-> **In Progress**
-> Generation runs are underway on local hardware. The paper is not yet written. This page documents the design and hypotheses.
+> **Preprint in Preparation**
+> The verified paper, receipts, and recompute tables are public in the repository. An arXiv posting is in preparation.
 
 ## Overview
 
-PsychBench documented a consistent failure: frontier models underestimate distress for transgender women while overestimating it nearly everywhere else. This extension asks where that failure lives. Abliteration removes a model's refusal direction by orthogonalizing the relevant weights, producing a model that answers what the aligned version would have declined, and that subtraction gives the audit a lever no amount of prompting can reach. The logic is simple. If the bias is enforced at the alignment layer, removing that layer should shift the output distribution; if the bias sits in the pretraining corpus itself, nothing should move.
+Does "uncensoring" an open-weight model change how it pathologizes patients? This extension of the PsychBench audit runs **ten base and abliterated model pairs** (Ministral, Qwen-3, Gemma, GLM-4, Phi-4, Qwen-2.5, Phi-3-medium, Llama-3.1, DeepSeek-R1-Distill, Yi-1.5) across four clinical screening instruments and **120 demographic cells**, producing **95,920 observations** graded against author-derived, survey-weighted NHANES 2005 to 2018 population norms.
 
-## Hypotheses
+Abliteration removes a model's refusal direction by orthogonalizing the relevant weights. If demographic bias were an artifact of the safety layer, removing that layer should relieve it. It does not.
 
-Two hypotheses cover the outcomes.
+## Key Findings
 
-- **Active Suppression (H1).** Safety training is muting minority-stress signal the base model actually carries, so abliterated variants should recover part of the documented elevation that aligned checkpoints flatten away.
-- **Passive Erasure (H2).** The signal was never there. The corpus underrepresents the populations in question, and the abliterated variants reproduce the same flattened distributions as their aligned counterparts.
+- **Abliteration reduces but does not remove over-pathologization.** Twenty-one cross-model consensus cells drop about 2.13 PHQ-8 points (t = -21.5, 21 of 21 in the reducing direction), yet they remain roughly 9 points above the NHANES population norm. The bias sits deeper than the refusal machinery.
+- **Three reproducible regimes.** The effect of abliteration sorts into preservation, compression, and correction, architecture-dependent patterns convergently classified by six independent psychometric metrics.
+- **Calibration-discrimination dissociation.** Across 40 pair-by-instrument combinations, abliteration improves both Brier components in only 20% of cases and worsens both in 52%.
+- **Honest scope.** Transgender and multiracial cohorts have no representative severity benchmark, so their elevated scores are reported descriptively; an earlier bias-localization claim resting on a non-representative offset was withdrawn and the correction is documented in the paper.
 
-## Design
+## Conclusion
 
-The design is matched-pairs. Base-instruct and abliterated variants of the same checkpoints run against identical PsychBench cohorts and the same NHANES and NESARC-III baselines, with all inference local on a single 16GB consumer GPU so the pairs differ in nothing except the abliteration itself. Scoring reuses the PsychBench pipeline unmodified. Any divergence between variants is attributable to the intervention rather than the harness.
+The refusal direction is not the seat of the bias. Open-weight screening tools built on abliterated checkpoints inherit the same over-pathologization as their aligned parents.
+
+---
+**[Paper repository on GitHub](https://github.com/pskeough/deeper-than-the-guardrails)**

@@ -1,18 +1,18 @@
 ---
-title: "The Explanation Gap"
-description: "A pilot study analyzing the dissonance between LLM mechanistic interpretability and user-facing rationale generation in high-stakes environments."
-pubDate: 2025-11-01
+title: "Telling More Than They Can Know"
+description: "A four-model audit of whether LLM self-explanations disclose the demographic drivers of their psychiatric-instrument scoring, showing that models name demographic features but credit them with a fraction of the score variance they actually drive."
+pubDate: 2026-07-10
 pdfLink: "/research/explanation-gap/ExplanationGapPilot.pdf"
-repoLink: "https://github.com/pskeough/TheExplanationGap"
-status: "Pilot Study"
+repoLink: "https://github.com/pskeough/telling-more-than-they-can-know"
+status: "Working Paper"
 plate: "/research/explanation-gap/Fig1_phase1_phq8_bias.png"
 plateCaption: "Fig. 1 · PHQ-8 group means: the SES gap dominates scoring variance"
 order: 3
 ---
 
-> [!WARNING]
-> **Pilot Study / In-Development**
-> The following research is currently in its pilot phase. The findings presented below are preliminary data from an ongoing four-phase audit. [Download the full Pilot Paper PDF](/research/explanation-gap/ExplanationGapPilot.pdf)
+> [!NOTE]
+> **Working Paper**
+> The findings below come from the pilot phase of an ongoing four-phase audit. The verified paper and full pipeline are public at [telling-more-than-they-can-know](https://github.com/pskeough/telling-more-than-they-can-know). [Download the Pilot Paper PDF](/research/explanation-gap/ExplanationGapPilot.pdf)
 
 ## Overview
 
@@ -39,4 +39,4 @@ Despite SES being the empirical driver of the scores, the models' explanations a
 An LLM-as-judge protocol ($n=1,074$ evaluations) further revealed severe "fairwashing." In over 52% of the cases, explanations would explicitly name the demographic features involved, yet still successfully fairwash the output by rationalizing the biased score through clinical-sounding language. The pilot indicates that current post-hoc explanation paradigms fail to surface demographic bias, actively maintaining an "explanation gap" between the model's mechanical drivers and its user-facing rationale.
 
 ---
-**[Read the Full Pilot PDF here.](/research/explanation-gap/ExplanationGapPilot.pdf)**
+**[Read the Full Pilot PDF here.](/research/explanation-gap/ExplanationGapPilot.pdf)** &middot; **[Paper repository on GitHub](https://github.com/pskeough/telling-more-than-they-can-know)**

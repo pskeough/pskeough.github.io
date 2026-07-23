@@ -15,11 +15,14 @@ const year = entry.data.pubDate.getFullYear();
 const arxivId = entry.data.arxivLink?.match(/abs\/([\d.]+)/)?.[1];
 const citeKey = `keough${year}${entry.slug.replace(/-/g, '')}`;
 const pageUrl = new URL(`/research/${entry.slug}/`, Astro.site).href;
+const bibAuthor = entry.data.coauthors
+  ? `Keough, Patrick S. and ${entry.data.coauthors}`
+  : 'Keough, Patrick S.';
 
 const bibtex = arxivId
   ? `@misc{${citeKey},
   title         = {${entry.data.title}},
-  author        = {Keough, Patrick S.},
+  author        = {${bibAuthor}},
   year          = {${year}},
   eprint        = {${arxivId}},
   archivePrefix = {arXiv},
@@ -27,7 +30,7 @@ const bibtex = arxivId
 }`
   : `@misc{${citeKey},
   title  = {${entry.data.title}},
-  author = {Keough, Patrick S.},
+  author = {${bibAuthor}},
   year   = {${year}},
   note   = {${entry.data.status ?? 'Working paper'}},
   url    = {${pageUrl}}

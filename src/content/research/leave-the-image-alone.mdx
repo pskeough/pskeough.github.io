@@ -1,0 +1,26 @@
+---
+title: "Leave the Image Alone"
+description: "A controlled pilot of 1,440 vision-model transcriptions showing that classical OCR preprocessing degrades transcription of legible documents, with raw images beating every enhancement condition for every model tested."
+pubDate: 2026-07-20
+repoLink: "https://github.com/pskeough/leave-the-image-alone"
+status: "Pilot Study"
+order: 8
+---
+
+> [!NOTE]
+> **Pilot Study**
+> A pilot preprint is in preparation. The verified stats reports and figure scripts are public in the repository.
+
+## Overview
+
+A controlled pilot: 30 CORD-v2 receipts, four preprocessing conditions, four vision-language models, three repeats, for 1,440 transcriptions in total. The classical OCR reflex of binarizing, normalizing, and upscaling before recognition is counterproductive for legible documents read by modern VLMs.
+
+## Key Findings
+
+- **Raw wins everywhere.** Pooled mean character error rate runs raw 0.297, downscale 0.374, 2x upscale 0.728, Otsu binarize 1.460, and the ordering holds for every model tested.
+- **Binarization is the worst offender.** Paired +1.163 CER (95% CI [0.512, 2.390], d = 0.468, p = 0.004).
+- **Degradation amplifies non-determinism.** Within-cell SD grows from 0.051 (raw) to 1.060 (binarized) at temperature 0, showing hosted-model instability is input-dependent.
+- A structured-field recall check reproduces the ranking without the CER metric, and the LLM judge auto-calibrates to kappa = 0.70 against hand scoring with zero human labels.
+
+---
+**[Paper repository on GitHub](https://github.com/pskeough/leave-the-image-alone)**

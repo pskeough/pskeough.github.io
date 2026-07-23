@@ -7,6 +7,7 @@ const researchCollection = defineCollection({
     description: z.string(),
     pubDate: z.date(),
     arxivLink: z.string().url().optional(),
+    coauthors: z.string().optional(),
     pdfLink: z.string().optional(),
     repoLink: z.string().url().optional(),
     status: z.string().optional(),

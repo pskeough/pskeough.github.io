@@ -1,0 +1,29 @@
+---
+title: "Access, Not Capability"
+description: "A controlled audit with Robert H. Tai showing that on private-corpus question answering, retrieval does most of the work a frontier API is assumed to do, and a small local model with the same retrieved context is nearly indistinguishable from the frontier."
+pubDate: 2026-07-14
+repoLink: "https://github.com/pskeough/access-not-capability"
+coauthors: "Tai, Robert H."
+status: "Working Paper"
+order: 6
+---
+
+> [!NOTE]
+> **Working Paper**
+> Joint work with Robert H. Tai. TMLR-targeted; an arXiv preprint is in preparation. The verified paper, receipts, and claims ledger are public in the repository.
+
+## Overview
+
+What does a frontier API actually sell you on your own documents? Mostly access to them. This audit crosses four configurations (base, retrieval, LoRA, both) with three local model sizes and three corpora (one private, two public), judged blind in both presentation orders under family-wise error control, against three frontier models under byte-identical retrieval.
+
+## Key Findings
+
+- **Closed-book, the frontier loses the documents war.** It fails to beat even a 1B local model with retrieval in over 90% of comparisons, and against the 8B in 95.8%.
+- **Given identical retrieved context**, a grounded judge cannot separate the local 8B from the frontier in about 77% of pairs; the residual frontier premium is real but small and bounded (net win-rate 0.600 [0.580, 0.620]).
+- **A million-token window does not change it.** A whole-corpus frontier gains no larger an edge (0.561 [0.508, 0.614]) than retrieval already gives it, and retrieval beats full context even for the frontier itself (0.433 [0.392, 0.475]).
+- **Corpus homogeneity, not corpus size, predicts retrieval's value**, and retrieval flips abstention behavior with corpus structure (62% to 100% correct abstention on the homogeneous corpus; 63% to 17% on the heterogeneous one).
+
+Every quantitative claim maps to one of twenty-two receipt scripts and re-derives offline from raw model outputs; a 186-claim adversarial revalidation ledger ships with the repository.
+
+---
+**[Paper repository on GitHub](https://github.com/pskeough/access-not-capability)**
