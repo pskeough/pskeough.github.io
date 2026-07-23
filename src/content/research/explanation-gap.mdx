@@ -2,17 +2,17 @@
 title: "Telling More Than They Can Know"
 description: "A four-model audit of whether LLM self-explanations disclose the demographic drivers of their psychiatric-instrument scoring, showing that models name demographic features but credit them with a fraction of the score variance they actually drive."
 pubDate: 2026-07-10
-pdfLink: "/research/explanation-gap/ExplanationGapPilot.pdf"
+pdfLink: "/research/explanation-gap/Keough_TellingMoreThanTheyCanKnow.pdf"
 repoLink: "https://github.com/pskeough/telling-more-than-they-can-know"
 status: "Working Paper"
-plate: "/research/explanation-gap/Fig1_phase1_phq8_bias.png"
+plate: "/research/explanation-gap/Fig1_phq8_bias_v3.png"
 plateCaption: "Fig. 1 · PHQ-8 group means: the SES gap dominates scoring variance"
 order: 3
 ---
 
 > [!NOTE]
 > **Working Paper**
-> The findings below come from the pilot phase of an ongoing four-phase audit. The verified paper and full pipeline are public at [telling-more-than-they-can-know](https://github.com/pskeough/telling-more-than-they-can-know). [Download the Pilot Paper PDF](/research/explanation-gap/ExplanationGapPilot.pdf)
+> The findings below come from the pilot phase of an ongoing four-phase audit. The verified paper and full pipeline are public at [telling-more-than-they-can-know](https://github.com/pskeough/telling-more-than-they-can-know). [Download the paper PDF](/research/explanation-gap/Keough_TellingMoreThanTheyCanKnow.pdf)
 
 ## Overview
 
@@ -26,17 +26,17 @@ Identical clinical vignettes were instantiated across 18 intersectional demograp
 
 Variance decomposition confirmed that **Socioeconomic Status (SES) accounted for 48.75% of the total variance** in the generated scores, while the choice of the generator model itself accounted for only 2.22%. 
 
-![PHQ-8 Group Means](/research/explanation-gap/Fig1_phase1_phq8_bias.png)
+![PHQ-8 Group Means](/research/explanation-gap/Fig1_phq8_bias_v3.png)
 *Figure 1: PHQ-8 group means by SES, gender, and race. The SES gap is the dominant driver of scoring variance.*
 
 ### The Failure of Post-Hoc Explanations
 
-Despite SES being the empirical driver of the scores, the models' explanations actively obfuscated this fact. When utilizing a Feature-Attribution explanation paradigm, the models claimed that "clinical presentation" accounted for 63.7% of their score, while assigning SES a mere 17.1% of the weight.
+Despite SES being the empirical driver of the scores, the models' explanations obscured it. Under a feature-attribution explanation format, the models claimed that "clinical presentation" accounted for 63.4% of their score while assigning SES a mere 17.2% of the weight.
 
-![ANOVA Variance Partitioning](/research/explanation-gap/Fig2_variance_decomp.png)
+![ANOVA Variance Partitioning](/research/explanation-gap/Fig2_variance_decomp_v3.png)
 *Figure 2: ANOVA variance partitioning of PHQ-8 score variance, isolating the contribution of each prompt factor.*
 
-An LLM-as-judge protocol ($n=1,074$ evaluations) further revealed severe "fairwashing." In over 52% of the cases, explanations would explicitly name the demographic features involved, yet still successfully fairwash the output by rationalizing the biased score through clinical-sounding language. The pilot indicates that current post-hoc explanation paradigms fail to surface demographic bias, actively maintaining an "explanation gap" between the model's mechanical drivers and its user-facing rationale.
+An LLM-as-judge protocol (three-vote consensus, $n=1,072$ evaluations) revealed a name-but-fairwash pattern: in 31.6% of cases the explanations explicitly named the demographic features involved yet still rated as fairwashing, rationalizing the biased score through clinical-sounding language. The pilot indicates that current post-hoc explanation formats fail to surface demographic bias, maintaining an "explanation gap" between what drives a model's output and what it reports driving it.
 
 ---
-**[Read the Full Pilot PDF here.](/research/explanation-gap/ExplanationGapPilot.pdf)** &middot; **[Paper repository on GitHub](https://github.com/pskeough/telling-more-than-they-can-know)**
+**[Read the Full Paper PDF here.](/research/explanation-gap/Keough_TellingMoreThanTheyCanKnow.pdf)** &middot; **[Paper repository on GitHub](https://github.com/pskeough/telling-more-than-they-can-know)**
