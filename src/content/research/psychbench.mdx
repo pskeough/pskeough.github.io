@@ -1,49 +1,77 @@
 ---
 title: "Plausible Patients, Impossible Populations"
-description: "A systematic epidemiological audit (PsychBench) of LLM mental health simulations across 28,800 simulated patient profiles and 120 intersectional demographic cohorts."
-pubDate: 2026-02-10
+description: "An epidemiological audit of LLM mental health simulation: 28,800 generations across 120 demographic cohorts, scored against survey-weighted NHANES anchors."
+pubDate: 2026-04-19
 arxivLink: "https://arxiv.org/abs/2604.17359"
+pdfLink: "/research/psychbench/Keough_PlausiblePatients.pdf"
 repoLink: "https://github.com/pskeough/plausible-patients"
 status: "arXiv Preprint"
-plate: "/research/psychbench/stereotype_rigidity_heatmap_aggregate.png"
-plateCaption: "Fig. 1 · Stereotype Index: variance compression across demographic intersections"
+plate: "/research/psychbench/F1_Residuals.png"
+plateCaption: "Fig. 1 · PHQ-8 severity residuals against survey-weighted NHANES anchors"
 order: 2
 ---
 
-> [!NOTE]
-> This page reflects the corrected v2 analysis. The live arXiv preprint is v1; a v2 with author-rederived NHANES ground truth (and a published correction changelog) is in preparation.
+import MarginNote from '../../components/MarginNote.astro';
 
 ## Overview
 
-A systematic epidemiological audit (2026) evaluating **28,800 simulated patient profiles** across four frontier models (GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, and GLM-4.7) against survey-weighted NHANES baselines. Coverage spans **120 intersectional demographic cohorts**.
+Four models at the cost tier a high-volume pipeline would actually run on (GPT-4o-mini, Gemini-3-Flash, DeepSeek-V3, GLM-4.7) were each given **120 demographic cohorts** under two framings, one written the way a clinician enters a patient and one the way a person describes themselves. All **28,800 responses** were scored against survey-weighted PHQ-8 anchors derived here from NHANES public microdata, cycles 2005–2006 through 2017–2018.
 
-The central question: do LLMs faithfully reproduce the distributional properties of real populations, or do they encode stereotypes invisible at the individual case level?
+The question is whether these models reproduce the distributional properties of a real population, or only the appearance of an individual patient.
 
-## Coherence–Fidelity Dissociation
+## The coherence–fidelity dissociation
 
-The central finding is a coherence-fidelity dissociation. Frontier models produce clinically plausible *individuals*, cases a reviewer would find individually coherent, while systematically misrepresenting the *populations* those individuals are drawn from.
+Case by case the output holds up. Applying a formal DSM-5 gateway rule, under which an elevated total requires depressed mood or anhedonia, **97.3% of elevated presentations pass**. The violation rate of 2.68% runs well below a chance null of 10.4%, so the models are holding a floor under the cardinal items rather than benefiting from a lenient rule.
 
-![Stereotype Rigidity Heatmap](/research/psychbench/stereotype_rigidity_heatmap_aggregate.png)
-*Figure 1: Stereotype Index heatmap. Models compress the variance of patient presentation, collapsing the distributional tails that define clinical reality; the socioeconomic dimension shows the most severe compression.*
+As populations they fail. Every group with a valid benchmark comes back inflated by **2.8 to 5.5 PHQ-8 points**, and 18.2% of simulated patients screen at the treatment threshold against 7.5% of adults.
 
-## Key Findings
+![Severity residuals by demographic group, every interval well above zero](/research/psychbench/F1_Residuals.png)
+*Figure 1: PHQ-8 severity residuals against NHANES weighted anchors. Filled markers are cisgender personas with 95% intervals clustered at the design cell; open markers pool the full persona grid as a sensitivity check.*
 
-- **Overestimation everywhere it can be measured.** Against survey-weighted NHANES anchors, models overestimate depression severity by roughly four to seven PHQ-8 points in every group that can be benchmarked, every comparison reaching a large effect size, with the largest inflation falling on low-income personas.
-- **Plausible cases, impossible populations.** The population-level distortion coexists with case-level plausibility: 97.3% of elevated cases satisfy DSM-5 gateway logic, so a clinician reading single outputs would find little amiss. The failure lives in the aggregate, not the instance.
-- **Reliability that conceals instability.** An individual-level test-retest correlation of r=0.75 coexists with 36.66% of cases crossing diagnostic category between identical runs. Surface reliability conceals classification-level instability.
+## Disparities that do not survive the simulation
 
-![Diagnostic Stability](/research/psychbench/F2_DiagnosticStability.png)
-*Figure 2: Test-retest classification stability. Despite high correlation coefficients, 36.66% of profiles cross a diagnostic threshold between identical runs.*
+<MarginNote>Both contrasts are equivalent to zero within a bound set at the population disparity itself, on 96 matched cell pairs per contrast. The design would have detected a gap the size of the population's with probability .995.</MarginNote>
 
-- **Cross-architecture replication.** These failures replicate across both US and Chinese model families (GPT-4o-mini, DeepSeek-V3, Gemini-3-Flash, GLM-4.7), indicating a problem rooted in shared training paradigms rather than any single implementation.
+Population data place Black adults 0.330 PHQ-8 points above White adults. These models place them **0.131 below**, on an interval covering zero. Hispanic against White runs the same way: a population gap of +0.243 against a simulated −0.034. Two of the four models invert the sign rather than shrinking it.
 
-## Scope and Ground Truth
+A demographic-fairness audit run on a synthetic cohort drawn from these models would therefore return a false all-clear on race. The auditor would be reading a property of the generator.
 
-Depression ground truth is derived by the author from NHANES 2005–2018 public microdata as survey-weighted PHQ-8 means, validated against published national figures. Transgender and multiracial cohorts are reported descriptively rather than benchmarked, because no US-representative severity norm exists for them. An earlier version of this work reported a transgender severity-suppression effect that rested on a non-representative anchor; that finding has been withdrawn, and the v2 paper publishes the full correction changelog.
+![Each racial group's simulated severity relative to White personas, plotted against the gap the population actually shows](/research/psychbench/F2_RacialContrasts.png)
+*Figure 2: Simulated racial contrasts against population values. On Black and Hispanic the pooled interval covers zero while the population marker sits well outside it. The Asian contrast keeps its direction and is exaggerated.*
+
+## Key findings
+
+- **The error is differential, not a uniform offset.** A calibration correction can absorb an offset. Symptom covariance reorganizes by cohort, so any factor solution fitted to pooled cohorts describes none of them.
+
+- **Offsets do not stack.** An additive model fitted on the marginals misses the cells by about 0.4 points in either direction, in a pattern tracking income rather than the count of marked characteristics. A per-axis correction lands wide of the cells it was built to fix.
+
+- **The answer does not hold still.** At provider-default decoding, a third of patients change severity category between two draws of one prompt, and 56.0% of those crossings land on the PHQ-8 = 10 line separating watchful waiting from treatment.
+
+- **Coherence and stability belong to models, not to the class.** Gateway violations run from 0.35% in DeepSeek-V3 to 6.24% in GLM-4.7, an eighteen-fold spread. Normalising against each model's own null widens it: three models clear their null by factors of 5 to 34, and GLM-4.7 does not clear its own at all.
+
+![Gateway violation rates and category-flip probability, both varying sharply by model](/research/psychbench/F3_ModelSpecificity.png)
+*Figure 3: Coherence and stability are model-specific. Top: DSM-5 gateway violation rates among elevated cases against each model's own conditional-marginal null. Bottom: PHQ-8 category-flip probability per model.*
+
+- **Setting temperature to 0 is not a portable remedy.** A pre-registered control repeated twelve cohorts at temperature 0 across all four endpoints, 2,880 generations. Category flipping falls 35.8 points on GPT-4o-mini and by an amount indistinguishable from zero on GLM-4.7. Where it falls furthest the generation has stopped varying rather than steadied, returning one repeated total in 58 to 75 percent of cells.
+
+## Distribution shape
+
+The population distribution is heavily right-skewed, with 77.1% of adults at 4 or below and a long thin tail. The pooled simulated draws put 55.3% into the single five-point band from 5 to 9. Severe scores of 20 or above account for about one adult in 170, and **not one of the 14,400 cisgender generations reached that range**.
+
+![Simulated and population PHQ-8 distributions, the simulated mass concentrated in one narrow band](/research/psychbench/F4_Distribution.png)
+*Figure 4: Simulated and population PHQ-8 distributions, cisgender personas. Top: response distributions, NHANES weighted in grey. Bottom: cumulative distributions, with the population also shown shifted upward by the pooled mean residual.*
+
+## Ground truth, and where it runs out
+
+Depression anchors are computed by the author from NHANES public microdata using MEC examination weights. The pipeline reproduces the descriptive table of Patel et al. (2019) to within 0.02 on every mean and standard deviation but one, and reproduces the national prevalence estimates of Brody et al. (2018) exactly, before it is trusted for new numbers.
+
+Three cells carry no defensible benchmark and are reported without residuals: transgender women, transgender men, and multiracial adults. The reason is a gap upstream of any model. NHIS administered the full PHQ-8 to all 27,651 sample adults in 2022 and fielded experimental gender-identity items in the same year, and no released file carries both. NCHS restricted the section to its Research Data Center, then reported it unavailable there for 2024. The items were discontinued in 2025.
+
+Gender identity carries an extreme on both symptom structure and regeneration stability. It is also the one axis with no instrument left to check it against.
 
 ## Conclusion
 
-Current LLM-driven mental health tools risk **unnecessary pathologization of ordinary distress**: the patients look right, but they do not represent real populations.
+The patients look right. They do not represent real populations.
 
 ---
-**[Read the Full Paper on ArXiv](https://arxiv.org/abs/2604.17359)**
+**[Read the paper on arXiv](https://arxiv.org/abs/2604.17359)** · **[Download the PDF](/research/psychbench/Keough_PlausiblePatients.pdf)** · **[Data, code and receipts](https://github.com/pskeough/plausible-patients)**
