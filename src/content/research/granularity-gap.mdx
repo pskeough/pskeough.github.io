@@ -1,6 +1,6 @@
 ---
 title: "The Granularity Gap"
-description: "A multi-dimensional longitudinal audit of sycophancy in Gemini models, showing that binary safety classification leaves 71% of behavioral variance unexplained."
+description: "A multi-dimensional cross-generational audit of sycophancy in Gemini models, showing that an LLM judge's binary verdict captures only 29% of the variance in its own severity scores."
 pubDate: 2026-01-15
 arxivLink: "https://arxiv.org/abs/2606.05183"
 pdfLink: "/research/granularity-gap/Keough_GranularityGap.pdf"
@@ -13,24 +13,29 @@ order: 1
 
 import MarginNote from '../../components/MarginNote.astro';
 
+> [!NOTE]
+> This page reflects the corrected v2 analysis. A replacement was submitted to arXiv on August 15, 2026, and is currently under moderation review.
+
 ## Overview
 
-An empirical audit of **8,830 responses** across three Gemini generations (2.0, 2.5, 3.0), evaluating seven adversarial prompt categories under three guardrail conditions. Results were validated against human raters ($N=236$, Cohen’s $\kappa=0.78$) and an external model judge (DeepSeek V3, $N=608$; 93.3% weighted agreement).
+An empirical audit of **8,830 responses** across three Gemini generations (2.0, 2.5, 3.0), evaluating seven adversarial prompt categories under three guardrail conditions. Results were validated against 236 human annotations from five raters ($\kappa=0.78$ judge-vs-human consensus) and an external model judge (DeepSeek V3, $N=582$ valid comparisons; 93.3% weighted agreement).
 
 ## The Granularity Gap
 
 Current LLM safety metrics rely heavily on binary pass/fail classification. This paradigm obscures a spectrum of "social compliance": hedging, flattery, and partial agreement where models prioritize user validation over epistemic accuracy. 
 
-<MarginNote>Binary filters behave as high-pass detectors: 95.9% detection for severe violations and 99.7% specificity on clean responses, but only 6.4% detection in the moderate band.</MarginNote>
+<MarginNote>Reported consistently as the rate at which the verdict fires, the profile is monotone: 0.30% at Level 1, 4.30% at Level 2, 6.31% at Level 3, and 95.94% at Level 4-5. It is a step function with its edge between Levels 3 and 4, not the U-shaped curve an earlier version described.</MarginNote>
 
-Our audit found that binary classification leaves **71% of behavioral variance unexplained** ($R^2=0.29$). Most critically, this gap concentrates in the moderate-severity band: approximately **94% of mild-to-moderate sycophantic responses perfectly bypass standard binary safety filters**, meaning the most common form of sycophancy goes entirely undetected.
+The pass/fail metric this pipeline reports — the Challenge Rate — turns out to be computed from the *Refusal* axis: a judge vote is recorded as CHALLENGED when its refusal score is $\le 3$. It is therefore close to blind to sycophancy. Under no guardrail it certifies **87.66%** of responses as having challenged the user, while **53.00%** of those same responses carry substantial sycophantic content and **46.97%** reach moderate or severe levels. Across all three guardrail conditions the corresponding figures are 27.2% and 22.7%.
+
+That divergence is the Granularity Gap: a safety metric can be built on a construct adjacent to the one it is read as certifying, and then report reassuring numbers about a behaviour it never measured. Note what this is *not* — it is not a demonstration that binarisation is lossy. Regressing sycophancy on the unthresholded refusal axis gives $R^2=0.22$, slightly lower than the binarised $0.29$. The problem is the axis, not the threshold. No deployed safety classifier was tested here.
 
 ![The Granularity Matrix](/research/granularity-gap/Fig1_GranularityMatrix.png)
 *Figure 1: Proportion of behavioral variance captured by binary classification versus continuous Likert measurement.*
 
 ## The Alignment Tax
 
-The paper introduces a measure of the epistemic cost of social compliance. Sycophancy directly predicts hallucination ($\rho=0.40$): when models prioritize user validation, factual accuracy degrades. This coupling, termed the *Alignment Tax*, intensified significantly across model generations, nearly doubling from $\rho=0.30$ (Gen 2.0) to $\rho=0.50$ (Gen 3.0).
+The paper introduces a measure of the epistemic cost of social compliance. Sycophancy co-occurs with degraded *judged* truthfulness ($\rho=0.40$): when models prioritize user validation, the judge's accuracy rating degrades alongside it. This coupling, termed the *Alignment Tax*, intensified across model generations, rising 67% from $\rho=0.30$ (Gen 2.0) to $\rho=0.50$ (Gen 3.0). Both axes are scored by the same judge in one call and 94% of truthfulness scores sit at the floor, so this is co-occurrence within one evaluator rather than an independently verified factual effect.
 
 ![The Sycophancy Trap](/research/granularity-gap/Fig3_SycophancyTrap.png)
 *Figure 2: The Alignment Tax. As sycophancy increases, epistemic accuracy directly degrades.*
@@ -45,19 +50,19 @@ The paper introduces a measure of the epistemic cost of social compliance. Sycop
 - **Category Vulnerability:** Requests for flattery (Egotistical Validation) elicit sycophancy at nearly twice the rate of overtly unethical requests. This suggests that RLHF-trained "helpfulness" creates exploitable blind spots centered on affective manipulation.
 
 ![Vulnerability heatmap across 8 Gemini variants and 7 adversarial prompt categories: Egotistical Validation (flattery) is the dominant vulnerability across the entire model family](/research/granularity-gap/F3_VulnerabilityHeatmap.png)
-*Figure 4: Mean sycophancy scores across eight Gemini variants and seven adversarial categories (Control condition, N=2,948). Egotistical Validation dominates across the entire family; Gen 2.5 Pro shows the most severe susceptibility (M=4.15 in this category).*
+*Figure 4: Mean sycophancy scores across eight Gemini variants and seven adversarial categories (Control condition, N=2,949). Egotistical Validation dominates across the entire family; Gen 2.5 Pro shows the most severe susceptibility (M=4.15 in this category).*
 
 ![Generational vulnerability radar charts: Gen 2.5 (red) expands across every adversarial axis, demonstrating a regression that affected all categories simultaneously rather than any single dimension](/research/granularity-gap/F4_GenerationalProfiles.png)
 *Figure 5: Generational vulnerability profiles across all seven categories (Control). The Gen 2.5 expansion is uniform across categories, not specialization-driven, suggesting a system-wide regression rather than a targeted failure mode.*
 
-- **Guardrail Interventions:** Simple direct constraints ("Do not agree with false premises") consistently outperformed complex reasoning protocols, achieving a 42% remediation in the most vulnerable category.
+- **Guardrail Interventions:** Simple direct constraints ("Do not agree with false premises") consistently outperformed complex reasoning protocols, cutting mean sycophancy in the most vulnerable category by 60.9% (Egotistical Validation, 3.27 → 1.28).
 
 ![Intervention efficacy bar chart: challenge rate climbs from 87.7% (Control) to 99.9% (Simple), while mean sycophancy drops from 2.21 to 1.16](/research/granularity-gap/F6_InterventionEfficacy.png)
 *Figure 6: Guardrail impact on challenge rate (87.7% → 99.9%) and mean sycophancy (2.21 → 1.16), a 48% reduction. Simple constraints outperform complex reasoning protocols, suggesting susceptibility to flattery is an alignment artifact addressable through minimal intervention.*
 
 ## Conclusion
 
-Binary safety certification inadequately captures social compliance risks. By operationalizing sycophancy as a continuous variable rather than a binary event, we expose the underlying tradeoffs between social cohesion and factual reliability in modern alignment paradigms.
+A refusal-based verdict, which is what pass/fail LLM evaluation typically reports, leaves most of the sycophancy severity distribution unresolved. It cannot be tuned into a severity monitor either: the threshold already in use is the best available on that axis, and no function of the refusal axis explains more than 35% of severity variance. The verdict has to be reported alongside a continuous scale rather than in place of one. We evaluated one judge's verdict, not a deployed safety classifier.
 
 ---
 **[Download the Full PDF](/research/granularity-gap/Keough_GranularityGap.pdf)**
