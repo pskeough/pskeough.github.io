@@ -14,7 +14,7 @@ A web scraper targeting Facebook Marketplace and eBay, paired with an LLM-driven
 
 - **Manual Login Handoff.** Bypasses bot detection by deferring authentication to the human, then minimizes the browser to run headless thereafter.
 - **Parallel Deep-Scrape.** Deploys multiple Chrome drivers concurrently to crawl individual listing pages at depth.
-- **The Ranking Engine.** Raw HTML text is passed to a `gemini_analyzer` that extracts pros, cons, and a verdict. Crucially, it fetches *recent market sold prices* from eBay and computes a strict **Deal Score (1–10)** by comparing the asking price to the verified market discount.
+- **The Ranking Engine.** Raw HTML text is passed to a `gemini_analyzer` that extracts pros, cons, and a verdict. It then fetches *recent market sold prices* from eBay and computes a strict **Deal Score (1–10)** by comparing the asking price to the verified market discount.
 
 
 [View on GitHub](https://github.com/pskeough/deal-finder)
