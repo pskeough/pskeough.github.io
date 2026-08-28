@@ -1,32 +1,89 @@
 ---
 githubLink: "https://github.com/pskeough/Mimesis_Voice_Clone"
 title: "Mimesis MCP"
-description: "An offline, local-first Model Context Protocol (MCP) server that equips Claude with tools to draft in a target author's voice, utilizing SQLite FTS5 hybrid search, stylometric profiling, and local ONNX embeddings."
+description: "An offline, local-first MCP server that drafts in a target author's voice, and an evaluation loop built to find out whether it actually works. Hybrid retrieval and stylometric profiling, plus rhetorical-shape detectors built after blind testing showed the surface checks were not enough."
 techStack: ["Python", "SQLite FTS5", "FastEmbed (ONNX)", "FastMCP", "PowerShell", "FastAPI"]
 order: 5
 ---
 
 ## Architecture
 
-**Mimesis MCP** is a local-first Model Context Protocol (MCP) server that operates entirely offline. The system integrates directly with Claude Desktop and the Claude Code CLI, equipping language models with tools to access an author's stylistic corpus and pacing patterns.
+**Mimesis MCP** is a local-first Model Context Protocol server that runs entirely
+offline. It integrates with Claude Desktop and the Claude Code CLI, giving a
+language model tools to read an author's stylistic corpus and to have its own
+drafts vetted against it. Local ONNX embeddings and SQLite FTS5 indices mean no
+private manuscript ever leaves the machine.
 
-By utilizing lightweight local ONNX embeddings, SQLite FTS5 indices, and automated stylometric profiling, the server exposes contextual style examples and real-time stylistic vetting tools without transmitting private data to external servers.
+Manuscripts are ingested from PDF or DOCX, cleaned of boilerplate, and packed
+into overlapping ~200-word chunks. Passages are embedded with a CPU-optimised
+BAAI/bge-small-en-v1.5 ONNX model and stored alongside an FTS5 table, and
+retrieval fuses cosine similarity with BM25 keyword search through reciprocal
+rank fusion.
 
-## Retrieval-Augmented Pacing
+## The surface scrubber, and its ceiling
 
-The core implementation utilizes a multi-stage offline RAG pipeline to guide the drafting process:
+The first version of this system did what most style tools do. It filtered a
+banlist of overused AI diction, profiled hedging density, measured sentence-length
+burstiness to catch the flat uniform rhythm characteristic of model output, and
+banned em-dashes outright.
 
-1. **Greedy Paragraph Chunking.** Raw manuscript files (PDF or DOCX) are ingested, cleaned of boilerplate headers, and packed into overlapping paragraphs of approximately 200 words to preserve the natural cadence of the text.
-2. **Hybrid Search Index.** Passages are embedded locally using a lightweight CPU-optimized BAAI/bge-small-en-v1.5 ONNX model. The vectors are stored in SQLite alongside an FTS5 virtual search table for high-performance keyword indexing.
-3. **Reciprocal Rank Fusion (RRF).** During a drafting query, the server executes both cosine similarity vector search and BM25 keyword search, combining the results using reciprocal rank fusion to retrieve highly relevant few-shot style exemplars.
+That layer is necessary and it is not sufficient, and the interesting part of this
+project is the evidence for the second half of that sentence.
 
-## Stylometric Auditing (AI Footprint Scrubber)
+Three measurements made the case. Generated text scored **AUROC 0.691** on the
+surface features a word-level scrubber can see, against **0.884** on cadence
+features it cannot — the tells being removed were already nearly matched, and
+what separated the prose was invisible to the filter. Optimising toward the
+author's corpus mean produced text scoring **AUROC 0.316**, below chance, meaning
+generations sat *closer to the author's centre than the author's own writing does*.
+And when the stylometric fingerprint was finally validated against a human
+ranking, it agreed **60%** of the time, identical to a control that just counted
+words.
 
-To ensure the generated drafts match the target author's natural pacing, the server runs a real-time stylometric check:
+A blocklist can remove the cheap tells. It cannot make prose human, because the
+tell that survives is the shape of the sentence, not its vocabulary.
 
-- **Sentence Burstiness.** Calculates the standard deviation of sentence lengths. The system flags flat, uniform sentence structures (a hallmark signature of standard AI output) and guides the model to insert highly varied sentence lengths.
-- **Diction Calibration.** Automatically filters an extensive list of overused AI buzzwords (such as *delve*, *tapestry*, *foster*, and *synergy*) against the target corpus, whitelisting only the words the author naturally uses and flagging other occurrences.
-- **Definiteness Enforcement.** Profiles the density of hedging phrases (such as *seems to*, *appears to*, or *in a sense*), directing the model to replace cautious statements with active, definite verbs.
-- **Pacing Metrics.** Measures median sentence lengths and strictly bans the use of em-dashes to eliminate common AI drafting Tells.
+## Rhetorical detectors
+
+The current system adds a layer that reads sentence structure rather than word
+choice. Each detector was added after a specific draft passed every existing
+check and was still rejected on sight in blind review.
+
+- **Self-explanation.** A clause arrives at a point, then instead of stopping
+  appends a clause narrating what the point was — the `, which means` hinge, or a
+  reverse pseudo-cleft with a nominalised subject. Named in all twelve drafts of
+  one blind round, at equal strength in every generation strategy tested. That it
+  did not move with the prompt is why it has to be caught after generation.
+- **The unheeded reversal.** A flat assertion taken back and restated in the next
+  breath.
+- **Borrowed simile.** The construction `the way a X does`, measured at up to
+  157 times the author's own rate.
+- **Declarative rating.** A sentence that grades the previous one by pointing at
+  it.
+
+Every detector is calibrated against the author's real corpus and has to clear the
+same bar: fire on the specimens, stay off the author's own writing. The reversal
+detector's first version matched any negation and fired on 71–88% of the corpus,
+because ordinary narrative negates constantly; the shipped version reads 0.10–0.19
+occurrences per thousand words. Some checks are per-profile by necessity — `It is`
+as a sentence opener has a 95th percentile of 5.45 in the author's fiction and
+0.00 in his academic writing, so a single global threshold would be wrong in both
+directions.
+
+## Evaluation
+
+The system carries a blind comparison harness, because the alternative is trusting
+a metric nobody has checked against a reader. Drafts are rendered unlabelled with
+the key withheld, ranked by the author, and the ranking is stored as structured
+preference data the scorers are then benchmarked against.
+
+Running that loop produced results worth reporting, including the ones that went
+against the design. Four instruction framings were tested across three voices with
+every arm written by an isolated agent — an earlier round where one model wrote all
+the arms produced a result that reversed inside a single evening, which is its own
+finding about how easily this kind of comparison confounds itself. Fixed-slot
+observation-then-write placed first or second in every voice and now ships as the
+default protocol. The framing that had been the leading hypothesis, telling the
+model to read the examples and then set them aside, placed last overall.
 
 [View on GitHub](https://github.com/pskeough/Mimesis_Voice_Clone)
