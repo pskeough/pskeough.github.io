@@ -12,6 +12,7 @@ const name = (entry?.data.title ?? 'Patrick Keough').replace(/^About\s+/i, '');
 // Asset slots live in /public/about. The signature renders only when present,
 // so dropping signature.png into that folder is all it takes to light it up.
 const photoSrc = '/about/selfie.png';
+const cvSrc = '/about/Patrick_Keough_CV.pdf';
 const resumeSrc = '/about/Patrick_Keough_Resume.pdf';
 const signatureSrc = '/about/P_vladimir_flourish.png';
 const hasSignature = fs.existsSync(path.join(process.cwd(), 'public', signatureSrc));
@@ -27,12 +28,13 @@ const hasSignature = fs.existsSync(path.join(process.cwd(), 'public', signatureS
         <img class="profile-signature" src={signatureSrc} alt={`${name} signature`} />
       )}
       <div class="profile-actions">
-        <a class="resume-btn" href={resumeSrc} target="_blank" rel="noopener">
-          <span>View Résumé</span>
+        <a class="resume-btn" href={cvSrc} target="_blank" rel="noopener">
+          <span>Academic CV</span>
           <span class="resume-btn-meta">PDF</span>
         </a>
-        <a class="resume-btn resume-btn-ghost" href={resumeSrc} download>
-          <span>Download</span>
+        <a class="resume-btn resume-btn-ghost" href={resumeSrc} target="_blank" rel="noopener">
+          <span>Résumé</span>
+          <span class="resume-btn-meta">PDF</span>
         </a>
       </div>
     </div>
