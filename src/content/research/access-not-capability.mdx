@@ -1,6 +1,6 @@
 ---
 title: "Private Documents, Local Models: Retrieval, Fine-Tuning and Judging"
-description: "A controlled comparison with Robert H. Tai of small local models and hosted frontier models answering questions over a private research corpus, testing when retrieval, fine-tuning and a local judge are enough to keep the documents on your own machine."
+description: "A controlled comparison with Robert H. Tai of small local models and hosted frontier models answering from the same retrieved passages, testing when retrieval, fine-tuning and a local judge are enough to keep a group's documents on its own machine."
 pubDate: 2026-09-26
 repoLink: "https://github.com/pskeough/access-not-capability"
 coauthors: "Tai, Robert H."
@@ -10,22 +10,22 @@ order: 6
 
 > [!NOTE]
 > **Working Paper, In Revision**
-> Joint work with Robert H. Tai. The analysis was rebuilt and re-verified in September 2026 and the manuscript is being rewritten for a methods-focused journal. Numbers on this page come from the current verified results register and may change as the revision closes. The repository still holds the earlier July version under its original title, *Access, Not Capability*.
+> Joint work with Robert H. Tai. The analysis was rebuilt and re-checked in September 2026, and the manuscript is being rewritten for journal submission. Numbers on this page come from the current results register and may change as the revision closes. The repository linked below holds the earlier July version under its original title, *Access, Not Capability*, and is marked as superseded.
 
 ## Overview
 
-Can a lab answer questions over its own unpublished documents with a small model on its own hardware, or does it need a hosted frontier API? The study tests three decisions a lab makes: whether to use retrieval, whether to fine-tune, and whether a local model can judge the answers.
+Can a research group answer questions over its own documents with a small model on its own hardware, or does it need a hosted frontier API? The study tests three decisions such a group makes: whether to use retrieval, whether to fine-tune, and whether a local model can judge the answers.
 
-The primary corpus is 26 private research papers, with QASPER and COVID-QA as public replications. Local models at 1B, 3.8B and 8B parameters are compared against GPT-5.1, Claude Sonnet 4.6 and DeepSeek under a matched-evidence condition, where the frontier models receive the same retrieved passages as the local ones. Answers are judged blind in both presentation orders.
+The primary corpus is 26 published papers from Robert Tai's research group, standing in for a collection that cannot leave the group, with QASPER and COVID-QA as public replications. Three local models (MiniCPM 1B, Phi-4-mini 3.8B and Llama-3.1-8B) run on one 16 GB consumer GPU and are compared against GPT-5.1, Claude Sonnet 4.6 and DeepSeek-v4-pro under a matched-evidence condition, in which the hosted models receive the same retrieved passages as the local ones. A hosted judge, Gemini 3 Flash, compares the answers blind in both presentation orders, alongside three local Gemma 4 judges.
 
 ## Current results
 
-- **Retrieval does most of the work.** Without retrieval, the frontier models win almost every comparison on the private corpus. With the same retrieved passages, most of that gap closes.
-- **The remaining frontier edge is small and depends on model size.** Under a non-inferiority test, the 3.8B local model is within a 0.20 net-preference margin of the frontier models on the private corpus, the 8B is within 0.30, and the 1B is not close.
-- **Expert grading agrees in direction.** Against Robert Tai's gold answers on a subset of private items, the frontier answers recover somewhat more of the expert content than the local 8B.
-- **Local judges** are being tested against a hosted judge on the same comparisons, to see whether the evaluation can also stay on local hardware.
+- **Retrieval is the largest lever.** Across all three collections it improves every local model. On top of retrieval, fine-tuning adds a small gain that survives correction for multiple tests in 2 of 9 model-by-corpus cells.
+- **With the same passages, the hosted models still lead by a small amount.** On the private corpus most pairs end in a tie, and when the judge picks a winner it is nearly always the hosted answer. Net preference, the share of pairs the judge gives the hosted answer minus the share it gives the local one, is +0.14 over the 3.8B and +0.24 over the 8B, while the 1B trails far behind. For the 3.8B the gap is smaller than for the 8B. Each size is a model from a different developer, and the results describe these three models.
+- **Expert gold points the same way.** On 38 private items with answers written by Robert Tai, GPT-5.1 recovers more of the expert answer than the local 8B given the same passages.
+- **Local judges agree on direction and read a larger gap.** In all nine private comparisons the Gemma 4 judges reach the hosted judge's verdict on which side leads, and they rank the models the same way. Under the 12B and E4B judges the hosted lead is larger than under the hosted judge. Which judge is closer to the truth is still open.
 
-Every reported number traces to a receipt script that recomputes it from raw model outputs.
+Every number on this page traces to a receipt in the study's results register.
 
 ---
-**[Paper repository on GitHub](https://github.com/pskeough/access-not-capability)**
+**[Earlier July version on GitHub (superseded)](https://github.com/pskeough/access-not-capability)**
