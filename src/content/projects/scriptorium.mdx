@@ -1,0 +1,30 @@
+---
+title: "Scriptorium"
+description: "A local pipeline that turns a written text into a narrated film: an LLM directs the text into a shot plan, Qwen-Image 2.1 renders the stills, MiniMax H3 animates them, and a voice booth records the narration and times the captions. Early public release on GitHub."
+techStack: ["Python", "TypeScript", "ComfyUI", "Qwen-Image 2.1", "MiniMax H3", "Qwen3-TTS", "FFmpeg", "MCP"]
+githubLink: "https://github.com/pskeough/scriptorium"
+order: 13
+---
+
+## Overview
+
+Scriptorium turns a written text into a narrated film on one machine. An LLM reads the text and directs it into a shot plan, an image model renders a still for each shot, a video model animates each still, the narration is recorded or synthesised, captions are timed to it, and the parts are assembled into an MP4. Every image, video, speech and caption model runs locally, on two RTX 5060 Ti 16GB cards. The planner can call any OpenAI-compatible endpoint, local or hosted. *Anubis*, a 4.8-minute film of 38 shots adapted from a 634-word prose piece, was the first film made with it.
+
+## Pipeline
+
+1. **Plan.** An LLM director turns the text or a brief into a JSON shot plan: the narration each shot carries, what the still shows, what moves, and where the camera sits. Every plan is validated, and the errors go back to the model for repair. Plans can also be written by hand or by an agent through the MCP server.
+2. **Narrate.** Qwen3-TTS reads the narration as a guide track, which sets the length of each shot.
+3. **Stills.** Qwen-Image 2.1 renders a 1344x768 still per shot, from text alone or by editing a staging image. A metric 3D clay blockout is one optional staging aid: it fixes camera height, lens and where each person stands before any diffusion model runs.
+4. **Motion.** MiniMax H3 animates each still into a clip timed to its narration. A frozen-clip gate and a cut detector flag clips where nothing moved or where the model invented a cut.
+5. **Assembly.** Clips are laid under the narration and encoded to MP4.
+
+## Key Features
+
+- **Voice Booth.** A local web app plays the finished picture with the script highlighted in time, records takes in the browser, denoises and levels them, and builds the voiced MP4. Captions use the script text, timed by faster-whisper and burned in with libass.
+- **Studio and MCP Server.** A FastAPI web UI edits plans and reruns any stage per shot, and the same functions are exposed over MCP so an agent can drive a film end to end.
+- **Agent Setup.** The repository ships a setup prompt for a coding agent, which checks the GPU, installs dependencies, locates ComfyUI and the model files, and reports what is missing.
+- **Prompting Rules from Renders.** Failure modes found while rendering *Anubis* are enforced or documented in the code: a shot may name only what its still shows, and actions must be visible at the figure's scale, or the motion model cuts away.
+
+This is an early release, and I am still updating it and making it easier to set up.
+
+[View on GitHub](https://github.com/pskeough/scriptorium)
