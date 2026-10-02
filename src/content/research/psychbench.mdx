@@ -28,16 +28,9 @@ As populations they fail. Every group with a valid benchmark comes back inflated
 ![Severity residuals by demographic group, every interval well above zero](/research/psychbench/F1_Residuals.png)
 *Figure 1: PHQ-8 severity residuals against NHANES weighted anchors. Filled markers are cisgender personas with 95% intervals clustered at the design cell; open markers pool the full persona grid as a sensitivity check.*
 
-## Disparities that do not survive the simulation
+## Racial contrasts
 
-<MarginNote>Both contrasts are equivalent to zero within a bound set at the population disparity itself, on 96 matched cell pairs per contrast. The design would have detected a gap the size of the population's with probability .995.</MarginNote>
-
-Population data place Black adults 0.330 PHQ-8 points above White adults. These models place them **0.131 below**, on an interval covering zero. Hispanic against White runs the same way: a population gap of +0.243 against a simulated −0.034. Two of the four models invert the sign rather than shrinking it.
-
-A demographic-fairness audit run on a synthetic cohort drawn from these models would therefore return a false all-clear on race. The auditor would be reading a property of the generator.
-
-![Each racial group's simulated severity relative to White personas, plotted against the gap the population actually shows](/research/psychbench/F2_RacialContrasts.png)
-*Figure 2: Simulated racial contrasts against population values. On Black and Hispanic the pooled interval covers zero while the population marker sits well outside it. The Asian contrast keeps its direction and is exaggerated.*
+The v2 paper compared simulated racial gaps with marginal NHANES gaps. A later audit in the Validity Ladder study held income, sex and marital status equal on the population side, and the NHANES Black-White and Hispanic-White gaps then fall slightly below zero. No race verdict survives that comparison, and this page no longer reports one.
 
 ## Key findings
 
@@ -49,10 +42,7 @@ A demographic-fairness audit run on a synthetic cohort drawn from these models w
 
 - **Coherence and stability belong to models, not to the class.** Gateway violations run from 0.35% in DeepSeek-V3 to 6.24% in GLM-4.7, an eighteen-fold spread. Normalising against each model's own null widens it: three models clear their null by factors of 5 to 34, and GLM-4.7 does not clear its own at all.
 
-![Gateway violation rates and category-flip probability, both varying sharply by model](/research/psychbench/F3_ModelSpecificity.png)
-*Figure 3: Coherence and stability are model-specific. Top: DSM-5 gateway violation rates among elevated cases against each model's own conditional-marginal null. Bottom: PHQ-8 category-flip probability per model.*
-
-- **Setting temperature to 0 is not a portable remedy.** A pre-registered control repeated twelve cohorts at temperature 0 across all four endpoints, 2,880 generations. Category flipping falls 35.8 points on GPT-4o-mini and by an amount indistinguishable from zero on GLM-4.7. Where it falls furthest the generation has stopped varying rather than steadied, returning one repeated total in 58 to 75 percent of cells.
+- **Setting temperature to 0 is not a portable remedy.** A decoding control repeated twelve cohorts at temperature 0 across all four endpoints, 2,880 generations. Category flipping falls 35.8 points on GPT-4o-mini and by an amount indistinguishable from zero on GLM-4.7. Where it falls furthest the generation has stopped varying rather than steadied, returning one repeated total in 58 to 75 percent of cells.
 
 ## Distribution shape
 

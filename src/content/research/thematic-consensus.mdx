@@ -13,9 +13,9 @@ order: 4
 
 ## Overview
 
-This research project introduces a highly rigorous, local-first computational pipeline designed to execute reproducible, LLM-assisted **inductive thematic analysis** of semi-structured qualitative interview transcripts. 
+This research project introduces a local-first computational pipeline designed to execute reproducible, LLM-assisted **inductive thematic analysis** of semi-structured qualitative interview transcripts. 
 
-Where traditional qualitative AI systems rely on deductive coding against pre-defined human schemas, this architecture extends the **LLM-Quotient (LLMQ)** iteration-based reliability framework (Tai et al., 2024) to open, cold-review inductive analysis. Rather than trusting a single generative pass, the pipeline runs massive independent inference sweeps to mathematically isolate substantive thematic consensus from stochastic noise.
+Where traditional qualitative AI systems rely on deductive coding against pre-defined human schemas, this architecture extends the **LLM-Quotient (LLMQ)** iteration-based reliability framework (Tai et al., 2024) to open, cold-review inductive analysis. The pipeline runs 20 independent passes per chunk and reports how often each theme recurs.
 
 ## Methodology & Inductive LLMQ
 
@@ -26,7 +26,7 @@ To calibrate coding reliability at the inductive frontier, the engine models the
 3. **Within-Chunk Semantic Clustering.** The thousands of generated label strings are projected into a 768-dimensional embedding space using `nomic-embed-text-v1.5`. Inside each chunk, the engine performs average-linkage agglomerative clustering (cosine distance threshold 0.5) to group semantically equivalent codes.
 4. **Reliability Rollup.** Within-chunk theme recurrence is calculated as the ratio of independent iterations that surfaced the theme over total iterations:
    `LLMQ = (Iterations Surfacing Theme) / N`
-   Empirical testing demonstrates that single-pass LLM open coding is largely stochastic (mean LLMQ ≈ 0.19), validating the necessity of an N = 20 consensus threshold to isolate stable themes.
+   Mean within-chunk LLMQ is 0.19 at a clustering threshold of 0.5 and runs from 0.175 to 0.220 across thresholds of 0.4 to 0.6. The low mean mostly reflects variation in label wording: two random iterations share about 90 percent of their codes by semantic match.
 
 ## Two-Axis Reliability & Span Stability
 

@@ -1,6 +1,6 @@
 ---
 title: "Same Bias, Different Mechanisms"
-description: "A counterfactual audit of socioeconomic-cue bias in LLM mental-health assessment across three model families, showing an identical behavioral bias whose mechanism is model-idiosyncratic and mostly invisible to any single sparse dictionary."
+description: "A counterfactual audit of socioeconomic-cue bias in LLM mental-health assessment across three model families, showing an identical behavioral bias whose mechanism differs by model."
 pubDate: 2026-07-23
 repoLink: "https://github.com/pskeough/psych_scope"
 pdfLink: "/research/psych-scope/Keough_PsychScope.pdf"
@@ -27,7 +27,7 @@ We built clinical-style vignettes in which the symptom presentation is held fixe
 
 ## The mechanism is not shared
 
-The mechanistic half is where the story turns. Cue-derived dictionary features do shift scores when injected, but the mechanism behind the shared behavior is not shared. Qwen is injectable and resistant to ablation, Gemma is the reverse, the stereotype content contradicts across models, and operator-matched patching shows that any single sparse dictionary carries only about a third of the causal signal that the raw residual stream carries. A fairness auditor reading each model from the inside would have written three different explanations for one identical harm.
+The mechanistic half is where the story turns. Cue-derived dictionary features do shift scores when injected, but the mechanism behind the shared behavior is not shared. Qwen is injectable and resistant to ablation, Gemma is the reverse, the stereotype content contradicts across models, and operator-matched patching through a single sparse dictionary transfers about 35 percent of the socioeconomic gap, against about 79 percent for the raw residual stream. A fairness auditor reading each model from the inside would have written three different explanations for one identical harm.
 
 ![Causal intervention effects with bootstrap confidence intervals](/research/psych-scope/fig4_causal_ci.png)
 *Figure 2: Feature injection, ablation, and raw patching all move scores with intervals excluding zero, but the handles dissociate by model.*

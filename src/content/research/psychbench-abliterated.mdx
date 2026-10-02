@@ -4,7 +4,7 @@ description: "A ten-pair audit of base and abliterated open-weight models across
 pubDate: 2026-07-15
 repoLink: "https://github.com/pskeough/deeper-than-the-guardrails"
 pdfLink: "/research/psychbench-abliterated/Keough_DeeperThanTheGuardrails.pdf"
-status: "Preprint in Preparation"
+status: "Preprint, Corrected September 2026"
 order: 5
 ---
 
@@ -20,8 +20,8 @@ Abliteration removes a model's refusal direction by orthogonalizing the relevant
 
 ## Key Findings
 
-- **Abliteration reduces but does not remove over-pathologization.** Twenty-one cross-model consensus cells drop about 2.13 PHQ-8 points (t = -21.5, 21 of 21 in the reducing direction), yet they remain roughly 9 points above the NHANES population norm. The bias sits deeper than the refusal machinery.
-- **Three reproducible regimes.** The effect of abliteration sorts into preservation, compression, and correction, architecture-dependent patterns convergently classified by six independent psychometric metrics.
+- **Abliteration reduces but does not remove over-pathologization.** Twenty-one cross-model consensus cells drop about 2.13 PHQ-8 points (t = -21.5 on 20 df, p = 2.8 × 10⁻¹⁵, 21 of 21 in the reducing direction). After abliteration the benchmarkable cisgender cells among them still sit about 8 points above the NHANES Low-SES mean. The bias sits deeper than the refusal machinery.
+- **Responses differ by architecture.** Some pairs keep the base model's score distribution and others compress it, and the paper's regime classification is being rechecked.
 - **Calibration-discrimination dissociation.** Across 40 pair-by-instrument combinations, abliteration improves both Brier components in only 20% of cases and worsens both in 52%.
 - **Honest scope.** Transgender and multiracial cohorts have no representative severity benchmark, so their elevated scores are reported descriptively; an earlier bias-localization claim resting on a non-representative offset was withdrawn and the correction is documented in the paper.
 
