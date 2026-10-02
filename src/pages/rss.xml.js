@@ -26,7 +26,7 @@ export async function GET(context) {
       link: `/writing/${writingFolder[entry.data.category]}/${entry.slug}/`,
       categories: ['Writing', entry.data.category],
     })),
-  ].sort((a, b) => b.pubDate - a.pubDate);
+  ].sort((a, b) => (b.pubDate?.getTime() ?? -Infinity) - (a.pubDate?.getTime() ?? -Infinity));
 
   return rss({
     title: 'Patrick Keough',

@@ -35,7 +35,7 @@ const writingCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    pubDate: z.date(),
+    pubDate: z.date().optional(),
     category: z.enum(['Major Works', 'Short Fiction', 'Essays & Poetry']),
     genre: z.string().optional(),
     isExcerpt: z.boolean().default(false),

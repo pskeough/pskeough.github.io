@@ -17,7 +17,7 @@ const grouped = categoryOrder.map((category) => ({
   folder: folderForCategory[category],
   items: entries
     .filter((e) => e.data.category === category)
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    .sort((a, b) => (b.data.pubDate?.getTime() ?? -Infinity) - (a.data.pubDate?.getTime() ?? -Infinity)),
 }));
 ---
 
