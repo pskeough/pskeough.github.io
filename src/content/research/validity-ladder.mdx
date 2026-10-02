@@ -1,0 +1,43 @@
+---
+title: "A Validity Ladder for LLM-Simulated Populations"
+description: "A protocol for deciding what a simulated survey sample can be used for, with a gate and four rungs, demonstrated on 28,800 PHQ-8 assessments from four models read against NHANES."
+pubDate: 2026-10-01
+repoLink: "https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Clinical-Populations"
+status: "Working Paper, In Revision"
+plate: "/research/validity-ladder/fig1_ladder.png"
+plateCaption: "Fig. 1 · The gate and the four rungs of the ladder"
+order: 3
+---
+
+> [!NOTE]
+> **Working Paper, In Revision**
+> This page shows the current version of a paper still in active revision. Results and wording will change as new analyses come in, and the page will be updated with them. The repository holds the latest manuscript, code and receipts.
+
+## Overview
+
+Researchers now prompt large language models with demographic personas and use the answers in place of survey respondents. These simulated samples are usually checked by reading individual answers. The validity ladder replaces that check with a protocol: a sample supports only the uses whose matching checks it has passed.
+
+## The ladder
+
+The protocol has a gate and four rungs. Each has a statistic, a pass rule, and a use that a pass supports.
+
+- **Gate.** How many repeated draws make a persona's score dependable.
+- **Level 1.** Whether a single draw is an answer pattern a real person could give.
+- **Level 2.** Whether gaps between groups match the population's gaps.
+- **Level 3.** Whether the overall level matches the population's.
+- **Level 4.** Whether the items hang together as they do in people.
+
+## Current results
+
+The ladder is demonstrated on 28,800 PHQ-8 assessments from four models, read against the National Health and Nutrition Examination Survey.
+
+- Persona means become dependable with repeated draws, and every model fails all four rungs above the gate.
+- Single draws are less varied than real respondents at the same total score.
+- The gap between low- and high-income personas is steeper in every model than in the population.
+- Every model's population mean sits above the survey's after post-stratification.
+- Survey respondents pass levels 1 and 3, and planted failures trip their own rungs.
+
+Level 2 has also been applied to two silicon-sample datasets released by other authors (OpinionQA and Argyle et al.), where the ladder records which rungs those designs can and cannot test.
+
+---
+**[Paper repository on GitHub](https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Clinical-Populations)**

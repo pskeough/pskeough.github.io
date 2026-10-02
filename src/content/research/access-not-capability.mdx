@@ -1,30 +1,31 @@
 ---
-title: "Access, Not Capability"
-description: "A controlled audit with Robert H. Tai showing that on private-corpus question answering, retrieval does most of the work a frontier API is assumed to do, and a small local model with the same retrieved context is nearly indistinguishable from the frontier."
-pubDate: 2026-07-14
+title: "Private Documents, Local Models: Retrieval, Fine-Tuning and Judging"
+description: "A controlled comparison with Robert H. Tai of small local models and hosted frontier models answering questions over a private research corpus, testing when retrieval, fine-tuning and a local judge are enough to keep the documents on your own machine."
+pubDate: 2026-09-26
 repoLink: "https://github.com/pskeough/access-not-capability"
 coauthors: "Tai, Robert H."
-pdfLink: "/research/access-not-capability/Keough_Tai_AccessNotCapability.pdf"
-status: "Working Paper"
+status: "Working Paper, In Revision"
 order: 6
 ---
 
 > [!NOTE]
-> **Working Paper**
-> Joint work with Robert H. Tai. TMLR-targeted; an arXiv preprint is in preparation. The verified paper, receipts, and claims ledger are public in the repository.
+> **Working Paper, In Revision**
+> Joint work with Robert H. Tai. The analysis was rebuilt and re-verified in September 2026 and the manuscript is being rewritten for a methods-focused journal. Numbers on this page come from the current verified results register and may change as the revision closes. The repository still holds the earlier July version under its original title, *Access, Not Capability*.
 
 ## Overview
 
-What does a frontier API actually sell you on your own documents? Mostly access to them. This audit crosses four configurations (base, retrieval, LoRA, both) with three local model sizes and three corpora (one private, two public), judged blind in both presentation orders under family-wise error control, against three frontier models under byte-identical retrieval.
+Can a lab answer questions over its own unpublished documents with a small model on its own hardware, or does it need a hosted frontier API? The study tests three decisions a lab makes: whether to use retrieval, whether to fine-tune, and whether a local model can judge the answers.
 
-## Key Findings
+The primary corpus is 26 private research papers, with QASPER and COVID-QA as public replications. Local models at 1B, 3.8B and 8B parameters are compared against GPT-5.1, Claude Sonnet 4.6 and DeepSeek under a matched-evidence condition, where the frontier models receive the same retrieved passages as the local ones. Answers are judged blind in both presentation orders.
 
-- **Closed-book, the frontier loses the documents war.** It fails to beat even a 1B local model with retrieval in over 90% of comparisons, and against the 8B in 95.8%.
-- **Given identical retrieved context**, a grounded judge cannot separate the local 8B from the frontier in about 77% of pairs; the residual frontier premium is real but small and bounded (net win-rate 0.600 [0.580, 0.620]).
-- **A million-token window does not change it.** A whole-corpus frontier gains no larger an edge (0.561 [0.508, 0.614]) than retrieval already gives it, and retrieval beats full context even for the frontier itself (0.433 [0.392, 0.475]).
-- **Corpus homogeneity, not corpus size, predicts retrieval's value**, and retrieval flips abstention behavior with corpus structure (62% to 100% correct abstention on the homogeneous corpus; 63% to 17% on the heterogeneous one).
+## Current results
 
-Every quantitative claim maps to one of twenty-two receipt scripts and re-derives offline from raw model outputs; a 186-claim adversarial revalidation ledger ships with the repository.
+- **Retrieval does most of the work.** Without retrieval, the frontier models win almost every comparison on the private corpus. With the same retrieved passages, most of that gap closes.
+- **The remaining frontier edge is small and depends on model size.** Under a non-inferiority test, the 3.8B local model is within a 0.20 net-preference margin of the frontier models on the private corpus, the 8B is within 0.30, and the 1B is not close.
+- **Expert grading agrees in direction.** Against Robert Tai's gold answers on a subset of private items, the frontier answers recover somewhat more of the expert content than the local 8B.
+- **Local judges** are being tested against a hosted judge on the same comparisons, to see whether the evaluation can also stay on local hardware.
+
+Every reported number traces to a receipt script that recomputes it from raw model outputs.
 
 ---
-**[Read the Full Paper PDF here.](/research/access-not-capability/Keough_Tai_AccessNotCapability.pdf)** &middot; **[Paper repository on GitHub](https://github.com/pskeough/access-not-capability)**
+**[Paper repository on GitHub](https://github.com/pskeough/access-not-capability)**
