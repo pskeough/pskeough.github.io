@@ -42,6 +42,7 @@ const writingCollection = defineCollection({
     status: z.string().optional(),
     wordCount: z.number().optional(),
     pdfLink: z.string().optional(),
+    videoLink: z.string().url().optional(),
   }),
 });
 

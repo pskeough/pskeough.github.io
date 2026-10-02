@@ -24,9 +24,10 @@ const { Content } = await entry.render();
     <h1 class="font-display">{entry.data.title}</h1>
     {entry.data.description && <p class="deck mb-8">{entry.data.description}</p>}
 
-    {entry.data.pdfLink && (
+    {(entry.data.pdfLink || entry.data.videoLink) && (
       <div class="flex gap-6 mb-8 sans-meta">
-        <a href={entry.data.pdfLink} target="_blank" rel="noopener noreferrer" class="article-link">Download / Open Full Piece &rarr;</a>
+        {entry.data.pdfLink && <a href={entry.data.pdfLink} target="_blank" rel="noopener noreferrer" class="article-link">Download / Open Full Piece &rarr;</a>}
+        {entry.data.videoLink && <a href={entry.data.videoLink} target="_blank" rel="noopener noreferrer" class="article-link">Watch the Film &rarr;</a>}
       </div>
     )}
     <div class="article-body">
