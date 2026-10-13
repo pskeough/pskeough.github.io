@@ -9,7 +9,7 @@ import YouTube from '../../components/YouTube.astro';
 
 ## Overview
 
-Scriptorium takes a piece of prose and produces a narrated short film from it on one desktop. A language model reads the text and writes a shot plan. Each shot is staged as a 3D clay blockout or described in words, painted as a still, animated into a clip timed to its line of narration, and cut together under a recorded voice with captions burned in. Every image, video, speech and caption model runs locally on two RTX 5060 Ti 16 GB cards; only the planner can optionally call a hosted model. The two films below are adaptations of my own short fiction.
+Scriptorium takes a piece of prose and produces a narrated short film from it on one desktop. I write the text and record the narration myself; the pipeline handles the pictures. A language model reads the text and writes a shot plan. Each shot is staged as a 3D clay blockout or described in words, painted as a still, animated into a clip timed to its line of narration, and cut together under my recorded voice with captions burned in. Every image, video, speech and caption model runs locally on two RTX 5060 Ti 16 GB cards; only the planner can optionally call a hosted model. The two films below are adaptations of my own short fiction, written and narrated by me.
 
 <div class="media-grid">
 <YouTube url="https://youtu.be/npvfbjC5cDI" title="Anubis" caption="Anubis: 38 shots from a 634-word prose piece about a permit clerk" />
@@ -21,11 +21,11 @@ Scriptorium takes a piece of prose and produces a narrated short film from it on
 The pipeline has six stages, each of which writes into the film's folder and records itself in a status file, so any stage can be rerun for any shot without touching the rest.
 
 1. **Plan.** The text becomes a JSON shot plan.
-2. **Narrate.** A guide voice track sets the length of every shot.
+2. **Time.** A synthetic guide read estimates how long each line takes, which sets the length of every shot.
 3. **Stage.** A metric clay blockout fixes the camera and the room.
 4. **Stills.** Qwen-Image 2.1 paints one frame per shot.
 5. **Motion.** MiniMax H3 animates each frame into a clip.
-6. **Assemble.** Clips go under the narration, then the voice booth records the final read and burns in captions.
+6. **Narrate and assemble.** I record the narration in my own voice in the voice booth, against the finished picture, and the clips are cut under it with captions burned in.
 
 ## Technical overview
 
@@ -50,9 +50,9 @@ Two automatic checks run on every clip:
 - **Frozen-clip gate.** The first and last frames are compared at 320 px wide in 48 px blocks, searching small offsets for each block's best match. A clip whose mean displacement is under 1.5 px is flagged as frozen.
 - **Cut detector.** Mean luma change between frames at 160x90 is flagged when it exceeds 12 and six times the clip's median. It catches the model inventing a cut to a new shot.
 
-### Narration, voice booth and captions
+### Timing, my narration and captions
 
-Qwen3-TTS reads the narration as a guide track in one take, and beat boundaries recovered from its silences set each shot's length before anything is rendered. The voice booth is a local web app that plays the finished picture with the script highlighted in time and records takes in the browser. Each take is captured twice, once as the timing clock and once as clean audio, and the two are matched up by cross-correlation with a drift fit. A spectral gate built from the room tone removes noise, and the read is levelled to −16 LUFS. faster-whisper supplies word times only; the words are matched back to the script, so the captions always show the script's text, in cues of at most 42 characters and 4.5 seconds, burned in with libass.
+The text-to-speech model is only a timing tool. Before anything is rendered, Qwen3-TTS reads the script once as a guide track, and the beat boundaries recovered from its silences estimate how long each line will take, which fixes the length of each shot. In my films the guide voice is then replaced: the narration is my own voice, recorded in the voice booth: a local web app that plays the finished picture with the script highlighted in time while I read, and records each take in the browser. Each take is captured twice, once as the timing clock and once as clean audio, and the two are matched up by cross-correlation with a drift fit. A spectral gate built from the room tone removes noise, and the read is levelled to −16 LUFS. faster-whisper supplies word times only; the words are matched back to the script, so the captions always show the script's text, in cues of at most 42 characters and 4.5 seconds, burned in with libass.
 
 ### The render farm
 
