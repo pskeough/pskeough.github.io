@@ -136,7 +136,13 @@
 
   @media (min-width: 768px) {
     .stat-strip {
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .stat-strip {
+      grid-template-columns: repeat(6, 1fr);
     }
   }
 
