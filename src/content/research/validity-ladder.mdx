@@ -2,16 +2,16 @@
 title: "A Validity Ladder for LLM-Simulated Populations"
 description: "A protocol for deciding what a simulated survey sample can be used for, with a gate and four rungs, demonstrated on 28,800 PHQ-8 assessments from four models read against NHANES."
 pubDate: 2026-10-01
-repoLink: "https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Clinical-Populations"
-status: "Working Paper, In Revision"
+repoLink: "https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Populations"
+status: "Under Review, Behavior Research Methods"
 plate: "/research/validity-ladder/fig1_ladder.png"
 plateCaption: "Fig. 1 · The gate and the four rungs of the ladder"
 order: 3
 ---
 
 > [!NOTE]
-> **Working Paper, In Revision**
-> This page shows the current version of a paper still in active revision. Results and wording will change as new analyses come in, and the page will be updated with them. The repository holds the latest manuscript, code and receipts.
+> **Under Review, Behavior Research Methods**
+> Submitted October 2026. The manuscript, supplement, code and a receipt for every number in the paper are in the repository, archived on Zenodo at [10.5281/zenodo.23147356](https://doi.org/10.5281/zenodo.23147356).
 
 ## Overview
 
@@ -27,17 +27,15 @@ The protocol has a gate and four rungs. Each has a statistic, a pass rule, and a
 - **Level 3.** Whether the overall level matches the population's.
 - **Level 4.** Whether the items hang together as they do in people.
 
-## Current results
+A certifiability step runs before any answers are generated. It uses the human data alone to show which group differences a study could confirm.
 
-The ladder is demonstrated on 28,800 PHQ-8 assessments from four models, read against the National Health and Nutrition Examination Survey.
+## Results
 
-- Persona means become dependable with repeated draws for every model and framing except GPT-4o-mini under the narrative framing, and every model fails all four rungs above the gate.
-- Single draws are less varied than real respondents at the same total score.
-- The gap between low- and high-income personas is steeper in every model than in the population.
-- Every model's population mean sits above the survey's after post-stratification.
-- Survey respondents pass levels 1 and 3, and planted failures trip their own rungs.
+- **Controls.** Real survey respondents run through the same checks rarely fail, and errors planted at known sizes are caught by the check built for each.
+- **Ten external releases.** The ladder was applied to ten datasets released by other authors, including silicon samples and digital twins. Samples drawn from each dataset's own human answers rarely fail where the human data are precise. None of 725 readings of published simulators in nine of them reproduces the group differences, and for over half the human data were too thin to confirm any simulator.
+- **Worked example.** In 28,800 PHQ-8 depression assessments from four models, read against the National Health and Nutrition Examination Survey, persona averages stabilize after a few answers, and every model fails every check above that.
 
-Level 2 has also been applied to two silicon-sample datasets released by other authors (OpinionQA and Argyle et al.), where the ladder records which rungs those designs can and cannot test.
+The ladder is released as a Python package with a harness that scores any simulator release against the same rules.
 
 ---
-**[Paper repository on GitHub](https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Clinical-Populations)**
+**[Paper repository on GitHub](https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Populations)** · **[Zenodo archive](https://doi.org/10.5281/zenodo.23147356)**

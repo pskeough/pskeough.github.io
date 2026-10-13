@@ -1,0 +1,68 @@
+---
+title: "Reading Behavior from Bird Calls"
+description: "A leakage-controlled evaluation of what pretrained audio models can read from corvid and zebra finch calls: call type, call function, age, sex and individual identity, with whole birds, recording days and recordists held out and a metadata-only baseline beside every result."
+techStack: ["Python", "PyTorch", "AST", "BioLingual", "BEATs", "NatureLM-BEATs", "Perch 2.0", "LoRA"]
+status: "In Progress"
+order: 3
+---
+import Figure from '../../components/Figure.astro';
+
+## Overview
+
+Can a model take a bird call and say what the bird is doing, and do its answers agree with the published behavioral description of the species? The project started from a question about Australian ravens and became an evaluation of how far current audio models can answer it, and of how easily the answer is inflated.
+
+The inflation has a specific source. A random split of clips puts recordings of the same bird, the same day or the same recordist on both sides of the test, so a model can score well by recognising the bird, the microphone or the weather. None of the benchmark papers the project checked holds out whole individuals or recordists. Every evaluation here does, and every audio result sits beside a baseline built from metadata alone: hour, season, location, clip length and recording quality.
+
+## Data
+
+- **Zebra finch, lab gold standard.** 3,426 calls from 50 birds in 11 call types with defined social functions (Elie and Theunissen repertoire, CC BY 4.0).
+- **Hooded crows, one expert observer.** 5,589 Xeno-canto recordings by one recordist in Berlin, 2020 to 2026, with named individual crows, sex, age and a fine-grained vocabulary for what each caw is for: contact, appropriation, attention and reporting.
+- **American crows, human-reviewed.** 2,457 segments in six behaviors (plain caw, mob, alert, soft song, rattle, begging).
+- **Corvids across recordists.** 19,438 Xeno-canto recordings of 13 corvid species from hundreds of recordists, with behavior labels parsed from their free-text notes by language-model agents under a verbatim-evidence rule.
+- **Australian corvids.** Australian raven, little raven, Torresian crow and little crow, held back as a transfer target.
+
+## Method
+
+Calls are embedded with pretrained audio encoders (AST, BioLingual, BEATs-bio, NatureLM-BEATs, with Perch 2.0 and BirdNET wrapped for the next round) and read out with linear and small MLP probes, LoRA fine-tuning of AST, from-scratch CNNs and zero-shot audio-text matching. All of them run on identical folds. Every task carries shuffled-label and planted-signal controls, a group-level permutation null and a metadata-only baseline. Headline scores are the best of several probe configurations on the same folds, so they lean optimistic. The study spec was frozen in git before any model result. Seven amendments are logged with their timing, and an independent six-lens review led to a dated reanalysis, committed before its numbers. The literature claims rest on 22 citation cards whose 293 quotations were checked mechanically against the fetched full text.
+
+## Results
+
+**Call type is readable, and the model's mistakes follow the ethogram.** With new birds held out, zebra finch call type reaches macro-F1 0.72 [0.62, 0.80] against a 0.04 majority baseline. 34% of the errors stay inside the same social function (contact, alarm, pair bond, non-affiliative), against 11% expected by chance (p = 0.007), and grouped into six functions the score is 0.84. Elie and Theunissen's own acoustic classifier made the same two main errors: Tuck read as the other alarm call, Thuk, and Distress read as the aggressive Wsst.
+
+<Figure
+  narrow
+  src="/projects/bird-calls/fig3a_confusion_zebra_finch.png"
+  alt="Confusion matrix of 11 zebra finch call types with orange boxes marking functional groups. Most errors fall inside the boxes."
+  caption="Zebra finch call types, new birds held out. Orange boxes mark the functional groups; most errors stay inside them. Matrix from the best-scoring probe (0.74)."
+/>
+
+**The crow's caw carries its function, within one observer's vocabulary.** For the four caw functions, macro-F1 is 0.60 [0.56, 0.62] against a 0.13 majority baseline, with individuals or recording days held out. Metadata alone reaches 0.37, and adding metadata to the audio adds nothing. Within a single crow, 342 caws with recording days held out still give 0.59. The limit is that the functions are one observer's reading, and he may assign a function partly from how the caw sounds.
+
+<Figure
+  narrow
+  src="/projects/bird-calls/fig3c_confusion_caw_functions.png"
+  alt="Four-by-four confusion matrix of hooded crow caw functions: appropriation, attention, contact and reporting."
+  caption="Hooded crow caw functions, individuals or days held out. Diagonal 0.52 to 0.67 against 0.25 chance."
+/>
+
+**Random splits invent findings.** Sex of new crows scores 0.33 to 0.41 against a 0.31 majority baseline across 18 crows, so the effect is not demonstrated. A random clip split lifts the same model by about 0.3, because it learns who the crow is and inherits that crow's label. Individual identity follows the same pattern: crows the model has heard before are recognisable across years (0.74 with 2021 to 2024 for training and 2025 to 2026 for testing, chance 0.25), and crows it has never heard are only weakly separable, and the pre-registered rule scores that as not demonstrated.
+
+<Figure
+  src="/projects/bird-calls/fig2_leakage_cropped.png"
+  alt="Dot chart comparing held-out and random-split macro-F1 for ten zebra finch and hooded crow tasks. The sex tasks show a gap of 0.29."
+  caption="Held-out (blue) against random clip splits (orange). Where identity carries the label, as with sex, the random split reports an effect that held-out birds do not support."
+/>
+
+**Label quality is the ceiling.** On the human-reviewed American crow segments, six behaviors reach 0.74 with recordings held out, and AST with LoRA reaches 0.78. The same encoder gives 0.28 on ten behaviors parsed from free-text notes across the full corvid set, with recordists held out.
+
+**A few hundred labelled calls beat language supervision.** Zero-shot audio-text matching is at chance on zebra finch call types (0.07 against 0.09). LoRA fine-tuning of AST is the best single result on zebra finch, 0.80 [0.76, 0.83], though its interval overlaps the best frozen probe. On noisy field recordings, giving a CNN 20 seconds of context instead of a 2-second crop lifts the crow call-class score from 0.37 to 0.44, so the bout carries information beyond the single call.
+
+<Figure
+  src="/projects/bird-calls/fig5_pathways.png"
+  alt="Two dot charts comparing fine-tuning, probes and zero-shot on zebra finch call type and hooded crow call class."
+  caption="Training pathways on identical folds. Fine-tuned AST leads, frozen probes cluster just below it, and zero-shot sits near chance."
+/>
+
+## Next
+
+The binding constraint is labels. The next round runs Perch 2.0 as the call encoder and pilots behavior labels from timestamped video of corvids, so that a label comes from what the bird is seen doing. Independent coding of a slice of the hooded crow caws would test whether the observer's functions hold up for a second reader. The code is not yet public.

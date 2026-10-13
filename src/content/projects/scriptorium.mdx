@@ -1,30 +1,82 @@
 ---
 title: "Scriptorium"
-description: "A local pipeline that turns a written text into a narrated film: an LLM directs the text into a shot plan, Qwen-Image 2.1 renders the stills, MiniMax H3 animates them, and a voice booth records the narration and times the captions. Early public release on GitHub."
-techStack: ["Python", "TypeScript", "ComfyUI", "Qwen-Image 2.1", "MiniMax H3", "Qwen3-TTS", "FFmpeg", "MCP"]
+description: "A local pipeline that turns a written text into a narrated film. A language model directs the text into a validated shot plan, a clay blockout stages each shot, Qwen-Image 2.1 paints the stills, MiniMax H3 animates them, and a voice booth records and captions the narration. It runs on two consumer GPUs, overnight and unattended."
+techStack: ["Python", "TypeScript", "ComfyUI", "Qwen-Image 2.1", "MiniMax H3", "Qwen3-TTS", "faster-whisper", "FFmpeg", "MCP"]
 githubLink: "https://github.com/pskeough/scriptorium"
-order: 13
+order: 1
 ---
+import YouTube from '../../components/YouTube.astro';
 
 ## Overview
 
-Scriptorium turns a written text into a narrated film on one machine. An LLM reads the text and directs it into a shot plan, an image model renders a still for each shot, a video model animates each still, the narration is recorded or synthesised, captions are timed to it, and the parts are assembled into an MP4. Every image, video, speech and caption model runs locally, on two RTX 5060 Ti 16GB cards. The planner can call any OpenAI-compatible endpoint, local or hosted. *Anubis*, a 4.8-minute film of 38 shots adapted from a 634-word prose piece, was the first film made with it. [*Deucalion*](https://youtu.be/BGRu-16W0GA), a retelling of the myth in a stylised engraving look, was the second.
+Scriptorium takes a piece of prose and produces a narrated short film from it on one desktop. A language model reads the text and writes a shot plan. Each shot is staged as a 3D clay blockout or described in words, painted as a still, animated into a clip timed to its line of narration, and cut together under a recorded voice with captions burned in. Every image, video, speech and caption model runs locally on two RTX 5060 Ti 16 GB cards; only the planner can optionally call a hosted model. The two films below are adaptations of my own short fiction.
 
-## Pipeline
+<div class="media-grid">
+<YouTube url="https://youtu.be/npvfbjC5cDI" title="Anubis" caption="Anubis: 38 shots from a 634-word prose piece about a permit clerk" />
+<YouTube url="https://youtu.be/BGRu-16W0GA" title="Deucalion" caption="Deucalion: 39 shots, a retelling of the flood myth in an engraving style" />
+</div>
 
-1. **Plan.** An LLM director turns the text or a brief into a JSON shot plan: the narration each shot carries, what the still shows, what moves, and where the camera sits. Every plan is validated, and the errors go back to the model for repair. Plans can also be written by hand or by an agent through the MCP server.
-2. **Narrate.** Qwen3-TTS reads the narration as a guide track, which sets the length of each shot.
-3. **Stills.** Qwen-Image 2.1 renders a 1344x768 still per shot, from text alone or by editing a staging image. A metric 3D clay blockout is one optional staging aid: it fixes camera height, lens and where each person stands before any diffusion model runs.
-4. **Motion.** MiniMax H3 animates each still into a clip timed to its narration. A frozen-clip gate and a cut detector flag clips where nothing moved or where the model invented a cut.
-5. **Assembly.** Clips are laid under the narration and encoded to MP4.
+## How it works
 
-## Key Features
+The pipeline has six stages, each of which writes into the film's folder and records itself in a status file, so any stage can be rerun for any shot without touching the rest.
 
-- **Voice Booth.** A local web app plays the finished picture with the script highlighted in time, records takes in the browser, denoises and levels them, and builds the voiced MP4. Captions use the script text, timed by faster-whisper and burned in with libass.
-- **Studio and MCP Server.** A FastAPI web UI edits plans and reruns any stage per shot, and the same functions are exposed over MCP so an agent can drive a film end to end.
-- **Agent Setup.** The repository ships a setup prompt for a coding agent, which checks the GPU, installs dependencies, locates ComfyUI and the model files, and reports what is missing.
-- **Prompting Rules from Renders.** Failure modes found while rendering *Anubis* are enforced or documented in the code: a shot may name only what its still shows, and actions must be visible at the figure's scale, or the motion model cuts away.
+1. **Plan.** The text becomes a JSON shot plan.
+2. **Narrate.** A guide voice track sets the length of every shot.
+3. **Stage.** A metric clay blockout fixes the camera and the room.
+4. **Stills.** Qwen-Image 2.1 paints one frame per shot.
+5. **Motion.** MiniMax H3 animates each frame into a clip.
+6. **Assemble.** Clips go under the narration, then the voice booth records the final read and burns in captions.
 
-This is an early release, and I am still updating it and making it easier to set up.
+## Technical overview
+
+### The shot plan
+
+A shot carries its narration, a location, a camera (angle, elevation, distance, lens and framing from fixed vocabularies), up to three people with marks, poses and facing, what the still shows, what moves, and where a camera move ends. The model never writes coordinates: it names marks in a location, and code resolves them to positions. The planner is any OpenAI-compatible chat model, run locally on llama-server by default (I use a 27B model split across both cards; the tested default is Qwen3-14B on one). Its output is decoded against a JSON schema and checked by a validator, and the first 25 errors go back to the model verbatim for up to three repair rounds.
+
+The validator enforces what the renders taught. Narration must be a verbatim substring of the source text and fit the shot's time budget, measured against the narrator's reading speed of about 2.4 words a second. Wide shots are allowed only outdoors, and every cast member, mark and look-at target must resolve. When adapting a passage, the model picks sentence numbers instead of quoting them, because free quoting failed the substring check on 4 of 7 shots even after three repairs.
+
+### Staging and stills
+
+For staged shots, a CPU renderer builds a clay blockout of the location at real scale: camera height, lens and where each person stands are fixed before any diffusion model runs. Gates check the blockout's field of view, empty space behind the subject and background coverage, and repair the first two automatically. The clay has no figures, so pose and figure size are carried into the prompt as words.
+
+Qwen-Image 2.1 (int8 weights, Qwen3-VL-8B text encoder) then edits the clay pass into a painted still at 1344x768, or paints a free shot from text alone, at cfg 1.0 with 18 steps for edits and 25 for text-to-image. A still takes about 35 seconds per card. *Anubis* used 21 staged shots and 17 free ones.
+
+### Motion
+
+MiniMax H3 animates each still from an int8 checkpoint with an 8-step distilled LoRA run at 6 steps and the res_multistep sampler, at 1344x768 and 24 fps. Clip length snaps to the model's 17k+5 frame grid inside its trained range of 124 to 362 frames, 5.2 to 15.1 seconds. The 21 GB checkpoint does not fit one 16 GB card, so motion runs on a worker that spans both. A five-second clip takes about five minutes.
+
+Two automatic checks run on every clip:
+
+- **Frozen-clip gate.** The first and last frames are compared at 320 px wide in 48 px blocks, searching small offsets for each block's best match. A clip whose mean displacement is under 1.5 px is flagged as frozen.
+- **Cut detector.** Mean luma change between frames at 160x90 is flagged when it exceeds 12 and six times the clip's median. It catches the model inventing a cut to a new shot.
+
+### Narration, voice booth and captions
+
+Qwen3-TTS reads the narration as a guide track in one take, and beat boundaries recovered from its silences set each shot's length before anything is rendered. The voice booth is a local web app that plays the finished picture with the script highlighted in time and records takes in the browser. Each take is captured twice, once as the timing clock and once as clean audio, and the two are matched up by cross-correlation with a drift fit. A spectral gate built from the room tone removes noise, and the read is levelled to −16 LUFS. faster-whisper supplies word times only; the words are matched back to the script, so the captions always show the script's text, in cues of at most 42 characters and 4.5 seconds, burned in with libass.
+
+### The render farm
+
+Each card runs its own ComfyUI process, and a dispatcher feeds both from one queue. On Windows, ComfyUI hides the second card from any process that can see two, to avoid an open driver issue, so one process per card is the configuration that keeps both cards and pinned memory working. The two cards share a PCIe 3.0 x8 link with no peer-to-peer transfer. A load gate waits for free VRAM before each job, a read-only preflight checks ports, GPUs, disk and model files, and a smoke test times one card against two. On a batch of stills, two cards finish 1.85 times faster than one.
+
+Overnight runs work by stage across the whole queue. Every piece is planned before any is narrated or rendered, and assembly comes last. The planner and the renderer cannot share the cards, and this order switches the cards between them twice a night instead of four times per piece.
+
+### Studio and MCP server
+
+A FastAPI studio edits the plan and reruns any stage for a single shot. Shots can be split, merged and reordered, an edit marks the affected shots stale without regenerating them, and every rendered version is kept so an earlier one can be restored. The same functions are exposed to agents through an MCP server with 15 tools: `guide`, `list_locations`, `location`, `list_cast`, `validate_plan`, `new_piece`, `plan_with_llm`, `run_piece`, `status`, `shot_still`, `shot_edit`, `shot_motion`, `shot_clay`, `shot_versions` and `activate_version`.
+
+## What the renders taught
+
+Most of the validator's rules came from failed clips.
+
+- H3 cuts away to a new shot when the prompt names something the still does not contain, so a shot may describe only what its still shows, and its action must be visible at the figure's scale.
+- Words for stillness in the action field freeze the clip, so a lint rejects them.
+- A push-in written as "close on" a detail cut to a face, so camera moves now name their end target.
+- "Fades" renders as an object appearing, so a fade is written as the appearance and the clip is reversed.
+- Reusing a seed for an edit overcooked the image, so edits get a derived seed.
+- A plural cast entry cloned the protagonist across background figures, and a shot with no location invented its own room.
+
+## Setup
+
+The repository ships a setup prompt for a coding agent. It checks the GPU, installs dependencies, finds ComfyUI and the required custom nodes, asks before downloading the roughly 58 GB of weights, and ends with a table of what is ready and what is missing. It needs Python 3.12 or later, Node 20 or later and CUDA PyTorch. This is an early release, and I am still making it easier to set up.
 
 [View on GitHub](https://github.com/pskeough/scriptorium)

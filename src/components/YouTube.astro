@@ -1,0 +1,36 @@
+---
+// Click-to-play YouTube embed: shows the thumbnail and loads the player only on click,
+// so a page with several films does not load several players up front.
+interface Props {
+  url: string;
+  title: string;
+  caption?: string;
+}
+const { url, title, caption } = Astro.props;
+const id = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/)([A-Za-z0-9_-]{11})/)?.[1];
+---
+
+{id && (
+  <figure class="media-figure">
+    <button type="button" class="yt-facade" data-yt={id} aria-label={`Play ${title}`}>
+      <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" />
+      <span class="yt-play" aria-hidden="true"></span>
+    </button>
+    <figcaption>
+      {caption ?? title} &middot; <a href={url} class="article-link">YouTube</a>
+    </figcaption>
+  </figure>
+)}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.yt-facade').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.yt}?autoplay=1`;
+      frame.title = btn.getAttribute('aria-label') ?? 'Video';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      frame.allowFullscreen = true;
+      btn.replaceWith(frame);
+    }, { once: true });
+  });
+</script>

@@ -1,0 +1,93 @@
+---
+title: "Fly Embodiment: A Language Model in a Connectome-Driven Body"
+description: "A simulated fruit fly whose 138,639-neuron brain, built from the FlyWire connectome, drives a physics body in an editable world. A local language model is wired into it in both directions: it reads the fly's state and steers its legs, and the fly's hunger, threat and fatigue reshape how the model thinks."
+techStack: ["Python", "NVIDIA Warp", "MuJoCo", "FlyGym", "llama.cpp", "Qwen3", "JavaScript"]
+status: "In Progress"
+order: 2
+---
+import Clip from '../../components/Clip.astro';
+
+## Overview
+
+The simulator runs a whole fruit-fly brain, neuron by neuron, inside a walking fly body, and puts a language model in the loop as the fly's mind. The brain is a spiking model of all 138,639 neurons and 15,091,983 synapses in the FlyWire v783 connectome. Its output neurons move a MuJoCo body through a 3D world that can be edited live: sugar, water, bitter food, fire, ice, walls, other flies. A local Qwen3-4B reads what the fly senses and needs, thinks in short streamed sentences, and chooses what the legs do next. The fly's state flows back the other way. Hunger, threat, fatigue and intoxication shrink the model's working memory and attention, and can be added straight into its hidden state as steering vectors, so the same model reasons differently in a starving, frightened or drunk body.
+
+Everything runs locally on one desktop with two RTX 5060 Ti cards, in a browser app with the brain on one side and the world on the other.
+
+<Clip
+  src="/projects/fly-embodiment/E1_two_brains.mp4"
+  poster="/projects/fly-embodiment/E1_two_brains.jpg"
+  caption="Two brains running together: each dot on the left is one of the fly's 138,639 neurons, and each ring on the right is one of the language model's 36 layers."
+/>
+
+## How it works
+
+### The brain
+
+The brain model is the leaky integrate-and-fire model of Shiu et al. (2024, *Nature*), ported from Brian2 to the GPU with NVIDIA Warp and CUDA graphs. It steps at 0.1 ms and hands results to the body every 10 ms. A quiet simulated second takes 0.30 s of wall time on the GPU, against 2.5 s under heavy drive, so the body and not the brain sets the pace. Against the Brian2 reference on the same sugar stimulus, the port activates 442 neurons to the reference's 432, with a top-40 rate correlation of 0.78. The model has a self-sustaining attractor in the antennal lobe, so a watchdog resets membranes when more than 2% of neurons fire for 300 ms.
+
+### Senses in, legs out
+
+Senses enter the brain as spike trains on the real sensory neurons. Looming objects drive LPLC2 and LC4, which push the giant fibre to take-off near 35 degrees of visual angle. Taste drives 20 sugar, 18 water and 20 bitter receptor neurons. Touch, temperature and humidity have their own entry cells.
+
+On the way out, a bridge reads the descending neurons that carry commands from brain to body: DNp09 and DNg100 for forward walking, the "moonwalker" MDN for backing up, DNa02, DNa01, DNb05 and DNg13 for steering, and the giant fibre DNp01 for escape. The body is the FlyGym 2.1 fly in MuJoCo 3.9 with 42 leg joints and a central-pattern-generator walking controller reimplemented in numba. It has an energy, water and temperature budget, and it can starve, dehydrate, overheat, freeze or be crushed.
+
+<div class="media-grid">
+<Clip
+  src="/projects/fly-embodiment/n03_hand_escape.mp4"
+  poster="/projects/fly-embodiment/n03_hand_escape.jpg"
+  caption="A hand's shadow looms and the fly jumps clear through its own escape circuit. Brain activity and the model's layers on the left; slowed to 0.3x."
+/>
+<Clip
+  src="/projects/fly-embodiment/M1_shared_control_dark.mp4"
+  poster="/projects/fly-embodiment/M1_shared_control_dark.jpg"
+  caption="Who drives the legs: the fly's own reflexes, the model's chosen action, or its steered hidden state, all meeting at the same command neurons."
+/>
+</div>
+
+### The mind
+
+The mind has three levels. The fly itself, brain plus reflexes, never waits for a model. A motor level picks from a lettered list of options every 0.35 s; on 160 test scenes Qwen3-1.7B chose correctly 86% of the time at a 53 ms median. Above that, Qwen3-4B on llama.cpp wakes on events such as pain onset, streams a thought and a feeling, and picks its next action from a grammar-constrained list such as "go to the sugar", "get away from the heat" or "freeze". The choice is bound directly to the descending neurons, and a reflex gate silences the mind while an escape or back-up reflex is running. A memory module runs at 5 Hz with a perception horizon, beliefs that fade unless refreshed, and a bid against the motor layer for control.
+
+### The body shapes the mind
+
+Nine drives are read from the brain where the connectome has a read-out and from the body's physiology otherwise: hunger, thirst, threat, arousal, fatigue, pain, intoxication, sedation and temperature stress. Together they set a capacity that shrinks the model's working memory, narrows what it attends to, cuts its thinking budget, slows its tempo and adds sampling noise, so a drugged fly's sentences slur.
+
+The second route goes into the model's activations. For seven drives the project extracted a direction in Qwen3-4B's residual stream from sentences written in the fly's register, then removed the component the directions share. At layer 18 each direction separates its drive from neutral text with held-out AUC from 0.84 to 1.00. A blind judge, a self-report probe and an activation probe each identify the intended drive for 6 of the 7 directions. While a thought streams, the simulator updates the doses about 15 times a second, so a swat lands inside a sentence that is already being written.
+
+<div class="media-grid">
+<Clip
+  src="/projects/fly-embodiment/E4_pushing_the_feeling_in.mp4"
+  poster="/projects/fly-embodiment/E4_pushing_the_feeling_in.jpg"
+  caption="A drive level times its direction, added to every token at layer 18. Only the layers above the push light up, and the sentence changes."
+/>
+<Clip
+  src="/projects/fly-embodiment/n06_alcohol.mp4"
+  poster="/projects/fly-embodiment/n06_alcohol.jpg"
+  caption="Ethanol: synapse gains drop in the brain model and the mind's sampling loosens. The stagger itself is scripted."
+/>
+</div>
+
+### The world
+
+Nine preset worlds (a labyrinth, two rooms, an oasis, a ring of fire and others) can be edited while the fly runs. Other flies can be added, each with its own full 138,639-neuron brain state; four extra flies run at half real time. Eight drugs, from ethanol and caffeine to picrotoxin and isoflurane, act on the brain model as synapse-gain changes by transmitter type. Every thought is logged with its full prompt, and a recorder writes a fixed 1080p composite for video.
+
+## What the coupling changes
+
+Ghost trials overlay ten runs with the model connected against ten with it switched off. When the food is moved partway through a trial, flies with the model connected go back to where the food used to be (8 of 10, against 0 of 10), and fewer of them find the new spot (6 against 9).
+
+<div class="media-grid">
+<Clip
+  src="/projects/fly-embodiment/g5_food_moved_v3.mp4"
+  poster="/projects/fly-embodiment/g5_food_moved_v3.jpg"
+  caption="The food is moved. Orange: model connected. Blue: model switched off. Ten runs each, overlaid."
+/>
+<Clip
+  src="/projects/fly-embodiment/n02_sugar_feed.mp4"
+  poster="/projects/fly-embodiment/n02_sugar_feed.jpg"
+  caption="A hungry fly finds sugar and feeds. Slowed to 0.3x."
+/>
+</div>
+
+## Limits
+
+The connectome covers the brain but not the ventral nerve cord, so leg contact has no brain pathway, and flight is a placeholder driven from outside the model. The brain model has no neuromodulation, so caffeine and octopamine barely move it. Hunger, thirst and fatigue live in the body model, and the visible effects of drugs on walking are scripted. An explainer video is in production, and the code is not yet public.

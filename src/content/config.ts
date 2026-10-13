@@ -26,6 +26,7 @@ const projectsCollection = defineCollection({
     githubLink: z.string().url().optional(),
     liveLink: z.string().url().optional(),
     screenshot: z.string().optional(),
+    status: z.string().optional(),
     order: z.number().optional(),
   }),
 });

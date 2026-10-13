@@ -16,6 +16,7 @@ const { Content } = await entry.render();
   <article class="prose-broadsheet mx-auto">
     <div class="sans-meta mb-4">
       <span class="tag">Project</span>
+      {entry.data.status && <span class="tag ml-2">{entry.data.status}</span>}
     </div>
     <h1 class="font-display">{entry.data.title}</h1>
     <p class="text-ink-gray text-[1.15rem] mb-2">{entry.data.description}</p>

@@ -1,0 +1,16 @@
+---
+// A figure image with a caption, for charts that need more than a one-line italic caption.
+// `narrow` caps square charts such as confusion matrices so they do not fill the column.
+interface Props {
+  src: string;
+  alt: string;
+  caption: string;
+  narrow?: boolean;
+}
+const { src, alt, caption, narrow = false } = Astro.props;
+---
+
+<figure class:list={['media-figure', { 'media-narrow': narrow }]}>
+  <img src={src} alt={alt} loading="lazy" />
+  <figcaption>{caption}</figcaption>
+</figure>

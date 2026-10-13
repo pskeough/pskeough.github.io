@@ -32,7 +32,7 @@ project is the evidence for the second half of that sentence.
 
 Three measurements made the case. Generated text scored **AUROC 0.691** on the
 surface features a word-level scrubber can see, against **0.884** on cadence
-features it cannot — the tells being removed were already nearly matched, and
+features it cannot. The tells being removed were already nearly matched, and
 what separated the prose was invisible to the filter. Optimising toward the
 author's corpus mean produced text scoring **AUROC 0.316**, below chance, meaning
 generations sat *closer to the author's centre than the author's own writing does*.
@@ -50,7 +50,7 @@ choice. Each detector was added after a specific draft passed every existing
 check and was still rejected on sight in blind review.
 
 - **Self-explanation.** A clause arrives at a point, then instead of stopping
-  appends a clause narrating what the point was — the `, which means` hinge, or a
+  appends a clause narrating what the point was: the `, which means` hinge, or a
   reverse pseudo-cleft with a nominalised subject. Named in all twelve drafts of
   one blind round, at equal strength in every generation strategy tested. That it
   did not move with the prompt is why it has to be caught after generation.
@@ -65,7 +65,7 @@ Every detector is calibrated against the author's real corpus and has to clear t
 same bar: fire on the specimens, stay off the author's own writing. The reversal
 detector's first version matched any negation and fired on 71–88% of the corpus,
 because ordinary narrative negates constantly; the shipped version reads 0.10–0.19
-occurrences per thousand words. Some checks are per-profile by necessity — `It is`
+occurrences per thousand words. Some checks are per-profile by necessity. `It is`
 as a sentence opener has a 95th percentile of 5.45 in the author's fiction and
 0.00 in his academic writing, so a single global threshold would be wrong in both
 directions.
@@ -79,9 +79,9 @@ preference data the scorers are then benchmarked against.
 
 Running that loop produced results worth reporting, including the ones that went
 against the design. Four instruction framings were tested across three voices with
-every arm written by an isolated agent — an earlier round where one model wrote all
-the arms produced a result that reversed inside a single evening, which is its own
-finding about how easily this kind of comparison confounds itself. Fixed-slot
+every arm written by an isolated agent. In an earlier round where one model wrote all
+the arms, the result reversed inside a single evening, and that reversal showed how
+easily this kind of comparison confounds itself. Fixed-slot
 observation-then-write placed first or second in every voice and now ships as the
 default protocol. The framing that had been the leading hypothesis, telling the
 model to read the examples and then set them aside, placed last overall.
