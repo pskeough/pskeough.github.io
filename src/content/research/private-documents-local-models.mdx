@@ -1,0 +1,25 @@
+---
+title: "Private Documents, Local Models: Retrieval, Fine-Tuning and Judging"
+description: "A study with Robert H. Tai of how much quality a research group gives up when answering and judging over its private documents move to small local models on one consumer graphics card."
+pubDate: 2026-10-17
+coauthors: "Tai, Robert H."
+status: "Manuscript in Preparation"
+order: 6
+---
+
+> [!NOTE]
+> **Manuscript in Preparation**
+> Joint work with Robert H. Tai, currently under co-author review. A code release will be linked here when it is public.
+
+## Overview
+
+Research groups working with private documents are often unable to send them to hosted language models, as ethics approvals and data agreements count hosted providers as external parties. Evaluating the resulting system with a hosted judge sends the same documents out a second time. This study measures how much quality a group loses when both answering and judging move to small local models on a single consumer 16 GB graphics card, and which deployment choice matters most among retrieval, fine-tuning, or both. Three local answering models are compared against three hosted models under matched evidence, and three sizes of a local judge are tested against a hosted judge. Answers written by the collection's owner, a domain expert, provide a human check on the machine-made answer key.
+
+## Findings
+
+- **Retrieval was the main lever** and improved every local model more than fine-tuning did. Added on top of retrieval, fine-tuning contributed little, leaving the training step optional for most groups.
+- **Given the same retrieved passages**, the 3.8B and 8B local models nearly matched the three hosted models, while the 1B model fell well behind.
+- **For judging**, every local judge named the same leading system as the hosted judge. Two checks that need no human labels, a closed-book check and an answer-order check, flag a judge that should not be trusted. Of the local judges, Gemma 4 12B came closest to the hosted judge's stability when the answer order was swapped.
+- **The expert check** costs one person and one sample. The owner answered without sight of the machine references, and the two label-free checks then test the judge on every run.
+
+The results indicate that a research group can keep its documents on its own hardware for both answering and judging at a small loss in quality, provided retrieval is built first and both checks are run on the local judge.

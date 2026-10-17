@@ -9,4 +9,7 @@ export default defineConfig({
   markdown: { rehypePlugins: [rehypeCaption] },
   integrations: [tailwind({ applyBaseStyles: false }), mdx(), sitemap()],
   output: 'static',
+  redirects: {
+    '/research/access-not-capability': '/research/private-documents-local-models',
+  },
 });
