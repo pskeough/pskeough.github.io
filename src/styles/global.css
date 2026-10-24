@@ -448,6 +448,16 @@
     margin: 0 0 3rem;
   }
 
+  .process-title,
+  .prose-broadsheet .process-title {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+  }
+
   .stage-line {
     font-style: italic;
     margin: 0 0 1rem;

@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import YouTube from '../../components/YouTube.astro';
 import FilmStages from '../../components/FilmStages.astro';
+import FilmProcess from '../../components/FilmProcess.astro';
 
 export async function getStaticPaths() {
   const films = await getCollection('films');
@@ -48,6 +49,7 @@ const facts: [string, string][] = [
       <Content />
     </div>
 
+    <FilmProcess items={d.process} />
     <FilmStages stages={d.stages} note={d.stagesNote} />
 
     <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">

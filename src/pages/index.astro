@@ -3,10 +3,12 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import ArticleItem from '../components/ArticleItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import FilmCard from '../components/FilmCard.astro';
 
 const research = await getCollection('research');
 const projects = await getCollection('projects');
 const writing = await getCollection('writing');
+const films = (await getCollection('films')).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const featuredResearch = [
   research.find((r) => r.slug === 'psychbench'),
@@ -132,6 +134,25 @@ const stats = [
     </div>
     <div class="mt-6 sans-meta">
       <a href="/projects" class="article-link">All projects &rarr;</a>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="section-header !mt-0 !mb-6">Film &amp; Video</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {films.map((f) => (
+        <FilmCard
+          href={`/films/${f.slug}`}
+          title={f.data.title}
+          description={f.data.description}
+          youtube={f.data.youtube}
+          meta={`${f.data.runtime} · ${f.data.pubDate.getFullYear()}`}
+          compact
+        />
+      ))}
+    </div>
+    <div class="mt-6 sans-meta">
+      <a href="/films" class="article-link">All films &rarr;</a>
     </div>
   </section>
 </MainLayout>

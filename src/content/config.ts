@@ -76,6 +76,16 @@ const filmsCollection = defineCollection({
       )
       .default([]),
     stagesNote: z.string().optional(),
+    process: z
+      .array(
+        z.object({
+          title: z.string(),
+          line: z.string().optional(),
+          caption: z.string(),
+          panels: z.array(z.object({ src: z.string(), label: z.string() })),
+        }),
+      )
+      .default([]),
   }),
 });
 

@@ -11,7 +11,6 @@ storyCategory: "short-fiction"
 storyWords: 5454
 look: "Muted naturalistic colour, turning to a photographic negative in the last section"
 tools: ["Qwen-Image 2.1", "MiniMax H3", "LatentSync", "Stable Audio 3"]
-stagesNote: "Each person stands in the clay as a mannequin tinted to match their clothes, which is how the still keeps who sits where. Frames are from the source clips, before the grade and subtitles."
 stages:
   - line: "There are three of us sitting around the sycamore table. The condiments bear worn labels, witness to the stillness of the collective."
     clay: "/films/gardening/p01d-t01a_clay.jpg"
@@ -29,6 +28,33 @@ stages:
     clay: "/films/gardening/p20c-t01a_clay.jpg"
     still: "/films/gardening/p20c-t01a_still.jpg"
     frame: "/films/gardening/p20c-t01a_frame.jpg"
+process:
+  - title: "Three at a table"
+    line: "There are three of us sitting around the sycamore table. The condiments bear worn labels, witness to the stillness of the collective."
+    caption: "The first board generated all 338 shots straight from the text. Its opening line, three of us at a table, came out with five people. The rebuild has three, each placed in a clay set of the diner first."
+    panels:
+      - src: "/films/gardening/process/L000_rejected_board.jpg"
+        label: "Rejected board"
+      - src: "/films/gardening/process/L000_clay_first.jpg"
+        label: "Clay-first rebuild"
+  - title: "Mannequins that swapped seats"
+    line: "She looks up at him. Her smile is harsh, I know the look well. “Give him your hand. We need new blood anyways."
+    caption: "With plain grey mannequins, the director's note that the woman sits in the left third beat the set, and she took the narrator's seat. Tinting each mannequin to that person's clothes and removing position words from the prompt put everyone back. The right panel is the test render; the film's still came later with the same fix."
+    panels:
+      - src: "/films/gardening/process/L054_clay_plan.jpg"
+        label: "Clay plan"
+      - src: "/films/gardening/process/L054_grey_swapped.jpg"
+        label: "Grey mannequins"
+      - src: "/films/gardening/process/L054_fixed.jpg"
+        label: "Tinted, fixed"
+  - title: "Someone walks into the shot"
+    line: "the trick will be over. For her, the trick had no conclusion."
+    caption: "The generated prompt pulled the camera back and brought a woman into what should be a shot of him alone. The redo holds the frame on him with a slight push in."
+    panels:
+      - src: "/films/gardening/process/L193_rejected_walkin.jpg"
+        label: "Rejected take"
+      - src: "/films/gardening/process/L193_used.jpg"
+        label: "Used"
 ---
 
-The film ends in negative. Over the last stretch the narrator's grip on what is happening goes, and the picture goes with him, flickering into a photographic negative over several lines before it stays there. The first board, generated straight from the text, had no sense of place and kept reusing the same faces, so I scrapped it and built each location as a clay set from real 3D models. Every person stands in that set as a mannequin tinted to their clothes, and the stills are painted over the top, so people stay where they were in the shot before. I narrated it myself after a light edit so the text would read aloud. Gardening is the third film and the one the first two were practice for. A lot of it is rough, faces drift and hands sink into props, and I redid shots until the time and money ran out.
+Gardening is the third film I've made with Scriptorium, and the longest by a wide margin. My first pass generated every shot straight from the text, and I threw it out when rooms kept changing from one shot to the next and the same few faces turned up on different characters. For the rebuild I made each location as a clay set from real 3D models and placed every character in it as a mannequin tinted to match their clothes. Painting the stills over those sets kept the diner, the lab and the house the same from shot to shot. I recorded the narration myself after a light edit of the text. In the last section the narrator loses his hold on events, and the film flickers into a photographic negative and stays there. Plenty of shots are still rough: faces drift between cuts and hands sink into the props.

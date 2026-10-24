@@ -1,21 +1,30 @@
 ---
 // Index card for a film: the YouTube thumbnail, the title, runtime and year, and the logline.
+// `compact` drops the logline and shrinks the type, for the row on the home page.
 interface Props {
   href: string;
   title: string;
   description: string;
   youtube: string;
   meta: string;
+  compact?: boolean;
 }
-const { href, title, description, youtube, meta } = Astro.props;
+const { href, title, description, youtube, meta, compact = false } = Astro.props;
 const id = youtube.match(/(?:youtu\.be\/|[?&]v=|\/embed\/)([A-Za-z0-9_-]{11})/)?.[1];
 ---
 
-<a href={href} class="film-card hover:!border-ink">
-  {id && <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" class="film-thumb" />}
-  <div class="p-6">
-    <h3 class="font-display text-[1.5rem] mb-2">{title}</h3>
-    <div class="font-sans text-[0.8rem] text-ink-gray mb-3">{meta}</div>
-    <p class="text-ink-gray text-[1.02rem]">{description}</p>
-  </div>
+<a href={href} class:list={['film-card hover:!border-ink', { 'film-card-compact': compact }]}>
+  {id && <img src={`https://i.ytimg.com/vi/${id}/${compact ? 'mqdefault' : 'hqdefault'}.jpg`} alt="" loading="lazy" class="film-thumb" />}
+  {compact ? (
+    <div class="px-4 py-3">
+      <h3 class="font-display text-[1.15rem] leading-tight">{title}</h3>
+      <div class="font-sans text-[0.75rem] text-ink-gray mt-1">{meta}</div>
+    </div>
+  ) : (
+    <div class="p-6">
+      <h3 class="font-display text-[1.5rem] mb-2">{title}</h3>
+      <div class="font-sans text-[0.8rem] text-ink-gray mb-3">{meta}</div>
+      <p class="text-ink-gray text-[1.02rem]">{description}</p>
+    </div>
+  )}
 </a>

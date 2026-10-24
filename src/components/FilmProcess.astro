@@ -1,0 +1,35 @@
+---
+// "How it was made": problems particular to this film, each shown as a rejected take (or test) beside
+// what the film used, with the narration line and a short caption of what went wrong and the fix.
+interface Item {
+  title: string;
+  line?: string;
+  caption: string;
+  panels: { src: string; label: string }[];
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="mt-16">
+    <h2 class="section-header">How it was made</h2>
+    {items.map((it) => (
+      <figure class="stage-row">
+        <h3 class="process-title">{it.title}</h3>
+        {it.line && <blockquote class="stage-line">{it.line}</blockquote>}
+        <div class:list={['stage-panels', { 'stage-panels-2': it.panels.length === 2 }]}>
+          {it.panels.map((p) => (
+            <div>
+              <img src={p.src} alt={`${it.title}: ${p.label}`} loading="lazy" />
+              <span>{p.label}</span>
+            </div>
+          ))}
+        </div>
+        <figcaption>{it.caption}</figcaption>
+      </figure>
+    ))}
+  </section>
+)}
