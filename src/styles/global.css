@@ -463,7 +463,7 @@
     .stage-panels {
       grid-template-columns: repeat(3, 1fr);
     }
-    .stage-panels-3 {
+    .stage-panels-2 {
       grid-template-columns: repeat(2, 1fr);
     }
   }
@@ -486,6 +486,11 @@
     margin-top: 0.35rem;
   }
 
+  .stages-note {
+    margin: 0 0 1.5rem;
+  }
+
+  .stages-note,
   .stage-row figcaption {
     font-family: 'Inter', -apple-system, sans-serif;
     font-size: 0.78rem;

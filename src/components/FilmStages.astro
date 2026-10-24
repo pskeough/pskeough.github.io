@@ -1,6 +1,6 @@
 ---
 // "From text to frame": for each shot, the line it speaks, then the clay blockout, the still painted from
-// it and a frame of the finished clip. Free shots (no clay pass) show three panels.
+// it and a frame of the finished clip. Free shots (no clay pass) show two panels.
 interface Stage {
   line: string;
   clay?: string;
@@ -10,17 +10,19 @@ interface Stage {
 }
 interface Props {
   stages: Stage[];
+  note?: string;
 }
-const { stages } = Astro.props;
+const { stages, note } = Astro.props;
 ---
 
 {stages.length > 0 && (
   <section class="mt-16">
     <h2 class="section-header">From text to frame</h2>
+    {note && <p class="stages-note">{note}</p>}
     {stages.map((s) => (
       <figure class="stage-row">
         <blockquote class="stage-line">{s.line}</blockquote>
-        <div class:list={['stage-panels', { 'stage-panels-3': !s.clay }]}>
+        <div class:list={['stage-panels', { 'stage-panels-2': !s.clay }]}>
           {s.clay && (
             <div>
               <img src={s.clay} alt="Clay blockout of the shot" loading="lazy" />
@@ -28,7 +30,7 @@ const { stages } = Astro.props;
             </div>
           )}
           <div>
-            <img src={s.still} alt="Still painted from the blockout" loading="lazy" />
+            <img src={s.still} alt={s.clay ? 'Still painted from the blockout' : 'Still painted from the line'} loading="lazy" />
             <span>Still</span>
           </div>
           <div>

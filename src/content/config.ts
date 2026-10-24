@@ -75,6 +75,7 @@ const filmsCollection = defineCollection({
         }),
       )
       .default([]),
+    stagesNote: z.string().optional(),
   }),
 });
 
