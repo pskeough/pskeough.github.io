@@ -1,0 +1,57 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import YouTube from '../../components/YouTube.astro';
+import FilmStages from '../../components/FilmStages.astro';
+
+export async function getStaticPaths() {
+  const films = await getCollection('films');
+  return films.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'films'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+const storyHref = d.story && d.storyCategory ? `/writing/${d.storyCategory}/${d.story}` : undefined;
+const facts: [string, string][] = [
+  ['Runtime', d.runtime],
+  ['Released', d.pubDate.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })],
+  ...(d.shots ? [['Shots', String(d.shots)] as [string, string]] : []),
+  ...(d.storyWords ? [['Story', `${d.storyWords.toLocaleString()} words`] as [string, string]] : []),
+  ...(d.look ? [['Look', d.look] as [string, string]] : []),
+  ...(d.tools.length ? [['Made with', d.tools.join(', ')] as [string, string]] : []),
+];
+---
+
+<MainLayout title={`${d.title} | Film & Video`} description={d.description} ogType="article">
+  <article class="prose-broadsheet mx-auto">
+    <div class="sans-meta flex gap-4 mb-4 flex-wrap">
+      <span class="tag">{d.kind}</span>
+      <span>{d.runtime}</span>
+    </div>
+    <h1 class="font-display">{d.title}</h1>
+    <p class="deck mb-8">{d.description}</p>
+
+    <YouTube url={d.youtube} title={d.title} caption={d.title} />
+
+    <dl class="film-facts">
+      {facts.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+    </dl>
+
+    <div class="flex gap-6 mb-8 sans-meta flex-wrap">
+      {storyHref && <a href={storyHref} class="article-link">Read the story &rarr;</a>}
+      <a href="/projects/scriptorium" class="article-link">How it was made: Scriptorium &rarr;</a>
+    </div>
+
+    <div class="article-body">
+      <Content />
+    </div>
+
+    <FilmStages stages={d.stages} />
+
+    <div class="mt-16 pt-8 border-t border-ink-gray sans-meta">
+      <a href="/films" class="article-link">&larr; All films</a>
+    </div>
+  </article>
+</MainLayout>

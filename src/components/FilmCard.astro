@@ -1,0 +1,21 @@
+---
+// Index card for a film: the YouTube thumbnail, the title, runtime and year, and the logline.
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  youtube: string;
+  meta: string;
+}
+const { href, title, description, youtube, meta } = Astro.props;
+const id = youtube.match(/(?:youtu\.be\/|[?&]v=|\/embed\/)([A-Za-z0-9_-]{11})/)?.[1];
+---
+
+<a href={href} class="film-card hover:!border-ink">
+  {id && <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" class="film-thumb" />}
+  <div class="p-6">
+    <h3 class="font-display text-[1.5rem] mb-2">{title}</h3>
+    <div class="font-sans text-[0.8rem] text-ink-gray mb-3">{meta}</div>
+    <p class="text-ink-gray text-[1.02rem]">{description}</p>
+  </div>
+</a>

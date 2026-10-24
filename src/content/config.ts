@@ -47,6 +47,37 @@ const writingCollection = defineCollection({
   }),
 });
 
+// A film or video. `story` is the slug of the writing entry an adaptation comes from, and `stages`
+// is the "from text to frame" strip: one shot's narration line and its clay pass, still and clip frame.
+const filmsCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    kind: z.enum(['Adaptation', 'Other']),
+    youtube: z.string().url(),
+    pubDate: z.date(),
+    runtime: z.string(),
+    shots: z.number().optional(),
+    story: z.string().optional(),
+    storyCategory: z.enum(['major-works', 'short-fiction', 'essays-and-poetry']).optional(),
+    storyWords: z.number().optional(),
+    look: z.string().optional(),
+    tools: z.array(z.string()).default([]),
+    stages: z
+      .array(
+        z.object({
+          line: z.string(),
+          clay: z.string().optional(),
+          still: z.string(),
+          frame: z.string(),
+          note: z.string().optional(),
+        }),
+      )
+      .default([]),
+  }),
+});
+
 const aboutCollection = defineCollection({
   type: 'content',
   schema: z.object({
@@ -60,5 +91,6 @@ export const collections = {
   research: researchCollection,
   projects: projectsCollection,
   writing: writingCollection,
+  films: filmsCollection,
   about: aboutCollection,
 };

@@ -1,0 +1,21 @@
+---
+// On a writing page: a small card linking to the film adapted from this story, if there is one.
+import { getCollection } from 'astro:content';
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const film = (await getCollection('films')).find((f) => f.data.story === slug);
+const id = film?.data.youtube.match(/(?:youtu\.be\/|[?&]v=|\/embed\/)([A-Za-z0-9_-]{11})/)?.[1];
+---
+
+{film && (
+  <a href={`/films/${film.slug}`} class="story-film hover:!border-ink">
+    {id && <img src={`https://i.ytimg.com/vi/${id}/mqdefault.jpg`} alt="" loading="lazy" />}
+    <span>
+      <span class="story-film-label">Adapted as a film</span>
+      <span class="font-display text-[1.2rem]">{film.data.title}</span>
+      <span class="story-film-meta">{film.data.runtime} &middot; watch &rarr;</span>
+    </span>
+  </a>
+)}
