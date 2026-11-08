@@ -3,10 +3,12 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import ArticleItem from '../components/ArticleItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import FilmCard from '../components/FilmCard.astro';
 
 const research = await getCollection('research');
 const projects = await getCollection('projects');
 const writing = await getCollection('writing');
+const films = (await getCollection('films')).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const featuredResearch = [
   research.find((r) => r.slug === 'psychbench'),
@@ -50,8 +52,8 @@ const stats = [
       more than 500,000 model generations, judge calls and coder calls, and across the sycophancy and clinical-simulation
       studies the finding repeats: large language models that pass binary safety checks still flatter
       users, flatten the populations they simulate, and misreport the variables that drove
-      their own outputs. Two of the twelve studies are on arXiv, and eight ship with a public,
-      receipt-backed repository.
+      their own outputs. Two of the twelve studies are on arXiv, one is archived on Zenodo,
+      and eight ship with a public, receipt-backed repository.
       I also build simulations and films, and I write fiction and essays, none of it with AI.
     </div>
     <aside class="font-sans text-[0.9rem] text-ink-gray border-l border-ink-gray pl-8 md:pl-8">
@@ -59,7 +61,7 @@ const stats = [
       <p class="mt-6"><strong>Position:</strong> Independent researcher, Sydney, Australia.</p>
       <p class="mt-2"><strong>Education:</strong> B.A. Psychology, University of Washington, 2025.</p>
       <p class="mt-2"><strong>Preprints:</strong> <a href="https://arxiv.org/abs/2604.17359" class="article-link">arXiv:2604.17359</a>, <em>Plausible Patients, Impossible Populations</em> &middot; <a href="https://arxiv.org/abs/2606.05183" class="article-link">arXiv:2606.05183</a>, <em>The Granularity Gap</em></p>
-      <p class="mt-2"><strong>Working paper:</strong> <a href="/research/validity-ladder" class="article-link"><em>A Validity Ladder for LLM-Simulated Populations</em></a> &middot; <a href="https://doi.org/10.5281/zenodo.23147356" class="article-link">code and data DOI</a></p>
+      <p class="mt-2"><strong>In preparation:</strong> <a href="/research/validity-ladder" class="article-link"><em>A Validity Ladder for LLM-Simulated Populations</em></a> &middot; <a href="https://doi.org/10.5281/zenodo.23147356" class="article-link">code and data DOI</a></p>
       <p class="mt-6"><strong>Contact:</strong> <a href="mailto:pskeough@gmail.com" class="article-link">pskeough@gmail.com</a></p>
       <p class="mt-2"><strong>Profiles:</strong> <a href="https://github.com/pskeough" class="article-link">GitHub</a> &middot; <a href={arxivAuthorUrl} class="article-link">arXiv</a> &middot; <a href="https://scholar.google.com/citations?user=Mw9_OjEAAAAJ" class="article-link">Google Scholar</a> &middot; <a href="https://linkedin.com/in/patrick-keough-b5b7a7261" class="article-link">LinkedIn</a> &middot; <a href="/about" class="article-link">About</a></p>
     </aside>
@@ -132,6 +134,25 @@ const stats = [
     </div>
     <div class="mt-6 sans-meta">
       <a href="/projects" class="article-link">All projects &rarr;</a>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="section-header !mt-0 !mb-6">Film &amp; Video</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {films.map((f) => (
+        <FilmCard
+          href={`/films/${f.slug}`}
+          title={f.data.title}
+          description={f.data.description}
+          youtube={f.data.youtube}
+          meta={`${f.data.runtime} · ${f.data.pubDate.getFullYear()}`}
+          compact
+        />
+      ))}
+    </div>
+    <div class="mt-6 sans-meta">
+      <a href="/films" class="article-link">All films &rarr;</a>
     </div>
   </section>
 </MainLayout>

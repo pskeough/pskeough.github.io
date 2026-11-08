@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import FilmCard from '../../components/FilmCard.astro';
+
+const films = (await getCollection('films')).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const groups = [
+  { title: 'Adaptations', items: films.filter((f) => f.data.kind === 'Adaptation') },
+  { title: 'Other video', items: films.filter((f) => f.data.kind === 'Other') },
+].filter((g) => g.items.length > 0);
+const meta = (f: (typeof films)[number]) =>
+  [f.data.runtime, f.data.pubDate.getFullYear(), ...(f.data.shots ? [`${f.data.shots} shots`] : [])].join(' • ');
+---
+
+<MainLayout title="Film & Video | Patrick Keough">
+  <h1 class="section-header">Film &amp; Video</h1>
+  <p class="text-ink-gray text-[1.05rem] max-w-[68ch] mb-12">
+    Narrated films made from my own short fiction. I write the text and record the narration; the pictures
+    come from <a href="/projects/scriptorium" class="article-link">Scriptorium</a>, a pipeline that runs every
+    image and video model on my own two graphics cards.
+  </p>
+  {groups.map((g) => (
+    <section class="mb-16">
+      <h2 class="section-header">{g.title}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {g.items.map((f) => (
+          <FilmCard href={`/films/${f.slug}`} title={f.data.title} description={f.data.description}
+                    youtube={f.data.youtube} meta={meta(f)} />
+        ))}
+      </div>
+    </section>
+  ))}
+</MainLayout>
