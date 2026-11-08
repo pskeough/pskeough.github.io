@@ -1,0 +1,31 @@
+---
+title: "Local Language Models for Privacy-Constrained Research: Answering and Judging Questions over Documents"
+description: "A study with Robert H. Tai comparing three local language models on one 16 GB consumer graphics card with three commercial models, for answering questions over a research group's papers and for judging the answers."
+pubDate: 2026-10-20
+coauthors: "Tai, Robert H."
+status: "Manuscript in preparation, with Robert H. Tai"
+plate: "/research/local-llms-privacy-constrained-research/FIG-gap.png"
+plateCaption: "Fig. 1 · Net preference for the commercial answer over each local model, by collection"
+order: 6
+---
+
+> [!NOTE]
+> **Manuscript in preparation, with Robert H. Tai**
+> No code or data are linked while the manuscript is in preparation.
+
+## Overview
+
+Researchers whose documents cannot be sent to commercial language models can run local models instead, at some cost in compute and quality. This study compares local and commercial models while holding the retrieved evidence fixed, both for answering questions and for judging the answers. The collections are 26 published STEM-education papers from one research group and two public question-answering collections, COVID-QA and QASPER.
+
+On one 16 GB consumer card we ran three local models, MiniCPM5-1B, Phi-4-mini (3.8B) and Llama-3.1-8B, and tested each closed book, with retrieval-augmented generation (RAG), fine-tuned with QLoRA, and fine-tuned with RAG. Three commercial models, GPT-5.1, Claude Sonnet 4.6 and DeepSeek-v4-pro, received the same six retrieved passages as the 8B. For judging, three sizes of Gemma 4 (E2B, E4B and 12B) were tested beside three commercial judges, Gemini 3 Flash, Hy3 from Tencent and MiMo-V2.6-Flash from Xiaomi.
+
+## Findings
+
+For every local model retrieval was the most effective intervention, outperforming fine-tuning alone by a large margin, and adding fine-tuning to RAG was significantly better in only 2 of 9 comparisons. Given the same passages, the commercial models led the 8B by 0.16 to 0.33 in net preference (wins minus losses as a share of all pairs) depending on the judge, with most comparisons tied. The 3.8B came closest and the 1B fell well behind.
+
+As judges, the three Gemma 4 models named the same leading system as the three commercial judges from three developers. The 12B agreed with Gemini 3 Flash pair by pair at a Cohen's kappa of 0.69 and changed fewer verdicts under order swaps than Hy3 or MiMo. Two checks that need no human labels, a closed-book check and an answer-order check, are run on every judge, and on QASPER two of the three commercial judges failed the closed-book check with retrieved passages while every local judge passed it.
+
+![Three panels comparing six judges: commercial lead over Llama-3.1-8B, share of verdicts that change when answer order swaps, and closed-book tie share on QASPER](/research/local-llms-privacy-constrained-research/FIG-judges.png)
+*Figure 2: The three commercial judges (orange) and three local Gemma 4 judges (blue). Open markers fail the closed-book check, which passes at a tie share of 0.40 or below.*
+
+Because the STEM reference answers were written by a model, the collection's owner, a domain expert, answered 50 questions without seeing the machine answers. The expert's answers matched the references on 34 of 38 evidence locations and agreed on all 12 unanswerable questions.

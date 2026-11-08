@@ -3,15 +3,15 @@ title: "A Validity Ladder for LLM-Simulated Populations"
 description: "A protocol for deciding what a simulated survey sample can be used for, with a gate and four rungs, demonstrated on 28,800 PHQ-8 assessments from four models read against NHANES."
 pubDate: 2026-10-01
 repoLink: "https://github.com/pskeough/A-Validity-Ladder-for-LLM-Simulated-Populations"
-status: "Under Review, Behavior Research Methods"
+status: "Working Paper"
 plate: "/research/validity-ladder/fig1_ladder.png"
 plateCaption: "Fig. 1 · The gate and the four rungs of the ladder"
 order: 3
 ---
 
 > [!NOTE]
-> **Under Review, Behavior Research Methods**
-> Submitted October 2026. The manuscript, supplement, code and a receipt for every number in the paper are in the repository, archived on Zenodo at [10.5281/zenodo.23147356](https://doi.org/10.5281/zenodo.23147356).
+> **Working Paper**
+> The manuscript, supplement, code and a receipt for every number in the paper are in the repository, archived on Zenodo at [10.5281/zenodo.23147356](https://doi.org/10.5281/zenodo.23147356).
 
 ## Overview
 
@@ -33,7 +33,7 @@ A certifiability step runs before any answers are generated. It uses the human d
 
 - **Controls.** Real survey respondents run through the same checks rarely fail, and errors planted at known sizes are caught by the check built for each.
 - **Ten external releases.** The ladder was applied to ten datasets released by other authors, including silicon samples and digital twins. Samples drawn from each dataset's own human answers rarely fail where the human data are precise. None of 725 readings of published simulators in nine of them reproduces the group differences, and for over half the human data were too thin to confirm any simulator.
-- **Worked example.** In 28,800 PHQ-8 depression assessments from four models, read against the National Health and Nutrition Examination Survey, persona averages stabilize after a few answers, and every model fails every check above that.
+- **Worked example.** In 28,800 PHQ-8 depression assessments from four models, read against the National Health and Nutrition Examination Survey, persona averages stabilize after a few answers, and every model fails every check above that. These are the same 28,800 assessments analysed in [Plausible Patients, Impossible Populations](/research/psychbench).
 
 The ladder is released as a Python package with a harness that scores any simulator release against the same rules.
 

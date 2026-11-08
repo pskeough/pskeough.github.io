@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [tailwind({ applyBaseStyles: false }), mdx(), sitemap()],
   output: 'static',
   redirects: {
-    '/research/access-not-capability': '/research/private-documents-local-models',
+    '/research/access-not-capability': '/research/local-llms-privacy-constrained-research',
+    '/research/private-documents-local-models': '/research/local-llms-privacy-constrained-research',
   },
 });

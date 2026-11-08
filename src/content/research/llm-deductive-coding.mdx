@@ -1,0 +1,29 @@
+---
+title: "Deductive Coding with Local LLMs"
+description: "A study with Robert H. Tai of whether a local language model's agreement with itself across repeated runs can certify it as a deductive coder, tested on twelve local configurations coding the same 300 interview cells."
+pubDate: 2026-09-30
+coauthors: "Tai, Robert H."
+status: "Manuscript in preparation, with Robert H. Tai"
+order: 4
+---
+
+> [!NOTE]
+> **Manuscript in Preparation**
+> Joint work with Robert H. Tai. The interview data are private, so no code or data are linked.
+
+## Overview
+
+Researchers coding confidential interviews with a local language model often judge the coder by how well it agrees with itself across repeated runs. The large language model quotient (LLMQ) of Tai et al. (2024) follows this logic, defined as the share of repeated iterations in which a model marks a code present, and when every cell receives the same number of runs the mean LLMQ equals the coder's yes rate. We tested whether self-agreement of this kind can certify a local coder.
+
+Twelve local configurations coded the same 300 cells, each pairing a passage from a corpus of 30 interviews with one code from a five-code codebook. Every configuration returned twenty yes or no verdicts per cell, giving 6,000 records per configuration. The ladder holds ten models from 0.5B to 14B parameters at the Q4_K_M quantisation level and two further copies of Llama-3.1-8B at Q3_K_M and Q2_K. We scored each configuration twice, once with statistics computed from its own repeated runs and once with checks that reach outside the coder.
+
+## Findings
+
+Self-agreement statistics rewarded both ways a coder can fail. Qwen2.5-0.5B, which said yes to most cells, held the highest mean LLMQ on the ladder at 0.860, while Qwen3-1.7B with thinking off answered no on nearly every cell and reached a split-half r of 0.991. Its Krippendorff's alpha over runs, 0.908, ranked third of ten and rested on the 4 cells where its runs disagreed at all.
+
+![Committee kappa plotted against mean LLMQ (A) and against split-half r and Krippendorff's alpha (B) for the twelve configurations](/research/llm-deductive-coding/fig1_core_contrast.png)
+*Figure 1: Agreement with the majority of the larger local models against each coder's own self-agreement statistics. The acquiescent and refusing configurations sit at the bottom of both panels.*
+
+Outside checks ordered the ladder differently. Committee kappa against a leave-one-out majority of the five Q4_K_M models from 8B to 14B tracked the verbatim rate of the evidence spans each coder cited at rho 0.879 across the ten Q4_K_M configurations, and both measures placed the two acquiescent configurations last. In a 30-call screen on reference cells the acquiescent pair and the refusing configuration received the lowest margins on the ladder. The Q2_K copy of Llama-3.1-8B agreed with its own Q4_K_M copy at kappa 0.302, so quantisation level belongs in the description of the instrument.
+
+Every comparison here sets models against models, and committee kappa measures convergence with the larger local models without saying whether a verdict is correct. A comparison with a human coder is specified in advance and awaits coded data.

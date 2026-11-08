@@ -1,50 +1,30 @@
 ---
-title: "Iterated Consensus in Inductive Qualitative Coding"
-description: "An iterative research framework extending the LLM-Quotient (LLMQ) reliability methodology to open, inductive qualitative coding of multilingual interview corpora."
-pubDate: 2026-05-20
+title: "Inductive Coding with Local LLMs"
+description: "A study with Robert H. Tai extending the LLM-Quotient (LLMQ) to open, inductive coding, showing on 742 interview excerpts that the recurrence of a local model's open codes depends on the threshold at which two labels count as the same code."
+pubDate: 2026-09-30
 coauthors: "Tai, Robert H."
-status: "Work in Progress"
+status: "Manuscript in preparation, with Robert H. Tai"
+plate: "/research/thematic-consensus/fig1_match_curve.png"
+plateCaption: "Fig. 1 · Pairwise match rate across the cosine threshold for label equivalence"
 order: 4
 ---
 
 > [!NOTE]
-> **Work in Progress / Ongoing Research**
-> This research is currently in active development. The following documentation details the methodological design and architectural pipeline of the consensus engine, which extends iteration-based reliability frameworks to inductive qualitative coding. This represents ongoing methods development and is not a finalized or published paper.
+> **Manuscript in Preparation**
+> Joint work with Robert H. Tai. The interview transcripts are private, so no code or data are linked.
 
 ## Overview
 
-This research project introduces a local-first computational pipeline designed to execute reproducible, LLM-assisted **inductive thematic analysis** of semi-structured qualitative interview transcripts. 
+Open codes arrive as free text, so their recurrence across repeated runs moves with the threshold at which two labels count as one code. Deductive coding avoids this because each iteration returns a verdict on a code fixed in advance, as in the large language model quotient (LLMQ) of Tai et al. (2024), the share of iterations marking that code present. This study extends LLMQ to inductive coding and measures how far that figure changes when the matching rule changes.
 
-Where traditional qualitative AI systems rely on deductive coding against pre-defined human schemas, this architecture extends the **LLM-Quotient (LLMQ)** iteration-based reliability framework (Tai et al., 2024) to open, cold-review inductive analysis. The pipeline runs 20 independent passes per chunk and reports how often each theme recurs.
+A local Llama-3.1-8B-Instruct model coded 742 excerpts from 30 semi-structured interviews with university alumni in up to 20 independent iterations per excerpt. Labels were embedded with nomic-embed-text-v1.5 and matched by cosine similarity, and the pairwise match rate between iterations of one excerpt was compared with the rate between excerpts from different participants as chance.
 
-## Methodology & Inductive LLMQ
+## Findings
 
-To calibrate coding reliability at the inductive frontier, the engine models the thematic analysis process across four computational stages:
+0.899 was the pairwise match rate between iterations at a cosine threshold of 0.5, or 0.867 after correction for chance. The same runs gave 0.196 at 0.875, the threshold used to build themes, and every one of the 30 participants stayed above the other-participant rate at every threshold tested. Mean theme LLMQ was 0.193 at cosine 0.875, ranging from 0.18 to 0.22 across clustering thresholds from 0.82 to 0.92.
 
-1. **Greedy Structural Chunker.** Raw transcript data is parsed, cleaned of audio-dropout segments, and split on speaker turns into hierarchically structured Q–A chunks.
-2. **High-Iteration Coding.** The engine targets a locally served, GPU-offloaded open-weights model (**Llama-3.1-8B-Instruct**), running **N = 20** independent open-coding iterations per chunk. Constrained JSON schemas enforce strict format parity.
-3. **Within-Chunk Semantic Clustering.** The thousands of generated label strings are projected into a 768-dimensional embedding space using `nomic-embed-text-v1.5`. Inside each chunk, the engine performs average-linkage agglomerative clustering (cosine distance threshold 0.5) to group semantically equivalent codes.
-4. **Reliability Rollup.** Within-chunk theme recurrence is calculated as the ratio of independent iterations that surfaced the theme over total iterations:
-   `LLMQ = (Iterations Surfacing Theme) / N`
-   Mean within-chunk LLMQ is 0.19 at a clustering threshold of 0.5 and runs from 0.175 to 0.220 across thresholds of 0.4 to 0.6. The low mean mostly reflects variation in label wording: two random iterations share about 90 percent of their codes by semantic match.
+We find that five local models converged above chance, with themes carrying between models at cosine 0.75 at about half the rate they recurred between split halves of one model's runs. Theme inventories from an unprimed and a minimally scaffolded prompt differed, but the difference could not be separated from run-to-run resampling under any of three null models. Because no human judged whether matched labels mean the same thing, the figures support no claim about validity, and recurrence is reported as a curve across thresholds with chance, the embedder configuration and the iteration count.
 
-## Two-Axis Reliability & Span Stability
+## Pipeline
 
-To satisfy academic publication standards, the pipeline establishes a two-axis reliability metric that separates thematic categorization from verbatim evidence sourcing:
-
-- **Verdict Recurrence (LLMQ).** The level of cross-iteration agreement on the conceptual presence of a theme.
-- **Evidence Span Stability.** The percentage of iterations within a theme cluster that cite the exact same verbatim words from the transcript.
-
-To resolve minor editorial adjustments made by smaller local models (such as silent pronoun changes or whitespace discrepancies), a **six-stage verbatim recovery cascade** is implemented. Using normalized matching, fuzz-matching similarity ratios, and sub-chunk re-attribution, the post-processing routine re-anchors LLM-emitted quotes back to verifiable, verbatim transcript substrings with a $96\%+$ success rate.
-
-## Hierarchical Aggregation & Calibration
-
-To aggregate recurrent chunk-level themes into a publication-ready codebook, the pipeline employs a deterministic hierarchical clustering scheme:
-
-- **Sub-Themes.** Agglomerates corpus-wide codes using Ward-linkage clustering on unit-norm centroids into $K = 30$ sub-themes. The LLM is used strictly to name and define each cluster, preventing hallucinated themes.
-- **Top-Themes.** Centroids of the sub-themes are clustered in a second Ward-linkage pass into $K = 12$ top-themes. Ordering is determined by mean LLMQ, placing the most robust, convergent findings first.
-- **Cross-Pass Convergence.** Parallel runs of unprimed and minimally scaffolded prompt variants are compared via Jaccard overlap on covered chunks. Themes meeting a mutual-best Jaccard overlap of $\ge 0.50$ are reported as robustly convergent, while lower overlaps isolate pass-dependent prompt sensitivity.
-
----
-
-*Note: The source repository and interview transcripts are private.*
+Transcripts are split on speaker turns into question and answer excerpts. Within each excerpt, labels from the iterations are grouped by average-linkage clustering, and a theme's LLMQ is the share of iterations that produced it. Corpus-wide codes are clustered into 30 sub-themes and 12 top-themes, with the model used only to name and define each cluster, and a recovery step re-anchors each evidence quote to verbatim transcript text, recovering about 96 percent of quotes under both prompt framings.

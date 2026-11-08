@@ -1,0 +1,38 @@
+---
+title: "HerbAI"
+description: "A local research assistant over one senior researcher's publication record, built with Robert H. Tai, tested on 879 of the author's own citations."
+pubDate: 2026-11-07
+coauthors: "Tai, Robert H."
+status: "Study report, November 2026"
+plate: "/research/herbai/f1_pipeline.png"
+plateCaption: "Fig. 1 · From the author's sentence to the score"
+order: 3
+---
+import YouTube from '../../components/YouTube.astro';
+
+> [!NOTE]
+> **Study report, November 2026**
+> Built with Robert H. Tai for a research group at ACU. The system and the study data are private, so no code or data are linked.
+
+## Overview
+
+HerbAI is a local research assistant built with Robert H. Tai for a research group at ACU, and between 4 and 7 November 2026 we tested it against an answer key taken from one senior researcher's own citations. From 6,923 self-citation sentences in 402 of the author's papers, sentences of the form "Author (1986) found X", we built 879 test items, each asking which paper supports a claim once its citation had been removed.
+
+The system holds 440 of the author's roughly 988 works, the share that could be collected from the open web, split into 76,023 passages. A search system retrieves 50 candidates per question, a reranker orders them, and the top 16 passages go to a Gemma 4 answer model on one 16 GB graphics card that writes a cited answer. We ran retrieval once per item and replayed the same 16 saved passages to every model, and registered every test before opening any score.
+
+<div class="media-grid">
+<YouTube url="https://www.youtube.com/watch?v=PWV-ZQN9u2o" title="HerbAI general demo" caption="General demo" />
+<YouTube url="https://www.youtube.com/watch?v=oe867zFagqo" title="HerbAI voice demo" caption="Voice demo" />
+</div>
+
+## Findings
+
+The largest local model, Gemma 4 26B, named the cited paper first for 32.0% of items, against 24.9% for the reranker's own first pick. No smaller local model beat the reranker. Three hosted models given the same passages scored 32.0% to 34.1%, with none differing from the local 26B after correction. Without the library the Gemma models recognised the author's real titles at chance and answered close to none of the items, and adding the library raised accuracy by 27 points.
+
+![Points gained over the search system's first pick for four local and three hosted models, with 95% intervals](/research/herbai/f2_lift.png)
+*Figure 2: Points above the search system's first pick, right paper named first, 879 claims. Blue marks local models and orange hosted models.*
+
+We find that the system rarely admits when a paper is missing. For the 415 items whose cited paper was not in the library, it named a wrong paper that it did hold 96 to 98% of the time, and about half of those were later works citing the missing paper. On 181 claims the author restates across papers, the author cited the same paper first 80% of the time, compared with 28% for the best model.
+
+![Share of restated claims for which the same paper is cited: the author against the 26B model and the search system's first pick](/research/herbai/f8_ceiling.png)
+*Figure 3: How often the same paper is cited for the same claim, by the author and by the system.*
